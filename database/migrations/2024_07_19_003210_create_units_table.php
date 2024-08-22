@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('abbreviation')->nullable();
             $table->string('name');
             $table->bigInteger('campus_id');
-            $table->bigInteger('mfo_id');
+            // $table->bigInteger('mfo_id');
             $table->timestamps();
         });
     }

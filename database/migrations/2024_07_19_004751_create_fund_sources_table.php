@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('category_id');
             $table->string('abbreviation');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

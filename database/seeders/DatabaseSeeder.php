@@ -15,5 +15,15 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        $this->call([
+            CampusTableSeeder::class,
+            UnitTableSeeder::class,
+            PositionTableSeeder::class,
+            UserTableSeeder::class,
+            // CategoryTableSeeder::class,
+            FundSourceTableSeeder::class,
+            MajorFinalOutputTableSeeder::class,
+            // ProgramActivityProjectTableSeeder::class
+        ]);
     }
 }
