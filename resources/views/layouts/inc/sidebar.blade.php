@@ -12,21 +12,22 @@
 
 
         <li class="nav-item">
-          <a class="nav-link {{(request()->is('resident/youth/entry')) ? '' : 'collapsed' }}" href="#">
-            <i class="bi bi-person-check"></i>
-            <span>New Entry</span>
-          </a>
-        </li><!-- End Profile Page Nav -->
+            <a class="nav-link {{(request()->is('budget-ceiling')) ? '' : 'collapsed' }}" href="#">
+                <i class="bi bi-bar-chart"></i>
+                <span>Budget Ceiling</span>
+            </a>
+        </li>
+        <!-- End Profile Page Nav -->
 
 
-        <li class="nav-heading">Master List</li>
+        {{-- <li class="nav-heading">Master List</li>
 
         <li class="nav-item">
           <a class="nav-link {{(request()->is('residents')) ? '' : 'collapsed' }}" href="#">
             <i class="bi bi-briefcase"></i>
             <span>Youths</span>
           </a>
-        </li>
+        </li> --}}
         <!-- End Residents Nav -->
     {{-- @endif --}}
 
@@ -36,11 +37,47 @@
     <li class="nav-heading">Maintenance</li>
 
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('users')) ? '' : 'collapsed' }}" href="#">
-        <i class="bi bi-people"></i>
-        <span>Users</span>
+      <a class="nav-link {{(request()->is('paps')) ? '' : 'collapsed' }}" href="#">
+        <i class="bi bi-list-check"></i>
+        <span>PAPs</span>
       </a>
     </li>
+
+    <li class="nav-item">
+      <a class="nav-link {{(request()->is('mfos')) ? '' : 'collapsed' }}" href="#">
+        <i class="bi bi-diagram-3"></i>
+        <span>MFOs</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link {{(request()->is('fund-sources')) ? '' : 'collapsed' }}" href="{{ route('fund-sources.index') }}">
+        <i class="bi bi-cash"></i>
+        <span>Fund Sources</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link {{(request()->is('units')) ? '' : 'collapsed' }}" href="{{ route('units.index') }}">
+        <i class="bi bi-building"></i>
+        <span>Units</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link {{(request()->is('campus')) ? '' : 'collapsed' }}" href="#">
+        <i class="bi bi-geo-alt"></i>
+        <span>Campus</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link {{(request()->is('budget-year')) ? '' : 'collapsed' }}" href="#">
+        <i class="bi bi-calendar"></i>
+        <span>Budget Year</span>
+      </a>
+    </li>
+
     <!-- End Users Nav -->
 
     {{-- <li class="nav-item">
@@ -109,7 +146,7 @@
     {{-- @if(auth()->user()->hasRole(['barangay_admin', 'municipal_admin', 'provincial_admin', 'super_admin'])) --}}
       {{-- <li class="nav-item">
         <a class="nav-link {{ request()->is('reports') ? '' : 'collapsed' }}" href="#">
-  
+
           <i class="bi bi-file-bar-graph"></i>
           <span>Reports</span>
         </a>

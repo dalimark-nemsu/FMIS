@@ -20,6 +20,7 @@ return new class extends Migration
             $table->bigInteger('campus_id');
             // $table->bigInteger('mfo_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

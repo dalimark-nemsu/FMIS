@@ -3,7 +3,7 @@
 <div class="d-flex align-items-center justify-content-between">
   <a href="{{ url('/') }}" class="logo d-flex align-items-center">
     <img src="{{ asset('assets/login-workspace/images/skp_s_logo.png') }}" alt="">
-    <span class="d-none d-lg-block">SKProfiler</span>
+    <span class="d-none d-lg-block">FMIS</span>
   </a>
   <i class="bi bi-list toggle-sidebar-btn"></i>
 </div><!-- End Logo -->
@@ -32,7 +32,7 @@
 
 
 
-    
+
 
     <li class="nav-item dropdown pe-3">
 
@@ -44,24 +44,24 @@
         {{-- <span class="d-none d-md-block dropdown-toggle ps-2">{{ implode(' ', array_filter([Auth::user()->first_name, Auth::user()->middle_name ? substr(Auth::user()->middle_name, 0, 1).'.' : '', Auth::user()->last_name])) }}</span> --}}
 
       </a><!-- End Profile Iamge Icon -->
-      
+
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
         <li class="dropdown-header">
-          <h6>Name Here</h6>                                              
+          <h6>Name Here</h6>
           {{-- <h6>{{ implode(' ', array_filter([Auth::user()->first_name, Auth::user()->middle_name ? substr(Auth::user()->middle_name, 0, 1).'.' : '', Auth::user()->last_name])) }}</h6>           --}}
-          
+
           {{-- @if (Auth::user()->account_type === 'barangay_user')
           <span>Barangay User</span>
-          @elseif (Auth::user()->account_type === 'barangay_admin') 
+          @elseif (Auth::user()->account_type === 'barangay_admin')
           <span>Barangay Admin</span>
-          @elseif (Auth::user()->account_type === 'municipal_admin') 
+          @elseif (Auth::user()->account_type === 'municipal_admin')
           <span>Municipal Admin</span>
-          @elseif (Auth::user()->account_type === 'provincial_admin') 
+          @elseif (Auth::user()->account_type === 'provincial_admin')
           <span>Provincial Admin</span>
-          @elseif (Auth::user()->account_type === 'super_admin') 
+          @elseif (Auth::user()->account_type === 'super_admin')
           <span>Super Admin</span>
           @endif --}}
-          
+
         </li>
         <li>
           <hr class="dropdown-divider">
@@ -99,13 +99,13 @@
                                     </a> --}}
             <i class="bi bi-box-arrow-right"></i>
             <span>Sign Out</span>
-            
+
           </a>
 
           <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                      @csrf
           </form>
-          
+
         </li>
 
 
