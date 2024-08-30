@@ -30,12 +30,12 @@
                     </div>
                         <div class="mt-3 mt-md-0">
                             <a href="#addUnitModal"
-                                class="btn btn-primary shadow-sm d-flex align-items-center gap-2 px-3"
+                                class="btn btn-outline-primary shadow-sm btn-sm"
                                 data-bs-toggle="modal"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="top"
                                 title="Create New Fund Source">
-                                <i class="bi bi-plus-circle"></i> <span class="text-bg">Create New Unit</span>
+                                <i class="bi bi-plus-circle"></i>
                             </a>
                         </div>
 

@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UnitStoreRequest;
-use App\Http\Requests\UnitUpdateRequest;
-use App\Models\Campus;
-use App\Models\Unit;
+use App\Http\Requests\MajorFinalOutputStoreRequest;
+use App\Http\Requests\MajorFinalOutputUpdateRequest;
+use App\Models\MajorFinalOutput;
 use Illuminate\Http\Request;
 
-class UnitsController extends Controller
+class MajorFinalOutputController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +16,8 @@ class UnitsController extends Controller
      */
     public function index()
     {
-        $campuses = Campus::get();
-        $units = Unit::get();
-        return view('units.index',compact('campuses', 'units'));
+        $mfos = MajorFinalOutput::get();
+        return view('mfos.index', compact('mfos'));
     }
 
     /**
@@ -38,14 +36,13 @@ class UnitsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UnitStoreRequest $request)
+    public function store(MajorFinalOutputStoreRequest $request)
     {
-        Unit::create([
+        MajorFinalOutput::create([
             'abbreviation'      =>      $request->abbrev,
             'name'              =>      $request->name,
-            'campus_id'         =>      $request->campus_id,
         ]);
-        return redirect()->route('units.index')->with('success','Unit added successfully');
+        return redirect()->route('mfos.index')->with('success','Major Final Output added successfully');
     }
 
     /**
@@ -77,14 +74,13 @@ class UnitsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UnitUpdateRequest $request, Unit $unit)
+    public function update(MajorFinalOutputUpdateRequest $request, MajorFinalOutput $mfo)
     {
-        $unit->update([
+        $mfo->update([
             'abbreviation'      =>      $request->abbrev,
             'name'              =>      $request->name,
-            'campus_id'         =>      $request->campus_id,
         ]);
-        return redirect()->route('units.index')->with('success','Unit updated successfully');
+        return redirect()->route('mfos.index')->with('success','Major Final Output updated successfully');
     }
 
     /**
@@ -93,9 +89,9 @@ class UnitsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Unit $unit)
+    public function destroy(MajorFinalOutput $mfo)
     {
-        $unit->delete();
-        return redirect()->route('units.index')->with('success','Unit deleted successfully');
+        $mfo->delete();
+        return redirect()->route('mfos.index')->with('success','Major Final Output deleted successfully');
     }
 }

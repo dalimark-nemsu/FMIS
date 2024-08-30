@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Fund Sources')
+@section('page-title', 'Major Final Outputs')
 
 @section('content')
 <div id="app-content">
@@ -24,12 +24,12 @@
                     <div class="flex-grow-1">
                     </div>
                         <div class="mt-3 mt-md-0">
-                            <a href="#addFundSourceModal"
+                            <a href="#addMajorFinalOutputModal"
                                 class="btn btn-outline-primary shadow-sm btn-sm"
                                 data-bs-toggle="modal"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="top"
-                                title="Create New Fund Source">
+                                title="Create New Major Final Outputs">
                                 <i class="bi bi-plus-lg"></i>
                             </a>
                         </div>
@@ -39,21 +39,21 @@
                       <table id="example" class="table text-nowrap table-centered mt-0" style="width: 100%">
                         <thead class="table-light">
                           <tr>
-                            <th>No</th>
+                            <th>No.</th>
                             <th>Abbrev.</th>
                             <th>Name</th>
                             <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                            @foreach ($fundSources as $fundSource)
+                            @foreach ($mfos as $mfo)
                           <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $fundSource->abbreviation }}</td>
-                            <td>{{ $fundSource->name }}</td>
+                            <td>{{ $mfo->abbreviation }}</td>
+                            <td>{{ $mfo->name }}</td>
                             <td>
                                 <!-- Edit Button -->
-                                <a href="#editFundSourceModal-{{$fundSource->id}}"
+                                <a href="#editMajorFinalOutputModal-{{$mfo->id}}"
                                    class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
                                    data-bs-toggle="modal"
                                    data-bs-toggle="tooltip"
@@ -63,7 +63,7 @@
                                 </a>
 
                                 <!-- Delete Button -->
-                                <a href="#deleteFundSourceModal-{{$fundSource->id}}"
+                                <a href="#deleteMajorFinalOutputModal-{{$mfo->id}}"
                                    class="btn btn-outline-danger btn-sm rounded-circle shadow-sm"
                                    data-bs-toggle="modal"
                                    data-bs-toggle="tooltip"
@@ -93,26 +93,26 @@
 
 
 
-<!-- Add fund-sources Modal -->
-<div class="modal fade" id="addFundSourceModal" tabindex="-1" aria-labelledby="addFundSourceModalLabel"
+<!-- Add Major Final Outputs Modal -->
+<div class="modal fade" id="addMajorFinalOutputModal" tabindex="-1" aria-labelledby="addMajorFinalOutputModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addFundSourceModalLabel">Add New Fund Source</h5>
+                <h5 class="modal-title" id="addMajorFinalOutputModalLabel">Add New Major Final Output</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('fund-sources.store') }}" method="POST">
+            <form action="{{ route('mfos.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="abbrev" class="form-label">Abbreviation:</label>
-                        <input type="text" class="form-control" id="abbrev" name="abbrev" placeholder="Enter fund source abbreviation" required>
+                        <input type="text" class="form-control" id="abbrev" name="abbrev" placeholder="Enter major final output abbreviation" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter fund source name" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter major final output name" required>
                     </div>
 
                 </div>
@@ -127,28 +127,28 @@
 </div>
 
 
-<!-- Edit fund-sources Modal -->
-@foreach ($fundSources as $fundSource)
-<div class="modal fade" id="editFundSourceModal-{{$fundSource->id}}" tabindex="-1"
-    aria-labelledby="editFundSourceModalLabel" aria-hidden="true">
+<!-- Edit Major Final Output Modal -->
+@foreach ($mfos as $mfo)
+<div class="modal fade" id="editMajorFinalOutputModal-{{$mfo->id}}" tabindex="-1"
+    aria-labelledby="editMajorFinalOutputModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editFundSourceModalLabel">Edit Fund Source</h5>
+                <h5 class="modal-title" id="editMajorFinalOutputModalLabel">Edit Major Final Output</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('fund-sources.update', $fundSource->id) }}" method="POST">
+            <form action="{{ route('mfos.update', $mfo->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="abbrev" class="form-label">Abbreviation:</label>
-                        <input type="text" class="form-control" id="abbrev" name="abbrev" value="{{ $fundSource->abbreviation }}" required>
+                        <label for="edit-abbrev" class="form-label">Abbreviation:</label>
+                        <input type="text" class="form-control" id="edit-abbrev" name="abbrev" value="{{ $mfo->abbreviation }}" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="edit-name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="edit-name" name="name" value="{{ $fundSource->name }}" required>
+                        <label for="edit-name" class="form-label">Name:</label>
+                        <input type="text" class="form-control" id="edit-name" name="name" value="{{ $mfo->name }}" required>
                     </div>
 
                 </div>
@@ -163,21 +163,21 @@
 @endforeach
 
 
-<!-- Delete fundSource Modal -->
-@foreach ($fundSources as $fundSource)
-<div class="modal fade" id="deleteFundSourceModal-{{$fundSource->id}}" tabindex="-1"
-    aria-labelledby="deleteFundSourceModalLabel" aria-hidden="true">
+<!-- Delete Major Final Output Modal -->
+@foreach ($mfos as $mfo)
+<div class="modal fade" id="deleteMajorFinalOutputModal-{{$mfo->id}}" tabindex="-1"
+    aria-labelledby="deleteMajorFinalOutputModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteFundSourceModalLabel">Delete Confirmation</h5>
+                <h5 class="modal-title" id="deleteMajorFinalOutputModalLabel">Delete Confirmation</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('fund-sources.delete', $fundSource->id) }}" method="POST">
+            <form action="{{ route('mfos.delete', $mfo->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="modal-body">
-                    Are you sure to delete Fund Source: <strong>{{ $fundSource->abbreviation }}</strong> ?
+                    Are you sure to delete Major Final Output: <strong>{{ $mfo->name }}</strong> ?
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Confirm</button>

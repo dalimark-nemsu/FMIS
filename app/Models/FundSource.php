@@ -12,15 +12,9 @@ class FundSource extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'category_id',
         'abbreviation',
         'name',
     ];
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
 
     public function paps()
     {

@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('fund_sources', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('category_id');
             $table->string('abbreviation');
             $table->string('name')->nullable();
             $table->timestamps();

@@ -2,28 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FundSourceStoreRequest;
-use App\Http\Requests\FundSourceUpdateRequest;
-use App\Models\FundSource;
+use App\Models\Campus;
 use Illuminate\Http\Request;
 
-class FundSourceController extends Controller
+class CampusController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
-
     public function index()
     {
-        $fundSources = FundSource::get();
-        return view('fund-sources.index',compact('fundSources'));
+        $campuses = Campus::get();
+        return view('campuses.index', compact('campuses'));
     }
 
     /**
@@ -42,13 +34,16 @@ class FundSourceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(FundSourceStoreRequest $request)
+    public function store(Request $request)
     {
-        FundSource::create([
-            'abbreviation'      =>      $request->abbrev,
-            'name'              =>      $request->name,
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
         ]);
-        return redirect()->route('fund-sources.index')->with('success','Fund Source added successfully');
+
+        Campus::create([
+            'name' => $validatedData['name'],
+        ]);
+        return redirect()->route('campuses.index')->with('success','Campus added successfully');
     }
 
     /**
@@ -80,13 +75,16 @@ class FundSourceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(FundSourceUpdateRequest $request, FundSource $fundSource)
+    public function update(Request $request, Campus $campus)
     {
-        $fundSource->update([
-            'abbreviation'      =>      $request->abbrev,
-            'name'              =>      $request->name,
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
         ]);
-        return redirect()->route('fund-sources.index')->with('success','Fund Source updated successfully');
+
+        $campus->update([
+            'name' => $validatedData['name'],
+        ]);
+        return redirect()->route('campuses.index')->with('success','Campus updated successfully');
     }
 
     /**
@@ -95,9 +93,9 @@ class FundSourceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FundSource $fundSource)
+    public function destroy(Campus $campus)
     {
-        $fundSource->delete();
-        return redirect()->route('fund-sources.index')->with('success','Fund Source deleted successfully');
+        $campus->delete();
+        return redirect()->route('campuses.index')->with('success','Campus deleted successfully');
     }
 }

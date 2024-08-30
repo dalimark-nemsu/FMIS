@@ -2,28 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FundSourceStoreRequest;
-use App\Http\Requests\FundSourceUpdateRequest;
-use App\Models\FundSource;
+use App\Http\Requests\UnitStoreRequest;
+use App\Http\Requests\UnitUpdateRequest;
+use App\Models\Campus;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 
-class FundSourceController extends Controller
+class UnitController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
-
     public function index()
     {
-        $fundSources = FundSource::get();
-        return view('fund-sources.index',compact('fundSources'));
+        $campuses = Campus::get();
+        $units = Unit::get();
+        return view('units.index',compact('campuses', 'units'));
     }
 
     /**
@@ -42,13 +38,14 @@ class FundSourceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(FundSourceStoreRequest $request)
+    public function store(UnitStoreRequest $request)
     {
-        FundSource::create([
+        Unit::create([
             'abbreviation'      =>      $request->abbrev,
             'name'              =>      $request->name,
+            'campus_id'         =>      $request->campus_id,
         ]);
-        return redirect()->route('fund-sources.index')->with('success','Fund Source added successfully');
+        return redirect()->route('units.index')->with('success','Unit added successfully');
     }
 
     /**
@@ -80,13 +77,14 @@ class FundSourceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(FundSourceUpdateRequest $request, FundSource $fundSource)
+    public function update(UnitUpdateRequest $request, Unit $unit)
     {
-        $fundSource->update([
+        $unit->update([
             'abbreviation'      =>      $request->abbrev,
             'name'              =>      $request->name,
+            'campus_id'         =>      $request->campus_id,
         ]);
-        return redirect()->route('fund-sources.index')->with('success','Fund Source updated successfully');
+        return redirect()->route('units.index')->with('success','Unit updated successfully');
     }
 
     /**
@@ -95,9 +93,9 @@ class FundSourceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FundSource $fundSource)
+    public function destroy(Unit $unit)
     {
-        $fundSource->delete();
-        return redirect()->route('fund-sources.index')->with('success','Fund Source deleted successfully');
+        $unit->delete();
+        return redirect()->route('units.index')->with('success','Unit deleted successfully');
     }
 }

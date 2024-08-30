@@ -44,7 +44,7 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('mfos')) ? '' : 'collapsed' }}" href="#">
+      <a class="nav-link {{(request()->is('mfos')) ? '' : 'collapsed' }}" href="{{ route('mfos.index') }}">
         <i class="bi bi-diagram-3"></i>
         <span>MFOs</span>
       </a>
@@ -65,14 +65,14 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('campus')) ? '' : 'collapsed' }}" href="#">
+      <a class="nav-link {{(request()->is('campus')) ? '' : 'collapsed' }}" href="{{ route('campuses.index') }}">
         <i class="bi bi-geo-alt"></i>
         <span>Campus</span>
       </a>
     </li>
 
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('budget-year')) ? '' : 'collapsed' }}" href="#">
+      <a class="nav-link {{(request()->is('budget-year')) ? '' : 'collapsed' }}" href="{{ route('budget-year.index') }}">
         <i class="bi bi-calendar"></i>
         <span>Budget Year</span>
       </a>

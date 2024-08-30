@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             UnitTableSeeder::class,
             PositionTableSeeder::class,
             UserTableSeeder::class,
-            CategoryTableSeeder::class,
+            // CategoryTableSeeder::class,
             FundSourceTableSeeder::class,
             MajorFinalOutputTableSeeder::class,
             // ProgramActivityProjectTableSeeder::class

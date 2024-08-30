@@ -26,7 +26,6 @@ class FundSourceStoreRequest extends FormRequest
         return [
             'abbrev'            =>          'required',
             'name'              =>          'required|string|max:255',
-            'category_id'       =>          'required',
         ];
     }
 }

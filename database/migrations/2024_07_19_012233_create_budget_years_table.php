@@ -18,6 +18,7 @@ return new class extends Migration
             $table->year('year');
             $table->boolean('is_active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -25,7 +25,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-  
+
 
   <!-- Vendor CSS Files -->
   <link href="{{ asset('assets/layouts/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -69,7 +69,7 @@
           <li class="breadcrumb-item"><a href="#">Home</a></li>
           <!-- <li class="breadcrumb-item active">Dashboard</li> -->
           <li class="breadcrumb-item active">@yield('page-title')</li>
-          
+
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -102,6 +102,21 @@
   <script src="{{ asset('assets/datatables5/js/jquery.dataTables.min.js')}}"></script>
   <script src="{{ asset('assets/datatables5/js/dataTables.bootstrap5.min.js')}}"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<!-- Bootstrap Datepicker CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
+<!-- Bootstrap Datepicker JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
+
 
   @stack('page-scripts')
 

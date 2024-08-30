@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\BudgetYearController;
+use App\Http\Controllers\CampusController;
 use App\Http\Controllers\FundSourceController;
-use App\Http\Controllers\UnitsController;
+use App\Http\Controllers\MajorFinalOutputController;
+use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -25,21 +28,51 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('fund-sources', FundSourceController::class)->names([
-    'index' => 'fund-sources.index',
-    'create' => 'fund-sources.create',
-    'store' => 'fund-sources.store',
-    'show' => 'fund-sources.show',
-    'edit' => 'fund-sources.edit',
-    'update' => 'fund-sources.update',
-    'destroy' => 'fund-sources.delete',
+    'index'     =>  'fund-sources.index',
+    'create'    =>  'fund-sources.create',
+    'store'     =>  'fund-sources.store',
+    'show'      =>  'fund-sources.show',
+    'edit'      =>  'fund-sources.edit',
+    'update'    =>  'fund-sources.update',
+    'destroy'   =>  'fund-sources.delete',
 ]);
 
-Route::resource('units', UnitsController::class)->names([
-    'index' => 'units.index',
-    'create' => 'units.create',
-    'store' => 'units.store',
-    'show' => 'units.show',
-    'edit' => 'units.edit',
-    'update' => 'units.update',
-    'destroy' => 'units.delete',
+Route::resource('units', UnitController::class)->names([
+    'index'     =>  'units.index',
+    'create'    =>  'units.create',
+    'store'     =>  'units.store',
+    'show'      =>  'units.show',
+    'edit'      =>  'units.edit',
+    'update'    =>  'units.update',
+    'destroy'   =>  'units.delete',
+]);
+
+Route::resource('campuses', CampusController::class)->names([
+    'index'     =>  'campuses.index',
+    'create'    =>  'campuses.create',
+    'store'     =>  'campuses.store',
+    'show'      =>  'campuses.show',
+    'edit'      =>  'campuses.edit',
+    'update'    =>  'campuses.update',
+    'destroy'   =>  'campuses.delete',
+]);
+
+Route::resource('budget-year', BudgetYearController::class)->names([
+    'index'     =>  'budget-year.index',
+    'create'    =>  'budget-year.create',
+    'store'     =>  'budget-year.store',
+    'show'      =>  'budget-year.show',
+    'edit'      =>  'budget-year.edit',
+    'update'    =>  'budget-year.update',
+    'destroy'   =>  'budget-year.delete',
+]);
+
+Route::resource('mfos', MajorFinalOutputController::class)->names([
+    'index'     =>  'mfos.index',
+    'create'    =>  'mfos.create',
+    'store'     =>  'mfos.store',
+    'show'      =>  'mfos.show',
+    'edit'      =>  'mfos.edit',
+    'update'    =>  'mfos.update',
+    'destroy'   =>  'mfos.delete',
 ]);

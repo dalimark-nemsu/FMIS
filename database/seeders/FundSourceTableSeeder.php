@@ -16,16 +16,15 @@ class FundSourceTableSeeder extends Seeder
     public function run()
     {
         $fundSources=[
-            ['name'=>'STF', 'category_id'=> '2'],
-            ['name'=>'GAA', 'category_id'=> '1'],
-            ['name'=>'IGP', 'category_id'=> '2'],
-            ['name'=>'TF', 'category_id'=> '2'],
-            ['name'=> 'TES', 'category_id'=> '2'],
+            ['name'=>'STF'],
+            ['name'=>'GAA'],
+            ['name'=>'IGP'],
+            ['name'=>'TF'],
+            ['name'=> 'TES'],
         ];
 
         foreach ($fundSources as $key => $fundSource) {
             FundSource::create([
-                'category_id'  =>  $fundSource['category_id'],
                 'abbreviation'  =>  $fundSource['name'],
             ]);
         }

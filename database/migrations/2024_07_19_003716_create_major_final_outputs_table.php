@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('abbreviation');
             $table->string('name');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
