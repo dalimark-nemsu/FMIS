@@ -35,7 +35,7 @@
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="top"
                                 title="Create New Fund Source">
-                                <i class="bi bi-plus-circle"></i>
+                                <i class="bi bi-plus-lg"></i>
                             </a>
                         </div>
 
@@ -45,7 +45,7 @@
                       <table id="example" class="table text-nowrap table-centered mt-0" style="width: 100%">
                         <thead class="table-light">
                           <tr>
-                            <th>No</th>
+                            <th>No.</th>
                             <th>Abbrev.</th>
                             <th>Name</th>
                             <th>Campus</th>

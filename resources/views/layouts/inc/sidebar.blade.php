@@ -37,7 +37,7 @@
     <li class="nav-heading">Maintenance</li>
 
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('paps')) ? '' : 'collapsed' }}" href="#">
+      <a class="nav-link {{(request()->is('paps')) ? '' : 'collapsed' }}" href="{{ route('paps.index') }}">
         <i class="bi bi-list-check"></i>
         <span>PAPs</span>
       </a>

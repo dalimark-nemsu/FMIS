@@ -39,7 +39,7 @@
                       <table id="example" class="table text-nowrap table-centered mt-0" style="width: 100%">
                         <thead class="table-light">
                           <tr>
-                            <th>No</th>
+                            <th>No.</th>
                             <th>Name</th>
                             <th>Action</th>
                           </tr>

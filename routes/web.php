@@ -4,6 +4,7 @@ use App\Http\Controllers\BudgetYearController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\FundSourceController;
 use App\Http\Controllers\MajorFinalOutputController;
+use App\Http\Controllers\ProgramActivityProjectsController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
 
@@ -75,4 +76,14 @@ Route::resource('mfos', MajorFinalOutputController::class)->names([
     'edit'      =>  'mfos.edit',
     'update'    =>  'mfos.update',
     'destroy'   =>  'mfos.delete',
+]);
+
+Route::resource('paps', ProgramActivityProjectsController::class)->names([
+    'index'     =>  'paps.index',
+    'create'    =>  'paps.create',
+    'store'     =>  'paps.store',
+    'show'      =>  'paps.show',
+    'edit'      =>  'paps.edit',
+    'update'    =>  'paps.update',
+    'destroy'   =>  'paps.delete',
 ]);

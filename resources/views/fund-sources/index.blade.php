@@ -39,7 +39,7 @@
                       <table id="example" class="table text-nowrap table-centered mt-0" style="width: 100%">
                         <thead class="table-light">
                           <tr>
-                            <th>No</th>
+                            <th>No.</th>
                             <th>Abbrev.</th>
                             <th>Name</th>
                             <th>Action</th>
@@ -93,7 +93,7 @@
 
 
 
-<!-- Add fund-sources Modal -->
+<!-- Add Fund Source Modal -->
 <div class="modal fade" id="addFundSourceModal" tabindex="-1" aria-labelledby="addFundSourceModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -127,7 +127,7 @@
 </div>
 
 
-<!-- Edit fund-sources Modal -->
+<!-- Edit Fund Source Modal -->
 @foreach ($fundSources as $fundSource)
 <div class="modal fade" id="editFundSourceModal-{{$fundSource->id}}" tabindex="-1"
     aria-labelledby="editFundSourceModalLabel" aria-hidden="true">
@@ -163,7 +163,7 @@
 @endforeach
 
 
-<!-- Delete fundSource Modal -->
+<!-- Delete Fund Source Modal -->
 @foreach ($fundSources as $fundSource)
 <div class="modal fade" id="deleteFundSourceModal-{{$fundSource->id}}" tabindex="-1"
     aria-labelledby="deleteFundSourceModalLabel" aria-hidden="true">
