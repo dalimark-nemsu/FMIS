@@ -246,8 +246,9 @@
                   
                     <div class="mb-3">
                         <label for="mfo" class="col-form-label">MFO:</label>
-                        <!-- <select id="mfo-select-{{ $unit->id }}" class="form-select" name="mfos[]" multiple="multiple" required> -->
-                        <select class="form-select" id="multiple-select-field" name="mfos[]" data-placeholder="Choose MFO" multiple>
+                        
+                        <!-- Since each modal has a unique ID (such as multiple-select-field-{{ $unit->id }}), you'll need to ensure that the select2 initialization is correctly applied to each individual field. -->
+                        <select class="form-select" id="multiple-select-field-{{$unit->id}}" name="mfos[]" data-placeholder="Choose MFO" multiple>
                             @foreach($mfos as $mfo)
                                 <option value="{{ $mfo->id }}" 
                                     @if($unit->majorFinalOutputs->contains($mfo->id)) selected @endif>
@@ -273,17 +274,21 @@
 @endsection
 
 
+
 @push('page-scripts')
-
-       <script>
-       
-   
-        $( '#multiple-select-field' ).select2( {
-            theme: "bootstrap-5",
-            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-            placeholder: $( this ).data( 'placeholder' ),
-            closeOnSelect: false,
-        } );
+    <script>
+        $(document).ready(function() {
+            // Initialize select2 for each dynamically generated select field
+            // The $('select[id^="multiple-select-field-"]') uses a jQuery attribute selector to target all select elements 
+            // whose id starts with multiple-select-field-. This ensures that the select2 plugin is initialized for all dynamically generated selects in each modal.
+            $('select[id^="multiple-select-field-"]').select2({
+                theme: "bootstrap-5",
+                width: '100%',  // Adjust width as needed
+                placeholder: 'Choose MFO',
+                closeOnSelect: false
+            });
+        });
     </script>
-
 @endpush
+
+
