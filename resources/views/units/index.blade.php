@@ -49,6 +49,7 @@
                             <th>Abbrev.</th>
                             <th>Name</th>
                             <th>Campus</th>
+                            <th>MFO</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -60,28 +61,40 @@
                                     <td>{{ $unit->name }}</td>
                                     <td>{{ $unit->campus?->name }}</td>
                                     <td>
+                                        @foreach ($unit->majorFinalOutputs as $mfo)
+                                            {{ $mfo->abbreviation }}<br>
+                                        @endforeach
+                                    </td>
+                                    <td>
                                         <!-- Edit Button -->
                                         <a href="#editUnitModal-{{$unit->id}}"
                                         class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
                                         data-bs-toggle="modal"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
                                         title="Edit">
                                             <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        <!-- Assign MFO Button -->
+                                        <a href="#assignMfoModal-{{$unit->id}}"
+                                        class="btn btn-outline-success btn-sm rounded-circle shadow-sm"
+                                        data-bs-toggle="modal"
+                                        title="Assign MFO">
+                                            <i class="bi bi-check-circle"></i>
                                         </a>
 
                                         <!-- Delete Button -->
                                         <a href="#deleteUnitModal-{{$unit->id}}"
                                         class="btn btn-outline-danger btn-sm rounded-circle shadow-sm"
                                         data-bs-toggle="modal"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
                                         title="Delete">
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     </td>
+
                                 </tr>
                             @endforeach
+
+
                         </tbody>
                       </table>
                     </div>
@@ -214,4 +227,63 @@
 </div>
 @endforeach
 
+<!-- Assign MFO Modal -->
+@foreach ($units as $unit)
+<div class="modal fade" id="assignMfoModal-{{$unit->id}}" tabindex="-1"
+    aria-labelledby="assignMfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignMfoModalLabel">Assign MFOs to {{ $unit->name }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('units.assignMfo', $unit->id) }}" method="POST">
+
+                @csrf
+                @method('PUT')
+
+                <div class="modal-body">
+                  
+                    <div class="mb-3">
+                        <label for="editCampus" class="col-form-label">Campus:</label>
+                        <select class="form-select" id="multiple-select-field" name="mfos[]" data-placeholder="Choose MFO" multiple>
+                        <!-- <select id="mfo-select-{{ $unit->id }}" class="form-control @error('mfos') is-invalid @enderror select2-multi" name="mfos[]" multiple="multiple" required> -->
+                            @foreach($mfos as $mfo)
+                                <option value="{{ $mfo->id }}" 
+                                    @if($unit->majorFinalOutputs->contains($mfo->id)) selected @endif>
+                                    {{ $mfo->abbreviation }} - {{ $mfo->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Assign</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
+
+
+
 @endsection
+
+
+@push('page-scripts')
+
+       <script>
+       
+   
+        $( '#multiple-select-field' ).select2( {
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: false,
+        } );
+    </script>
+
+@endpush

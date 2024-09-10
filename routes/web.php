@@ -48,6 +48,9 @@ Route::resource('units', UnitController::class)->names([
     'destroy'   =>  'units.delete',
 ]);
 
+Route::put('/units/{id}/assign-mfo', [UnitController::class, 'assignMfo'])->name('units.assignMfo');
+
+
 Route::resource('campuses', CampusController::class)->names([
     'index'     =>  'campuses.index',
     'create'    =>  'campuses.create',

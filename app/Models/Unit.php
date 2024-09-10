@@ -22,4 +22,9 @@ class Unit extends Model
         return $this->belongsTo(Campus::class, 'campus_id');
     }
 
+    public function majorFinalOutputs()
+    {
+        return $this->belongsToMany(MajorFinalOutput::class, 'major_final_output_unit');
+    }
+    
 }

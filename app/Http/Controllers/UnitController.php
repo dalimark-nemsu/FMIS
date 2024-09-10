@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UnitStoreRequest;
 use App\Http\Requests\UnitUpdateRequest;
 use App\Models\Campus;
+use App\Models\MajorFinalOutput;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,8 @@ class UnitController extends Controller
     {
         $campuses = Campus::get();
         $units = Unit::get();
-        return view('units.index',compact('campuses', 'units'));
+        $mfos = MajorFinalOutput::all();
+        return view('units.index',compact('campuses', 'units','mfos'));
     }
 
     /**
@@ -98,4 +100,22 @@ class UnitController extends Controller
         $unit->delete();
         return redirect()->route('units.index')->with('success','Unit deleted successfully');
     }
+
+    public function assignMfo(Request $request, $id)
+    {
+        $unit = Unit::findOrFail($id);
+
+        // Validate that at least one MFO is selected
+        $request->validate([
+            'mfos' => 'required|array',
+        ]);
+        
+
+        // Sync the selected MFOs with the unit
+        $unit->majorFinalOutputs()->sync($request->mfos);
+
+        return redirect()->back()->with('success', 'MFOs assigned successfully!');
+    }
+
+
 }

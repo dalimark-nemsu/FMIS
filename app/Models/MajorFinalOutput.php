@@ -23,6 +23,7 @@ class MajorFinalOutput extends Model
 
     public function units()
     {
-        return $this->hasMany(Unit::class, 'mfo_id');
+        return $this->belongsToMany(Unit::class, 'major_final_output_unit');
     }
+
 }
