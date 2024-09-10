@@ -245,9 +245,9 @@
                 <div class="modal-body">
                   
                     <div class="mb-3">
-                        <label for="editCampus" class="col-form-label">Campus:</label>
+                        <label for="mfo" class="col-form-label">MFO:</label>
+                        <!-- <select id="mfo-select-{{ $unit->id }}" class="form-select" name="mfos[]" multiple="multiple" required> -->
                         <select class="form-select" id="multiple-select-field" name="mfos[]" data-placeholder="Choose MFO" multiple>
-                        <!-- <select id="mfo-select-{{ $unit->id }}" class="form-control @error('mfos') is-invalid @enderror select2-multi" name="mfos[]" multiple="multiple" required> -->
                             @foreach($mfos as $mfo)
                                 <option value="{{ $mfo->id }}" 
                                     @if($unit->majorFinalOutputs->contains($mfo->id)) selected @endif>
