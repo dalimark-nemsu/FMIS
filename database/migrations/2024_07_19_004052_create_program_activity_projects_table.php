@@ -20,6 +20,8 @@ return new class extends Migration
             $table->bigInteger('mfo_id');//major final output
             $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

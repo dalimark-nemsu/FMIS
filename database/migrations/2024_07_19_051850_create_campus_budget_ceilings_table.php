@@ -15,14 +15,16 @@ return new class extends Migration
     {
         Schema::create('campus_budget_ceilings', function (Blueprint $table) {
             $table->id();
-            $table->integer('campus_id');
-            $table->integer('budget_year_id');
+            $table->bigInteger('campus_id');
+            $table->bigInteger('budget_year_id');
             $table->bigInteger('pap_id');
-            $table->decimal('ps', 15, 2); // personnel service ammount
-            $table->decimal('mooe', 15, 2); // maintenance and other operating expenses ammount
-            $table->decimal('co', 15, 2); // capital outlay ammount
-            $table->integer('processed_by');
+            $table->decimal('ps', 15, 2); // personnel services amount
+            $table->decimal('mooe', 15, 2); // maintenance and other operating expenses amount
+            $table->decimal('co', 15, 2); // capital outlay amount
+            $table->decimal('total_amount', 15, 2); // total amount
+            $table->bigInteger('processed_by');//user_id budget officer III
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
