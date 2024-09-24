@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MajorFinalOutputStoreRequest;
 use App\Http\Requests\MajorFinalOutputUpdateRequest;
 use App\Models\MajorFinalOutput;
+use App\Traits\DataRetrievalTrait;
 use Illuminate\Http\Request;
 
 class MajorFinalOutputController extends Controller
 {
+    use DataRetrievalTrait;
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +18,7 @@ class MajorFinalOutputController extends Controller
      */
     public function index()
     {
-        $mfos = MajorFinalOutput::get();
+        $mfos = $this->getAllMFOs();
         return view('mfos.index', compact('mfos'));
     }
 
@@ -91,7 +93,8 @@ class MajorFinalOutputController extends Controller
      */
     public function destroy(MajorFinalOutput $mfo)
     {
+        $name = strtoupper($mfo->name);
         $mfo->delete();
-        return redirect()->route('mfos.index')->with('success','Major Final Output deleted successfully');
+        return redirect()->route('mfos.index')->with('success',"{$name} deleted successfully");
     }
 }

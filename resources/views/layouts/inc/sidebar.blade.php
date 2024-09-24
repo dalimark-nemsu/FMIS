@@ -12,7 +12,7 @@
 
 
         <li class="nav-item">
-            <a class="nav-link {{(request()->is('budget-ceiling')) ? '' : 'collapsed' }}" href="#">
+            <a class="nav-link {{(request()->is('budget-ceiling')) ? '' : 'collapsed' }}" href="{{ route('budget-ceilings.index') }}">
                 <i class="bi bi-bar-chart"></i>
                 <span>Budget Ceiling</span>
             </a>

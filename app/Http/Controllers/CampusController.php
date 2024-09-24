@@ -95,7 +95,8 @@ class CampusController extends Controller
      */
     public function destroy(Campus $campus)
     {
+        $name = strtoupper($campus->name);
         $campus->delete();
-        return redirect()->route('campuses.index')->with('success','Campus deleted successfully');
+        return redirect()->route('campuses.index')->with('success', "{$name} deleted successfully");
     }
 }

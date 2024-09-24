@@ -7,11 +7,13 @@ use App\Http\Requests\ProgramActivityProjectsUpdateRequest;
 use App\Models\FundSource;
 use App\Models\MajorFinalOutput;
 use App\Models\ProgramActivityProject;
+use App\Traits\DataRetrievalTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class ProgramActivityProjectsController extends Controller
 {
+    use DataRetrievalTrait;
     /**
      * Display a listing of the resource.
      *
@@ -20,16 +22,20 @@ class ProgramActivityProjectsController extends Controller
     public function index(Request $request)
     {
         $paps = ProgramActivityProject::with('campusBugetCeilings', 'unitBudgetCeilings', 'majorFinalOutput', 'fundSource')->orderBy('created_at', 'desc')->get();
-        $fundSources = FundSource::get();
-        $mfos = MajorFinalOutput::get();
+        $fundSources = $this->getAllFundSources();
+        $mfos = $this->getAllMFOs();
+
         if ($request->ajax()) {
-            return $this->renderDataTables($paps);
+            return $this->renderDataTables($paps, $fundSources, $mfos);
         }
         return view('paps.index', compact('paps','fundSources','mfos'));
     }
 
-    public function renderDataTables($paps)
+    public function renderDataTables($paps, $fundSources, $mfos)
     {
+        // $fundSources = FundSource::all();
+        // $mfos = MajorFinalOutput::all();
+
         return DataTables::of($paps)
             ->addIndexColumn()
             ->editColumn('code', function($paps) {
@@ -44,8 +50,8 @@ class ProgramActivityProjectsController extends Controller
             ->editColumn('name', function($paps) {
                 return $paps->name;
             })
-            ->addColumn('action', function ($paps) {
-                return view('paps.actions.btn', compact('paps'));
+            ->addColumn('action', function ($paps) use ($fundSources, $mfos) {
+                return view('paps.actions.btn', compact('paps', 'fundSources', 'mfos'));
             })
             ->toJson();
     }
@@ -106,9 +112,9 @@ class ProgramActivityProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProgramActivityProjectsUpdateRequest $request, ProgramActivityProject $paps)
+    public function update(ProgramActivityProjectsUpdateRequest $request, ProgramActivityProject $pap)
     {
-        $paps->update([
+        $pap->update([
             'code'              =>      $request->code,
             'fund_source_id'    =>      $request->fund_source_id,
             'mfo_id'            =>      $request->mfo_id,
@@ -123,8 +129,10 @@ class ProgramActivityProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ProgramActivityProject $pap)
     {
-        //
+        $name = strtoupper($pap->name);
+        $pap->delete();
+        return redirect()->route('paps.index')->with('success', "{$name} deleted successfully");
     }
 }

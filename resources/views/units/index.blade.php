@@ -243,14 +243,14 @@
                 @method('PUT')
 
                 <div class="modal-body">
-                  
+
                     <div class="mb-3">
                         <label for="mfo" class="col-form-label">MFO:</label>
-                        
+
                         <!-- Since each modal has a unique ID (such as multiple-select-field-{{ $unit->id }}), you'll need to ensure that the select2 initialization is correctly applied to each individual field. -->
                         <select class="form-select" id="multiple-select-field-{{$unit->id}}" name="mfos[]" data-placeholder="Choose MFO" multiple>
                             @foreach($mfos as $mfo)
-                                <option value="{{ $mfo->id }}" 
+                                <option value="{{ $mfo->id }}"
                                     @if($unit->majorFinalOutputs->contains($mfo->id)) selected @endif>
                                     {{ $mfo->abbreviation }} - {{ $mfo->name }}
                                 </option>
@@ -279,7 +279,7 @@
     <script>
         $(document).ready(function() {
             // Initialize select2 for each dynamically generated select field
-            // The $('select[id^="multiple-select-field-"]') uses a jQuery attribute selector to target all select elements 
+            // The $('select[id^="multiple-select-field-"]') uses a jQuery attribute selector to target all select elements
             // whose id starts with multiple-select-field-. This ensures that the select2 plugin is initialized for all dynamically generated selects in each modal.
             $('select[id^="multiple-select-field-"]').select2({
                 theme: "bootstrap-5",

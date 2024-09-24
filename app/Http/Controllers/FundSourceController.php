@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FundSourceStoreRequest;
 use App\Http\Requests\FundSourceUpdateRequest;
 use App\Models\FundSource;
+use App\Traits\DataRetrievalTrait;
 use Illuminate\Http\Request;
 
 class FundSourceController extends Controller
 {
+    use DataRetrievalTrait;
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +24,7 @@ class FundSourceController extends Controller
 
     public function index()
     {
-        $fundSources = FundSource::get();
+        $fundSources = $this->getAllFundSources();
         return view('fund-sources.index',compact('fundSources'));
     }
 
@@ -97,7 +99,8 @@ class FundSourceController extends Controller
      */
     public function destroy(FundSource $fundSource)
     {
+        $name = strtoupper($fundSource->name);
         $fundSource->delete();
-        return redirect()->route('fund-sources.index')->with('success','Fund Source deleted successfully');
+        return redirect()->route('fund-sources.index')->with('success', "{$name} deleted successfully");
     }
 }

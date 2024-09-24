@@ -97,8 +97,9 @@ class UnitController extends Controller
      */
     public function destroy(Unit $unit)
     {
+        $name = strtoupper($unit->name);
         $unit->delete();
-        return redirect()->route('units.index')->with('success','Unit deleted successfully');
+        return redirect()->route('units.index')->with('success', "{$name} deleted successfully");
     }
 
     public function assignMfo(Request $request, $id)
@@ -109,7 +110,7 @@ class UnitController extends Controller
         $request->validate([
             'mfos' => 'required|array',
         ]);
-        
+
 
         // Sync the selected MFOs with the unit
         $unit->majorFinalOutputs()->sync($request->mfos);

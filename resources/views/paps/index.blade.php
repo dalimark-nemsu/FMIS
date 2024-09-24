@@ -118,33 +118,6 @@
     </div>
 </div>
 
-
-<!-- Delete Program, Activity, Projects Modal -->
-{{-- @foreach ($ProgramActivityProjectss as $ProgramActivityProjects)
-<div class="modal fade" id="deleteProgramActivityProjectsModal-{{$ProgramActivityProjects->id}}" tabindex="-1"
-    aria-labelledby="deleteProgramActivityProjectsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteProgramActivityProjectsModalLabel">Delete Confirmation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('fund-sources.delete', $ProgramActivityProjects->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="modal-body">
-                    Are you sure to delete Fund Source: <strong>{{ $ProgramActivityProjects->abbreviation }}</strong> ?
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Confirm</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@endforeach --}}
-
 @endsection
 
 @push('page-scripts')

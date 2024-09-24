@@ -104,7 +104,8 @@ class BudgetYearController extends Controller
      */
     public function destroy(BudgetYear $budgetYear)
     {
+        $year = $budgetYear->year;
         $budgetYear->delete();
-        return redirect()->route('budget-year.index')->with('success', 'Budget year deleted successfully');
+        return redirect()->route('budget-year.index')->with('success', "{$year} deleted successfully");
     }
 }

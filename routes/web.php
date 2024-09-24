@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BudgetCeilingController;
 use App\Http\Controllers\BudgetYearController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\FundSourceController;
@@ -90,3 +91,16 @@ Route::resource('paps', ProgramActivityProjectsController::class)->names([
     'update'    =>  'paps.update',
     'destroy'   =>  'paps.delete',
 ]);
+
+Route::resource('budget-ceilings', BudgetCeilingController::class)->names([
+    'index'     =>  'budget-ceilings.index',
+    'create'    =>  'budget-ceilings.create',
+    'store'     =>  'budget-ceilings.store',
+    'show'      =>  'budget-ceilings.show',
+    'edit'      =>  'budget-ceilings.edit',
+    'update'    =>  'budget-ceilings.update',
+    'destroy'   =>  'budget-ceilings.delete',
+]);
+
+Route::get('budget-ceilings/campus/{id}', [BudgetCeilingController::class, 'showCampus'])->name('show-campus');
+
