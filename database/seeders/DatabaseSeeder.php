@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             // CategoryTableSeeder::class,
             FundSourceTableSeeder::class,
             MajorFinalOutputTableSeeder::class,
+            RoleTableSeeder::class,
+            PermissionTableSeeder::class
             // ProgramActivityProjectTableSeeder::class
         ]);
     }
