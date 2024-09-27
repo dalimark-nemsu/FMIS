@@ -16,6 +16,7 @@ class CampusBudgetCeiling extends Model
         'ps',
         'mooe',
         'co',
+        'total_amount',
         'processed_by'
     ];
 

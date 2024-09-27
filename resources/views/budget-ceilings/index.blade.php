@@ -1,39 +1,6 @@
 @extends('layouts.app')
 
-{{-- @push('page-style')
-<style>
-    .budget-year-tag {
-        display: inline-flex;
-        align-items: center;
-        padding: 5px 10px;
-        font-size: 16px;
-        font-weight: 500;
-        color: #333;
-    }
-
-    .budget-year-tag i {
-        margin-right: 5px; /* Space between icon and text */
-    }
-
-    .year-value {
-        display: inline-block;
-        padding: 4px 15px; /* Padding inside the tag */
-        background-color: #28a745; /* Green background for the tag */
-        color: #fff; /* White text color */
-        font-weight: 700; /* Emphasize the year */
-        font-size: 16px; /* Font size for the year */
-        margin-left: 5px; /* Space between "Budget Year" and the year */
-    }
-
-    .btn-outline-primary:hover {
-        background-color: #007bff;
-        color: white;
-        transition: background-color 0.3s ease;
-    }
-</style>
-@endpush --}}
-
-@section('page-title', 'Budget Ceiling - ' . $campus->name . ' Campus (Budget Year: '. $activeYear->year .')')
+@section('page-title', 'Campus Budget Ceiling')
 
 @section('content')
 <div id="app-content">
@@ -53,41 +20,73 @@
             <div class="row">
                 <div class="col-12">
                     <div class="my-3 mt-4">
-                    {{-- <!-- Budget Year Display -->
-                    <div class="d-flex mb-2">
-                        <span class="budget-year-tag ms-4">
-                        <i class="bi bi-calendar-event"></i> <!-- Icon for the tag -->
-                        Budget Year: <span class="year-value">{{ $activeYear->year }}</span>
-                        </span>
-                    </div> --}}
-
-                    <!-- Horizontal Lines and Centered Button -->
-                    <div class="d-flex align-items-center">
-                        <!-- Left Horizontal Line -->
-                        <div class="flex-grow-1 border-bottom"></div>
-
-                        <!-- Centered Button -->
-                        <div class="mx-3">
-                        <a href="#addBudgetCeilingModal"
-                            class="btn btn-outline-primary shadow-sm btn-sm"
-                            data-bs-toggle="modal"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title="Create New Budget Ceiling">
-                            <i class="bi bi-plus-lg"></i>
-                        </a>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <!-- Cards on the Left in a single line -->
+                            <div class="d-flex flex-wrap">
+                                <!-- Campus Card -->
+                                <div class="card shadow border-0 rounded-3 me-4" style="min-width: 200px; max-width: 100%;">
+                                    <div class="card-body d-flex justify-content-start align-items-center p-3 bg-light rounded-3">
+                                        <div class="icon-container me-3" style="width: 50px; height: 50px; background-color: #eaefe9; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                                            <i class="bi bi-building fs-4 text-info"></i>
+                                        </div>
+                                        <div class="text-start">
+                                            <h5 class="text-muted mb-0">Campus</h5>
+                                            <p class="fs-5 fw-bold text-dark mb-0 mt-1">{{ $campus->name }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Budget Year Card -->
+                                <div class="card shadow border-0 rounded-3 me-4" style="min-width: 200px; max-width: 100%;">
+                                    <div class="card-body d-flex justify-content-start align-items-center p-3 bg-light rounded-3">
+                                        <div class="icon-container me-3" style="width: 50px; height: 50px; background-color: #e9ecef; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                                            <i class="bi bi-calendar-event fs-4 text-success"></i>
+                                        </div>
+                                        <div class="text-start">
+                                            <h5 class="text-muted mb-0">Budget Year</h5>
+                                            <p class="fs-5 fw-bold text-dark mb-0 mt-1">{{ $activeYear->year }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Grand Total Card -->
+                                <div class="card shadow border-0 rounded-3 me-4" style="min-width: 200px; max-width: 100%;">
+                                    <div class="card-body d-flex justify-content-start align-items-center p-3 bg-light rounded-3">
+                                        <div class="icon-container me-3" style="width: 50px; height: 50px; background-color: #e9ecef; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                                            <i class="bi bi-cash-stack fs-4 text-primary"></i>
+                                        </div>
+                                        <div class="text-start">
+                                            <h5 class="text-muted mb-0">Grand Total</h5>
+                                            <p class="fs-5 fw-bold text-dark mb-0 mt-1">&#8369 {{ number_format($grandTotal, 2) }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Google-Style Add Button -->
+                                <div>
+                                    <a href="#addBudgetCeilingModal" class="card shadow border-0 rounded-3 bg-light p-3 text-center" data-bs-toggle="modal" data-bs-toggle="tooltip" data-bs-placement="top" title="Create New Budget Ceiling" style="min-width: 120px; max-width: 120%; height: 120px;">
+                                        <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                                            <i class="bi bi-plus-lg fs-1 text-primary" style="flex-shrink: 0;"></i>
+                                        </div>
+                                    </a>
+                                </div>
+                                @include('budget-ceilings.modals.add_budget_ceiling', ['campus' => $campus, 'activeYear' => $activeYear, 'fundSources' => $fundSources, 'mfos' => $mfos, 'paps' => $paps])
+                            </div>
                         </div>
-
-                        <!-- Right Horizontal Line -->
-                        <div class="flex-grow-1 border-bottom"></div>
-                    </div>
 
                     @if($groupedBudgetCeilings->isNotEmpty())
                         @foreach ($groupedBudgetCeilings as $fundSource => $budgetCeilings)
                             <!-- Card for each Fund Source -->
                             <div class="card mt-3">
-                                <div class="card-header">
+                                <div class="card-header d-flex justify-content-between align-items-center">
                                     <h4 class="mb-0">{{ $fundSource }}</h4> <!-- Display the fund source as the card title -->
+
+                                    <!-- Subtotal Display -->
+                                    <div>
+                                        <strong>Subtotal: </strong>
+                                        <span class="fs-5 text-dark">
+                                            &#8369 {{ number_format($budgetCeilings->sum(function($budgetCeiling) {
+                                                return $budgetCeiling->ps + $budgetCeiling->mooe + $budgetCeiling->co;
+                                            }), 2) }}
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="table-responsive table-card p-4">
                                     <table id="example" class="table text-nowrap table-centered mt-0" style="width: 100%">
@@ -113,7 +112,7 @@
                                                     <td>{{ number_format($budgetCeiling->ps + $budgetCeiling->mooe + $budgetCeiling->co, 2) }}</td>
                                                     <td>
                                                         <!-- Edit Button -->
-                                                        <a href="#editBudgetModal-{{$budgetCeiling->id}}"
+                                                        <a href="#editBudgetCeilingModal-{{$budgetCeiling->id}}"
                                                         class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
                                                         data-bs-toggle="modal"
                                                         data-bs-toggle="tooltip"
@@ -123,7 +122,7 @@
                                                         </a>
 
                                                         <!-- Delete Button -->
-                                                        <a href="#deleteBudgetModal-{{$budgetCeiling->id}}"
+                                                        <a href="#deleteBudgetCeilingModal-{{$budgetCeiling->id}}"
                                                         class="btn btn-outline-danger btn-sm rounded-circle shadow-sm"
                                                         data-bs-toggle="modal"
                                                         data-bs-toggle="tooltip"
@@ -133,6 +132,7 @@
                                                         </a>
                                                     </td>
                                                 </tr>
+                                                @include('budget-ceilings.modals.edit_budget_ceiling', ['budgetCeiling' => $budgetCeiling])
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -140,133 +140,12 @@
                             </div>
                         @endforeach
                     @endif
-
-
                 </div>
             </div>
           </div>
         </div>
       </div>
-
 </div>
-
-<!-- Add Budget Ceiling Modal -->
-<div class="modal fade" id="addBudgetCeilingModal" tabindex="-1" aria-labelledby="addBudgetCeilingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addBudgetCeilingModalLabel">Add New Budget Ceiling ({{ $campus->name }} Campus)</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('budget-ceilings.store',['campus_id' => $campus->id, 'year_id' => $activeYear->id]) }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <!-- Column 1 -->
-                        <div class="col-md-6">
-                            <label for="fundSource" class="form-label">Fund Source:</label>
-                            <select class="form-select" name="fundSource" id="fund_source">
-                                <option value=""> -- Select Fund Source -- </option>
-                                @foreach ($fundSources as $fundSource )
-                                    <option value="{{ $fundSource->id }}">{{ $fundSource->abbreviation }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Column 2 -->
-                        <div class="col-md-6">
-                            <label for="mfo" class="form-label">MFO:</label>
-                            <select class="form-select" name="mfo" id="mfo">
-                                <option value=""> -- Select Major Final Outputs -- </option>
-                                @foreach ($mfos as $mfo )
-                                    <option value="{{ $mfo->id }}">{{ $mfo->abbreviation }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="pap" class="form-label">PAP:</label>
-                            <select class="form-select" name="pap" id="pap">
-                                <option value=""> -- Select Program, Activity, Projects -- </option>
-                                @foreach ($paps as $pap )
-                                    <option value="{{ $pap->id }}">{{ $pap->code }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="ps" class="form-label">PS:</label>
-                            <input type="text" class="form-control" id="ps" name="ps" required>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="mooe" class="form-label">MOOE:</label>
-                            <input type="text" class="form-control" id="mooe" name="mooe" required>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="co" class="form-label">CO:</label>
-                            <input type="text" class="form-control" id="co" name="co" required>
-                        </div>
-                    </div>
-
-                    <!-- Horizontal line to separate inputs from total -->
-                    <hr class="my-4">
-
-                    <!-- Total display -->
-                    <div class="row">
-                        <div class="col-md-12 text-end">
-                            <label for="total" class="form-label fs-5 fw-bold">Total: &#8369</label>
-                            <span id="total" class="fs-5 fw-bold">0.00</span> <!-- Default total value as 0 -->
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-
-<!-- Edit Fund Source Modal -->
-{{-- @foreach ($fundSources as $fundSource)
-<div class="modal fade" id="editFundSourceModal-{{$fundSource->id}}" tabindex="-1"
-    aria-labelledby="editFundSourceModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editFundSourceModalLabel">Edit Fund Source</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('fund-sources.update', $fundSource->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="abbrev" class="form-label">Abbreviation:</label>
-                        <input type="text" class="form-control" id="abbrev" name="abbrev" value="{{ $fundSource->abbreviation }}" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="edit-name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="edit-name" name="name" value="{{ $fundSource->name }}" required>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@endforeach --}}
 
 
 <!-- Delete Fund Source Modal -->
@@ -299,49 +178,156 @@
 
 @push('page-scripts')
 <script>
-    $(document).ready(function() {
-        // Attach input event listeners to PS, MOOE, and CO fields
-        $('#ps, #mooe, #co').on('input', function() {
-            formatInput($(this)); // Format input fields with commas
-            updateTotal(); // Update total with formatted values
-        });
+$(document).ready(function() {
+    // =================== Add Budget Ceiling Modal Code ===================
 
-        // Function to format input with commas as user types
-        function formatInput(input) {
-            let value = input.val();
+    // Initialize Select2 on the PAP select element for the Add modal
+    initializeSelect2('#pap', '#addBudgetCeilingModal');
 
-            // Remove all non-numeric characters except for decimal points
-            value = value.replace(/[^0-9.]/g, '');
+    // Attach input event listeners to PS, MOOE, and CO fields for the Add modal
+    $('#ps, #mooe, #co').on('input', function() {
+        formatInput($(this)); // Format input fields with commas
+        // updateTotal(['#ps', '#mooe', '#co'], '#total'); // Update total for Add modal
+        updateTotal($(this).closest('.add-budget-ceiling-modal'), ['.ps', '.mooe', '.co'], '.total');
+    });
 
-            // Ensure there's only one decimal point
-            const parts = value.split('.');
-            if (parts.length > 2) {
-                value = parts[0] + '.' + parts[1]; // Keep only the first decimal point
-            }
+    // Common change handler for PAP selection for Add modal
+    handlePapChange('#pap', '#fund_source', '#mfo');
+    // Common change handler for Fund Source and MFO selection for Add modal
+    handleFilterChange('#fund_source', '#mfo', '#pap');
+});
 
-            // Add commas to the integer part of the number and leave decimals intact
-            if (parts.length === 2) {
-                // Add commas only to the integer part
-                value = parseFloat(parts[0]).toLocaleString() + '.' + parts[1];
-            } else if (parts[0] !== '') {
-                value = parseFloat(parts[0]).toLocaleString();
-            }
+// =================== Edit Budget Ceiling Modal Code ===================
+$(document).on('shown.bs.modal', '.edit-budget-ceiling-modal', function(e) {
+    const editBudgetCeilingModal = $(this);
+    const editPapInput = editBudgetCeilingModal.find('.edit-pap');
+    const editFundSourceInput = editBudgetCeilingModal.find('.edit-fund-source');
+    const editMofInput = editBudgetCeilingModal.find('.edit-mfo');
+    initializeSelect2(editPapInput, editBudgetCeilingModal);
+    // Reattach input event listeners for the Edit modal
+    editBudgetCeilingModal.find('.edit-ps, .edit-mooe, .edit-co').on('input', function() {
+        formatInput($(this)); // Format input fields with commas
+        updateTotal($(this).closest('.edit-budget-ceiling-modal'), ['.edit-ps', '.edit-mooe', '.edit-co'], '.edit-total'); // Update total for Edit modal
+    });
 
-            // Update the input field value
-            input.val(value);
-        }
+    // Rebind change listeners for the Fund Source, MFO, and PAP in the Edit modal
+    handleFilterChange(editFundSourceInput, editMofInput, editPapInput);
 
-        // Function to calculate and update the total
-        function updateTotal() {
-            // Remove commas before parsing the values for calculation
-            const ps = parseFloat($('#ps').val().replace(/,/g, '')) || 0;
-            const mooe = parseFloat($('#mooe').val().replace(/,/g, '')) || 0;
-            const co = parseFloat($('#co').val().replace(/,/g, '')) || 0;
-            const total = ps + mooe + co;
+    // Make sure the PAP change handler runs once
+    editBudgetCeilingModal.find('.edit-pap').off('change').on('change', function() {
+        handlePapChange('.edit-pap', '.edit-fund-source', '.edit-mfo');
+    });
+});
 
-            // Check if the inputs are valid numbers and display the total, otherwise display 0
-            $('#total').text(total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+// =================== Shared Functions ===================
+// Function to initialize Select2 on a specific select element
+function initializeSelect2(selector, parentModal) {
+    $(selector).select2({
+        dropdownParent: $(parentModal),
+        theme: "bootstrap-5",
+        width: '100%',
+    });
+}
+
+// Function to format input with commas as the user types
+function formatInput(input) {
+    let value = input.val();
+    // Remove all non-numeric characters except for decimal points
+    value = value.replace(/[^0-9.]/g, '');
+    // Ensure there's only one decimal point
+    const parts = value.split('.');
+    if (parts.length > 2) {
+        value = parts[0] + '.' + parts[1]; // Keep only the first decimal point
+    }
+    // Add commas to the integer part of the number and leave decimals intact
+    if (parts.length === 2) {
+        value = parseFloat(parts[0]).toLocaleString() + '.' + parts[1];
+    } else if (parts[0] !== '') {
+        value = parseFloat(parts[0]).toLocaleString();
+    }
+    // Update the input field value
+    input.val(value);
+}
+
+// Function to handle PAP selection changes
+function handlePapChange(papSelector, fundSourceSelector, mfoSelector) {
+    $(papSelector).change(function() {
+        const papId = $(this).val();
+        if (papId) {
+            $.ajax({
+                url: `/get-fundsource-and-mfo-by-paps/${papId}`,
+                method: 'GET',
+                success: function(data) {
+                    if (data.status === 'success') {
+                        $(fundSourceSelector).val(data.fund_source_id);
+                        $(mfoSelector).val(data.mfo_id);
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
         }
     });
+}
+
+// =================== Handle Filter Change Function ===================
+function handleFilterChange(fundSourceSelector, mfoSelector, papSelector) {
+    // Bind the change event on both fundSource and MFO selectors
+    fundSourceSelector.add(mfoSelector).on('change', function() {
+        const fundSourceId = fundSourceSelector.val();
+        const mfoId = mfoSelector.val();
+
+        // Reset the PAP dropdown
+        papSelector.empty().append('<option value=""> -- Select Program, Activity, Projects -- </option>');
+
+        // Construct the URL for the AJAX request
+        let url = '/get-paps';
+        const params = [];
+
+        // Add fundSourceId to the params if it exists
+        if (fundSourceId) {
+            params.push(`fundSourceId=${fundSourceId}`);
+        }
+
+        // Add mfoId to the params if it exists
+        if (mfoId) {
+            params.push(`mfoId=${mfoId}`);
+        }
+
+        // If there are parameters, execute the AJAX call
+        if (params.length > 0) {
+            url += '?' + params.join('&');
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(data) {
+                    if (data.length > 0) {
+                        // Populate the PAP dropdown with the returned data
+                        data.forEach(function(pap) {
+                            papSelector.append(`<option value="${pap.id}">${pap.code}</option>`);
+                        });
+                    } else {
+                        // If no data is returned, show a disabled option
+                        papSelector.append('<option value="" disabled selected>No PAPs found</option>');
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX error: ', textStatus, errorThrown);
+                    alert('An error occurred while fetching PAPs. Please try again.');
+                }
+            });
+        }
+    });
+}
+
+// Function to calculate and update the total for modal inputs
+function updateTotal(modal, totalFields, totalSelector) {
+    let total = 0;
+    totalFields.forEach(function(field) {
+        total += parseFloat(modal.find(field).val().replace(/,/g, '')) || 0; // Use modal context to find fields
+    });
+    // Update total display
+    modal.find(totalSelector).text(total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+}
 </script>
 @endpush
