@@ -16,7 +16,7 @@ class FundSource extends Model
         'name',
     ];
 
-    public function paps()
+    public function programActivityProjects()
     {
         return $this->hasMany(ProgramActivityProject::class);
     }
