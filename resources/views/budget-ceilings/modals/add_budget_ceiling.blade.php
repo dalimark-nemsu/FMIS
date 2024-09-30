@@ -13,7 +13,7 @@
 
                         <div class="col-md-6">
                             <label for="fundSource" class="form-label">Fund Source:</label>
-                            <select class="form-select" name="fundSource" id="fund_source">
+                            <select class="form-select add-fund-source" name="fundSource" id="fund_source">
                                 <option value="" disabled selected> -- Select Fund Source -- </option>
                                 @foreach ($fundSources as $fundSource )
                                     <option value="{{ $fundSource->id }}">{{ $fundSource->abbreviation }}</option>
@@ -23,7 +23,7 @@
 
                         <div class="col-md-6">
                             <label for="mfo" class="form-label">MFO:</label>
-                            <select class="form-select" name="mfo" id="mfo">
+                            <select class="form-select add-mfo" name="mfo" id="mfo">
                                 <option value="" disabled selected> -- Select Major Final Outputs -- </option>
                                 @foreach ($mfos as $mfo )
                                     <option value="{{ $mfo->id }}">{{ $mfo->abbreviation }}</option>
@@ -33,7 +33,7 @@
 
                         <div class="col-md-6">
                             <label for="pap" class="form-label">PAP:</label>
-                            <select class="js-example-basic-single js-states form-control" name="pap" id="pap">
+                            <select class="js-example-basic-single js-states form-control add-pap" name="pap" id="pap">
                                 <option value="" disabled selected> -- Select Program, Activity, Projects -- </option>
                                 @foreach ($paps as $pap )
                                     <option value="{{ $pap->id }}">{{ $pap->code }}</option>
