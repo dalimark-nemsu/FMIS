@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class CampusController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:read-campus|create-campus|update-campus|delete-campus');
+    }
     /**
      * Display a listing of the resource.
      *

@@ -16,7 +16,15 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name'  =>  'University Budget',
+            'name'  =>  'Mark Santing',
+            'position_id'  =>  1,
+            'unit_id'  =>  1,
+            'email'  =>  'mark@nemsu.edu.ph',
+            'password'  =>  bcrypt('password'),
+        ]);
+
+        User::create([
+            'name'  =>  'University Budget Officer',
             'position_id'  =>  1,
             'unit_id'  =>  1,
             'email'  =>  'universitybudget@nemsu.edu.ph',
@@ -24,7 +32,7 @@ class UserTableSeeder extends Seeder
         ]);
 
         User::create([
-            'name'  =>  'University Budget',
+            'name'  =>  'Campus Budget Officer',
             'position_id'  =>  2,
             'unit_id'  =>  1,
             'email'  =>  'campusbudget@nemsu.edu.ph',

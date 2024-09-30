@@ -64,12 +64,14 @@
       </a>
     </li>
 
-    <li class="nav-item">
-      <a class="nav-link {{(request()->is('campus')) ? '' : 'collapsed' }}" href="{{ route('campuses.index') }}">
-        <i class="bi bi-geo-alt"></i>
-        <span>Campus</span>
-      </a>
-    </li>
+    @permission('read-campus')
+      <li class="nav-item">
+        <a class="nav-link {{(request()->is('campus')) ? '' : 'collapsed' }}" href="{{ route('campuses.index') }}">
+          <i class="bi bi-geo-alt"></i>
+          <span>Campus</span>
+        </a>
+      </li>
+    @endpermission
 
     <li class="nav-item">
       <a class="nav-link {{(request()->is('budget-year')) ? '' : 'collapsed' }}" href="{{ route('budget-year.index') }}">
