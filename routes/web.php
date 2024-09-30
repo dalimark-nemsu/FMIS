@@ -8,6 +8,8 @@ use App\Http\Controllers\MajorFinalOutputController;
 use App\Http\Controllers\ProgramActivityProjectsController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Auth;
+use App\Models\FundSource;
+use App\Models\ProgramActivityProject;
 use Illuminate\Support\Facades\Route;
 
 
@@ -27,6 +29,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|budget-officer-iii|budget-officer-ii|president']], function() {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

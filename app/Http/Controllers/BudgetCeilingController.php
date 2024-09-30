@@ -49,7 +49,9 @@ class BudgetCeilingController extends Controller
         $groupedBudgetCeilings = $campusBudgetCeilings->groupBy(function ($type) {
             return $type->programActivityProject->fundSource->abbreviation;
         });
-        return view('budget-ceilings.index', compact('campus', 'activeYear', 'fundSources', 'mfos', 'paps', 'groupedBudgetCeilings'));
+        // Calculate the grand total based on total_amount
+        $grandTotal = $campusBudgetCeilings->sum('total_amount');
+        return view('budget-ceilings.index', compact('campus', 'activeYear', 'fundSources', 'mfos', 'paps', 'groupedBudgetCeilings', 'grandTotal'));
     }
 
     /**
@@ -70,11 +72,10 @@ class BudgetCeilingController extends Controller
      */
     public function store(BudgetCeilingStoreRequest $request)
     {
-        // return $request;
         $psAmount = str_replace(',', '', $request->ps);
         $mooeAmount = str_replace(',', '', $request->mooe);
         $coAmount = str_replace(',', '', $request->co);
-
+        $totalAmount = $psAmount + $mooeAmount + $coAmount;
         CampusBudgetCeiling::create([
             'campus_id'             =>      $request->campus_id,
             'budget_year_id'        =>      $request->year_id,
@@ -82,6 +83,7 @@ class BudgetCeilingController extends Controller
             'ps'                    =>      $psAmount,
             'mooe'                  =>      $mooeAmount,
             'co'                    =>      $coAmount,
+            'total_amount'          =>      $totalAmount,
             'processed_by'          =>      1,
         ]);
         return redirect()->back()->with('success','Budget Ceiling added successfully');
@@ -116,9 +118,20 @@ class BudgetCeilingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, CampusBudgetCeiling $campusBudgetCeiling)
     {
-        //
+        $psAmount = str_replace(',', '', $request->ps);
+        $mooeAmount = str_replace(',', '', $request->mooe);
+        $coAmount = str_replace(',', '', $request->co);
+        $totalAmount = $psAmount + $mooeAmount + $coAmount;
+        $campusBudgetCeiling->update([
+            'pap_id'                =>      $request->pap,
+            'ps'                    =>      $psAmount,
+            'mooe'                  =>      $mooeAmount,
+            'co'                    =>      $coAmount,
+            'total_amount'          =>      $totalAmount,
+            'processed_by'          =>      1,
+        ]);
     }
 
     /**

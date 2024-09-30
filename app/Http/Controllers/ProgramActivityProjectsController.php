@@ -83,6 +83,66 @@ class ProgramActivityProjectsController extends Controller
         return redirect()->route('paps.index')->with('success','Program Activity Project added successfully');
     }
 
+    // public function getPapsByFundSource($fundSourceId)
+    // {
+    //     // Query PAPs based on the selected Fund Source and MFO
+    //     $paps = ProgramActivityProject::where('fund_source_id', $fundSourceId)
+    //                                    ->get();
+    //     return response()->json($paps);
+    // }
+
+    // public function getPapsByMfo($mfoId)
+    // {
+    //     // Query PAPs based on the selected Fund Source and MFO
+    //     $paps = ProgramActivityProject::where('mfo_id', $mfoId)
+    //                                    ->get();
+    //     return response()->json($paps);
+    // }
+
+    // public function getPapsByFundSourceAndMfo($fundSourceId, $mfoId)
+    // {
+    //     // Query PAPs based on the selected Fund Source and MFO
+    //     $paps = ProgramActivityProject::where('fund_source_id', $fundSourceId)
+    //                                    ->where('mfo_id', $mfoId)
+    //                                    ->get();
+    //     return response()->json($paps);
+    // }
+
+    public function getPaps(Request $request)
+{
+    $query = ProgramActivityProject::query();
+
+    // Apply filters based on the request
+    if ($request->has('fundSourceId')) {
+        $query->where('fund_source_id', $request->fundSourceId);
+    }
+
+    if ($request->has('mfoId')) {
+        $query->where('mfo_id', $request->mfoId);
+    }
+
+    $paps = $query->get(['id', 'code']); // Adjust as necessary to fetch needed fields
+
+    return response()->json($paps);
+}
+
+
+    public function getFundSourceAndMfoByPaps($papId)
+    {
+        // Find the ProgramActivityProject by papId
+        $pap = ProgramActivityProject::with(['fundSource', 'majorFinalOutput'])
+                                       ->findOrFail($papId);
+
+        // Return the fund_source_id and mfo_id as a JSON response
+        return response()->json([
+            'status' => 'success',
+            'fund_source_id' => $pap->fund_source_id,
+            'mfo_id' => $pap->mfo_id,
+        ]);
+    }
+
+
+
     /**
      * Display the specified resource.
      *

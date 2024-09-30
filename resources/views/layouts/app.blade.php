@@ -43,6 +43,9 @@
   <!-- Template Main CSS File -->
   <link href="{{ asset('assets/layouts/css/style.css') }}" rel="stylesheet">
 
+  <!-- Include Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- Datatables CSS B5 -->
      {{-- <link href="{{ asset('assets/datatables5/css/bootstrap.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('assets/datatables5/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
@@ -114,6 +117,9 @@
 
 <!-- Bootstrap Datepicker JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<!-- Include Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
 
