@@ -107,5 +107,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
     ]);
     
     Route::get('budget-ceilings/campus/{id}', [BudgetCeilingController::class, 'showCampus'])->name('show-campus');
+    
+    // Route::get('/get-paps-by-fundsource/{fundSourceId}', [ProgramActivityProjectsController::class, 'getPapsByFundSource']);
+    // Route::get('/get-paps-by-mfo/{mfoId}', [ProgramActivityProjectsController::class, 'getPapsByMfo']);
+    // Route::get('/get-paps-by-fundsource-and-mfo/{fundSourceId}/{mfoId}', [ProgramActivityProjectsController::class, 'getPapsByFundSourceAndMfo']);
+    Route::get('/get-paps', [ProgramActivityProjectsController::class, 'getPaps']);
+    Route::get('/get-fundsource-and-mfo-by-paps/{papId}', [ProgramActivityProjectsController::class, 'getFundSourceAndMfoByPaps']);
 });
 
