@@ -194,7 +194,7 @@ $(document).ready(function() {
     // Common change handler for PAP selection for Add modal
     handlePapChange('#pap', '#fund_source', '#mfo');
     // Common change handler for Fund Source and MFO selection for Add modal
-    handleFilterChange('#fund_source', '#mfo', '#pap');
+    handleFilterChange('.add-fund-source', '.add-mfo', '.add-pap');
 });
 
 // =================== Edit Budget Ceiling Modal Code ===================
@@ -272,13 +272,20 @@ function handlePapChange(papSelector, fundSourceSelector, mfoSelector) {
 
 // =================== Handle Filter Change Function ===================
 function handleFilterChange(fundSourceSelector, mfoSelector, papSelector) {
+    // Convert selectors to jQuery objects
+    const $fundSource = $(fundSourceSelector);
+    const $mfo = $(mfoSelector);
+    const $pap = $(papSelector);
+
     // Bind the change event on both fundSource and MFO selectors
-    fundSourceSelector.add(mfoSelector).on('change', function() {
-        const fundSourceId = fundSourceSelector.val();
-        const mfoId = mfoSelector.val();
+    $fundSource.add($mfo).on('change', function() {
+        const fundSourceId = $fundSource.val();
+        const mfoId = $mfo.val();
+
+        console.log(fundSourceId, mfoId);
 
         // Reset the PAP dropdown
-        papSelector.empty().append('<option value=""> -- Select Program, Activity, Projects -- </option>');
+        $pap.empty().append('<option value=""> -- Select Program, Activity, Projects -- </option>');
 
         // Construct the URL for the AJAX request
         let url = '/get-paps';
@@ -304,21 +311,19 @@ function handleFilterChange(fundSourceSelector, mfoSelector, papSelector) {
                     if (data.length > 0) {
                         // Populate the PAP dropdown with the returned data
                         data.forEach(function(pap) {
-                            papSelector.append(`<option value="${pap.id}">${pap.code}</option>`);
+                            console.log(pap.id, pap.code);
+                            $pap.append(`<option value="${pap.id}">${pap.code}</option>`).prop('disabled', false);
                         });
                     } else {
                         // If no data is returned, show a disabled option
-                        papSelector.append('<option value="" disabled selected>No PAPs found</option>');
+                        $pap.append('<option value="">No PAPs found</option>');
                     }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('AJAX error: ', textStatus, errorThrown);
-                    alert('An error occurred while fetching PAPs. Please try again.');
                 }
             });
         }
     });
 }
+
 
 // Function to calculate and update the total for modal inputs
 function updateTotal(modal, totalFields, totalSelector) {
