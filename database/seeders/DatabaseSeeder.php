@@ -19,12 +19,14 @@ class DatabaseSeeder extends Seeder
             CampusTableSeeder::class,
             UnitTableSeeder::class,
             PositionTableSeeder::class,
+            PermissionTableSeeder::class,
+            RoleTableSeeder::class,
             UserTableSeeder::class,
             // CategoryTableSeeder::class,
+            BudgetYearTableSeeder::class,
             FundSourceTableSeeder::class,
             MajorFinalOutputTableSeeder::class,
-            RoleTableSeeder::class,
-            PermissionTableSeeder::class
+            ProgramActivityProjectTableSeeder::class
             // ProgramActivityProjectTableSeeder::class
         ]);
     }

@@ -58,11 +58,11 @@
 <body>
 
   <!-- ======= Header ======= -->
-  @include('layouts.inc.navbar')
+  @include('layouts.user.inc.navbar')
 
   <!-- ======= Sidebar ======= -->
 
-  @include('layouts.inc.sidebar')
+  @include('layouts.user.inc.sidebar')
 
   <main id="main" class="main">
 
@@ -83,7 +83,7 @@
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  @include('layouts.inc.footer')
+  @include('layouts.user.inc.footer')
 
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

@@ -53,12 +53,14 @@
           <hr class="dropdown-divider">
         </li>
 
-        <li>
-          <a class="dropdown-item d-flex align-items-center" href="{{ route('home') }}">
-            <i class="bi bi-toggles"></i>
-            <span>Switch to User</span>
-          </a>
-        </li>
+        @role(['super-admin', 'budget-officer-iii', 'budget-officer-ii'])
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.home') }}" target="_blank">
+              <i class="bi bi-toggles"></i>
+              <span>Admin Console</span>
+            </a>
+          </li>
+        @endrole
         <li>
           <hr class="dropdown-divider">
         </li>

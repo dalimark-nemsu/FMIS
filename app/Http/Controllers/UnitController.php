@@ -7,7 +7,9 @@ use App\Http\Requests\UnitUpdateRequest;
 use App\Models\Campus;
 use App\Models\MajorFinalOutput;
 use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UnitController extends Controller
 {
@@ -18,11 +20,24 @@ class UnitController extends Controller
      */
     public function index()
     {
-        $campuses = Campus::get();
-        $units = Unit::get();
-        $mfos = MajorFinalOutput::all();
-        return view('units.index',compact('campuses', 'units','mfos'));
+        $user = auth()->user(); // Get authenticated user
+        // Check if the user has the role 'budget-officer-ii'
+        if ($user->hasRole('budget-officer-ii')) {
+            // Assuming the user has a campus_id field to determine the campus they belong to
+            $campuses = Campus::where('id', $user->unit?->campus_id)->get();
+            // Filter units by the campus that the user belongs to
+            $units = Unit::where('campus_id', $user->unit?->campus_id)->get();
+        } else {
+            // Otherwise, get all campuses and units
+            $campuses = Campus::get();
+            $units = Unit::get();
+        }
+    
+        $mfos = MajorFinalOutput::all(); // Fetch all MFOS (no need to filter unless necessary)
+    
+        return view('units.index', compact('campuses', 'units', 'mfos'));
     }
+    
 
     /**
      * Show the form for creating a new resource.

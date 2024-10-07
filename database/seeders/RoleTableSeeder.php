@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Str;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -21,10 +22,39 @@ class RoleTableSeeder extends Seeder
         ];
 
         foreach ($roles as $key => $role) {
-            Role::create([
+            $role = Role::create([
                 'name'  => Str::slug($role, '-'),
                 'display_name'  => $role
             ]);
+
+            $superAdminAndBudgetOfficer3Permsissions = Permission::all()->pluck('id');
+
+            $excludedPermissions = [
+                'create-campus-budget-ceiling',
+                'read-campus-budget-ceiling',
+                'update-campus-budget-ceiling',
+                'delete-campus-budget-ceiling',
+                'create-budget-year',
+                'read-budget-year',
+                'update-budget-year',
+                'delete-budget-year'
+            ];
+
+            $budgetOfficer2Permissions = Permission::whereNotIn('name', $excludedPermissions)->pluck('id')->toArray();
+
+            switch ($role->name) {
+                case 'super-admin':
+                case 'budget-officer-iii':
+                    $role->attachPermissions($superAdminAndBudgetOfficer3Permsissions);
+                    break;
+                case 'budget-officer-ii':
+                    $role->attachPermissions($budgetOfficer2Permissions);
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
         }
     }
 }
