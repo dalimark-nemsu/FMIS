@@ -35,7 +35,7 @@
               {{-- <a href="{{ route('youths.barangay.details') }}"> --}}
               <div class="card info-card sales-card">
                 <div class="card-body">
-                  <h5 class="card-title">Total Youths</h5>
+                  <h5 class="card-title">Card Title</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -58,7 +58,7 @@
               {{-- <a href="{{ route('dashboard.bmi.details', 'normal') }}"> --}}
               <div class="card info-card revenue-card">
                 <div class="card-body">
-                  <h5 class="card-title">Males</h5>
+                  <h5 class="card-title">Card Title</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -66,7 +66,7 @@
 
                     </div>
                     <div class="ps-3">
-                      <h6>Total Males</h6>
+                      <h6>Total</h6>
                       <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
                     </div>
                   </div>
@@ -82,159 +82,12 @@
               {{-- <a href="{{ route('dashboard.bmi.details', 'underweight') }}"> --}}
               <div class="card info-card underweight-card">
                 <div class="card-body">
-                  <h5 class="card-title">Females</h5>
+                  <h5 class="card-title">Card Title</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="fas fa-female"></i>
 
-                    </div>
-                    <div class="ps-3">
-                      <h6>Total Females</h6>
-                      <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-              {{-- </a> --}}
-            </div><!-- End Revenue Card -->
-          <!-- Revenue Card -->
-          
-
-
-          <div class="col-xxl-4 col-md-4">
-            {{-- <a href="{{ route('dashboard.barangay.details') }}"> --}}
-            <div class="card info-card barangay-card">
-              <div class="card-body">
-                <h5 class="card-title">Child Youths<span>(15-17 years old)</span></h5>
-
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    {{-- <i class="bi bi-building"></i> --}}
-                    <i class="fas fa-child"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>Total Child</h6>
-                    <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            {{-- </a> --}}
-          </div><!-- End Revenue Card -->
-
-          <div class="col-xxl-4 col-md-4">
-            {{-- <a href="{{ route('dashboard.barangay.details') }}"> --}}
-            <div class="card info-card barangay-card">
-              <div class="card-body">
-                <h5 class="card-title">Core Youths<span>(18-24 years old)</span></h5>
-
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="fas fa-users"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>Total Core Youths</h6>
-                    <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            {{-- </a> --}}
-          </div><!-- End Revenue Card -->
-
-
-          <div class="col-xxl-4 col-md-4">
-            {{-- <a href="{{ route('dashboard.barangay.details') }}"> --}}
-            <div class="card info-card barangay-card">
-              <div class="card-body">
-                <h5 class="card-title">Young Adults<span>(25-30 years old)</span></h5>
-
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="fas fa-users"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>Young Adults</h6>
-                    <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            {{-- </a> --}}
-          </div><!-- End Revenue Card -->
-
-
-            <!-- Revenue Card -->
-            <div class="col-xxl-4 col-md-4">
-              {{-- <a href="{{ route('dashboard.bmi.details', 'overweight') }}"> --}}
-              <div class="card info-card customers-card">
-                <div class="card-body">
-                  <h5 class="card-title">Out of School Youths</h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="fas fa-school"></i>
-
-                    </div>
-                    <div class="ps-3">
-                      <h6>Tota Out School youth</h6>
-                      <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-              {{-- </a> --}}
-            </div><!-- End Revenue Card -->
-          <!-- Revenue Card -->
-          
-
-            <!-- Revenue Card -->
-            <div class="col-xxl-4 col-md-4">
-              {{-- <a href="{{ route('dashboard.bmi.details', 'obese') }}"> --}}
-                <div class="card info-card overweight-card">
-                  <div class="card-body">
-                    <h5 class="card-title">Registered SK Voters</h5>
-
-                    <div class="d-flex align-items-center">
-                      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="fas fa-vote-yea"></i>
-
-                      </div>
-                      <div class="ps-3">
-                        <h6>Total</h6>
-                        <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              {{-- </a> --}}
-            </div><!-- End Revenue Card -->
-          <!-- Revenue Card -->
-          
-            <div class="col-xxl-4 col-md-4">
-              {{-- <a href="{{ route('dashboard.barangay.details') }}"> --}}
-              {{-- <div class="card info-card barangay-card"> --}}
-              <div class="card info-card overweight-card">
-
-                <div class="card-body">
-                  <h5 class="card-title">Overage Youths</h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="fas fa-users"></i>
                     </div>
                     <div class="ps-3">
                       <h6>Total</h6>
@@ -247,10 +100,78 @@
               </div>
               {{-- </a> --}}
             </div><!-- End Revenue Card -->
+          <!-- Revenue Card -->
+          
 
 
-        
-        
+          <div class="col-xxl-4 col-md-4">
+            {{-- <a href="{{ route('dashboard.barangay.details') }}"> --}}
+            <div class="card info-card barangay-card">
+              <div class="card-body">
+                <h5 class="card-title">Card Title</h5>
+
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    {{-- <i class="bi bi-building"></i> --}}
+                    <i class="fas fa-child"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>Total</h6>
+                    <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            {{-- </a> --}}
+          </div><!-- End Revenue Card -->
+
+          <div class="col-xxl-4 col-md-4">
+            {{-- <a href="{{ route('dashboard.barangay.details') }}"> --}}
+            <div class="card info-card barangay-card">
+              <div class="card-body">
+                <h5 class="card-title">Card Title</h5>
+
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="fas fa-users"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>Total</h6>
+                    <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            {{-- </a> --}}
+          </div><!-- End Revenue Card -->
+
+
+          <div class="col-xxl-4 col-md-4">
+            {{-- <a href="{{ route('dashboard.barangay.details') }}"> --}}
+            <div class="card info-card barangay-card">
+              <div class="card-body">
+                <h5 class="card-title">Card Title</h5>
+
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="fas fa-users"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>total</h6>
+                    <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            {{-- </a> --}}
+          </div><!-- End Revenue Card -->
+
        </div>
 
 

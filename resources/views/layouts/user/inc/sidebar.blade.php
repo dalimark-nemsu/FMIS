@@ -1,55 +1,34 @@
 <aside id="sidebar" class="sidebar">
   <ul class="sidebar-nav" id="sidebar-nav">
 
+    {{-- @if(auth()->user()->hasRole(['barangay_user', 'barangay_admin', 'municipal_admin', 'provincial_admin', 'super_admin'])) --}}
         <li class="nav-item">
-          <a class="nav-link {{(request()->is('admin/home')) ? '' : 'collapsed' }}" href="{{ route('admin.home') }}">
+          <a class="nav-link" href="#">
             <i class="bi bi-grid"></i>
-            <span>Dashboard</span>
+            <span>Home</span>
           </a>
         </li>
         <!-- End Dashboard Nav -->
 
-      @if(auth()->user()->hasRole('super-admin'))
-        <!-- Super Admin: Dropdown for Budget Ceilings -->
-        <li class="nav-item dropdown">
-            {{-- <a class="nav-link dropdown-toggle {{ request()->is('budget-ceiling', 'unit/budget-ceiling') ? '' : 'collapsed' }}" href="#" id="budgetCeilingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-bar-chart"></i>
-                <span>Budget Ceiling</span>
-            </a> --}}
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-              <i class="bi bi-menu-button-wide"></i><span>Budget Ceiling</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a class="dropdown-item {{ request()->is('budget-ceiling') ? 'active' : '' }}" href="{{ route('budget-ceilings.index') }}">
-                        Campus
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item {{ request()->is('unit/budget-ceiling') ? 'active' : '' }}" href="{{ route('admin.unit-budget-ceiling.index') }}">
-                        Unit
-                    </a>
-                </li>
-            </ul>
-        </li>
-      @elseif(auth()->user()->hasRole('budget-officer-iii'))
-        <!-- Budget Officer III: Access to Budget Ceiling -->
-        <li class="nav-item">
-            <a class="nav-link {{ request()->is('budget-ceiling') ? '' : 'collapsed' }}" href="{{ route('budget-ceilings.index') }}">
-                <i class="bi bi-bar-chart"></i>
-                <span>Budget Ceiling</span>
-            </a>
-        </li>
-      @elseif(auth()->user()->hasRole('budget-officer-ii'))
-        <!-- Budget Officer II: Access to Unit Budget Ceiling -->
-        <li class="nav-item">
-            <a class="nav-link {{ request()->is('unit/budget-ceiling') ? '' : 'collapsed' }}" href="{{ route('admin.unit-budget-ceiling.index') }}">
-                <i class="bi bi-bar-chart"></i>
-                <span>Unit Budget Ceiling</span>
-            </a>
-        </li>
-      @endif
 
+        <li class="nav-item">
+            <a class="nav-link {{ (request()->is('proposals')) ? '' : 'collapsed' }}" href="{{ route('proposals') }}">
+              <i class="bi bi-file-post"></i>
+                <span>Proposals</span>
+            </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ (request()->is('ppmp')) ? '' : 'collapsed' }}" href="{{ route('ppmp') }}">
+            <i class="bi bi-file-earmark-ruled"></i>
+              <span>PPMP</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ (request()->is('pr')) ? '' : 'collapsed' }}" href="{{ route('pr') }}">
+            <i class="bi bi-file-earmark-spreadsheet"></i>
+              <span>PR</span>
+          </a>
+        </li>
         <!-- End Profile Page Nav -->
 
 
@@ -67,7 +46,7 @@
 
 
     {{-- @if(auth()->user()->hasRole(['barangay_admin', 'municipal_admin', 'provincial_admin', 'super_admin'])) --}}
-    <li class="nav-heading">Maintenance</li>
+    {{-- <li class="nav-heading">Maintenance</li>
 
     <li class="nav-item">
       <a class="nav-link {{(request()->is('paps')) ? '' : 'collapsed' }}" href="{{ route('paps.index') }}">
@@ -111,7 +90,7 @@
         <i class="bi bi-calendar"></i>
         <span>Budget Year</span>
       </a>
-    </li>
+    </li> --}}
 
     <!-- End Users Nav -->
 

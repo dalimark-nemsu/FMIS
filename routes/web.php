@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UnitBudgetCeilingController;
 use App\Http\Controllers\BudgetCeilingController;
 use App\Http\Controllers\BudgetYearController;
 use App\Http\Controllers\CampusController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\FundSourceController;
 use App\Http\Controllers\MajorFinalOutputController;
 use App\Http\Controllers\ProgramActivityProjectsController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\User\HomeController as UserHomeController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FundSource;
 use App\Models\ProgramActivityProject;
@@ -25,14 +27,24 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
 Auth::routes();
 
+Route::get('/home', [UserHomeController::class, 'index'])->name('home');
+Route::get('proposals', function(){
+    return 'Proposals';
+})->name('proposals');
+Route::get('ppmp', function(){
+    return 'PPMP';
+})->name('ppmp');
+Route::get('pr', function(){
+    return 'PR';
+})->name('pr');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|budget-officer-iii|budget-officer-ii|president']], function() {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('admin.home');
 
     Route::resource('fund-sources', FundSourceController::class)->names([
         'index'     =>  'fund-sources.index',
@@ -114,5 +126,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
     // Route::get('/get-paps-by-fundsource-and-mfo/{fundSourceId}/{mfoId}', [ProgramActivityProjectsController::class, 'getPapsByFundSourceAndMfo']);
     Route::get('/get-paps', [ProgramActivityProjectsController::class, 'getPaps']);
     Route::get('/get-fundsource-and-mfo-by-paps/{papId}', [ProgramActivityProjectsController::class, 'getFundSourceAndMfoByPaps']);
+
+
+    Route::get('unit/budget-ceiling', [UnitBudgetCeilingController::class, 'index'])->name('admin.unit-budget-ceiling.index');
+    Route::get('unit/{id}/budget-ceiling', [UnitBudgetCeilingController::class, 'show'])->name('admin.unit-budget-ceiling.show');
+    Route::post('unit/budget-ceiling', [UnitBudgetCeilingController::class, 'store'])->name('admin.unit-budget-ceiling.store');
 });
 

@@ -10,7 +10,8 @@ class UnitBudgetCeiling extends Model
     use HasFactory;
 
     protected $fillable = [
-        'campus_budget_ceiling_id',
+        // 'campus_budget_ceiling_id',
+        'budget_year_id',
         'operating_unit',
         'pap_id',
         'ps',
@@ -27,6 +28,16 @@ class UnitBudgetCeiling extends Model
 
     public function operatingUnit()
     {
-        return $this->belongsTo(Unit::class, 'unit_id');
+        return $this->belongsTo(Unit::class, 'operating_unit');
+    }
+
+    public function budgetYear()
+    {
+        return $this->belongsTo(BudgetYear::class, 'budget_year_id');
+    }
+
+    public function programActivityProject()
+    {
+        return $this->belongsTo(ProgramActivityProject::class, 'pap_id');
     }
 }

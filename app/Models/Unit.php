@@ -27,4 +27,22 @@ class Unit extends Model
         return $this->belongsToMany(MajorFinalOutput::class, 'major_final_output_unit');
     }
     
+    public function unitBudgetCeilings()
+    {
+        return $this->hasMany(UnitBudgetCeiling::class, 'operating_unit');
+    }
+
+    /**
+     * Scope to filter units by whether they have a unit budget ceiling for a specific budget year.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $budgetYearId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeHasUnitBudgetCeilingForYear($query, $budgetYearId)
+    {
+        return $query->whereHas('unitBudgetCeilings', function ($q) use ($budgetYearId) {
+            $q->where('budget_year_id', $budgetYearId);
+        })->exists();
+    }
 }
