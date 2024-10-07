@@ -17,8 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('budget_year_id');
             $table->bigInteger('operating_unit');//unit_id
-            $table->bigInteger('mfo_id')->nullable();
-            $table->bigInteger('pap_id');//pap_id (mfo dependent) (nullable) need to clarify if unit have separate pap from campus pap
+            $table->bigInteger('pap_id');
             $table->decimal('ps', 15, 2); // personnel services amount
             $table->decimal('mooe', 15, 2); // maintenance and other operating expenses amount
             $table->decimal('co', 15, 2); // capital outlay amount
