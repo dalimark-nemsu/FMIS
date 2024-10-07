@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BudgetCeilingStoreRequest;
+use App\Http\Requests\BudgetCeilingUpdateRequest;
+use App\Models\BudgetYear;
 use App\Models\Campus;
 use App\Models\CampusBudgetCeiling;
 use App\Services\BudgetYearService;
@@ -31,26 +33,73 @@ class BudgetCeilingController extends Controller
      */
     public function index()
     {
-
         $budgetYears = $this->getAllYears();
         $activeYear = $this->getActiveYear();
-        $campuses = $this->getAllCampuses();
-        return view('budget-ceilings.campuses.index', compact('campuses', 'budgetYears', 'activeYear'));
+
+        // You may set selectedYear to the active year here
+        $selectedYear = $activeYear;
+
+        $campuses = Campus::with(['campusBudgetCeilings' => function ($query) use ($activeYear) {
+            $query->where('budget_year_id', $activeYear->id);
+        }])->get();
+
+        return view('budget-ceilings.campuses.index', compact('campuses', 'budgetYears', 'selectedYear', 'activeYear'));
     }
 
-    public function showCampus($id)
+    public function getCampusBudgetCeilingByYear(Request $request)
+    {
+        // Retrieve the selected year from the request
+        $yearId = $request->query('year');
+
+        // Fetch all available budget years for the dropdown or display
+        $budgetYears = $this->getAllYears();
+
+        // Fetch the selected budget year details
+        $selectedYear = BudgetYear::find($yearId); // Rename this to selectedYear
+
+        // Fetch the campuses with their budget ceilings for the selected year
+        $campuses = Campus::with(['campusBudgetCeilings' => function ($query) use ($yearId) {
+            $query->where('budget_year_id', $yearId);
+        }])->get();
+
+        // If no data for the selected year, get all campuses (without filtering by budget year)
+        if ($campuses->isEmpty()) {
+            $campuses = Campus::all();
+        }
+
+        // Return the view with the necessary data, now using selectedYear instead of activeYear
+        return view('budget-ceilings.campuses.index', compact('campuses', 'budgetYears', 'selectedYear'));
+    }
+
+    public function showCampus($id, $budgetYearId, Request $request)
     {
         $campus = Campus::findOrFail($id);
         $activeYear = $this->getActiveYear();
-        $fundSources = $this->getAllFundSources();
-        $mfos = $this->getAllMFOs();
-        $paps = $this->getAllPAPs();
-        $campusBudgetCeilings = CampusBudgetCeiling::where('campus_id', $campus->id)->with(['programActivityProject.fundSource', 'programActivityProject.majorFinalOutput'])->get();
+        // Fetch the budget ceilings for the campus and the specified budget year
+        // return $campusBudgetCeilings = CampusBudgetCeiling::where('campus_id', $campus->id)->get();
+
+         // Build the query
+        $query = CampusBudgetCeiling::query()
+            ->where('campus_id', $campus->id)
+            ->when($budgetYearId, function ($query) use ($budgetYearId) {
+                return $query->where('budget_year_id', $budgetYearId);
+            })
+            ->with(['programActivityProject.fundSource', 'programActivityProject.majorFinalOutput']);
+
+        // Execute the query
+        $campusBudgetCeilings = $query->get();
+
         $groupedBudgetCeilings = $campusBudgetCeilings->groupBy(function ($type) {
             return $type->programActivityProject->fundSource->abbreviation;
         });
+
         // Calculate the grand total based on total_amount
         $grandTotal = $campusBudgetCeilings->sum('total_amount');
+
+        $fundSources = $this->getAllFundSources();
+        $mfos = $this->getAllMFOs();
+        $paps = $this->getAllPAPs();
+
         return view('budget-ceilings.index', compact('campus', 'activeYear', 'fundSources', 'mfos', 'paps', 'groupedBudgetCeilings', 'grandTotal'));
     }
 
@@ -84,7 +133,7 @@ class BudgetCeilingController extends Controller
             'mooe'                  =>      $mooeAmount,
             'co'                    =>      $coAmount,
             'total_amount'          =>      $totalAmount,
-            'processed_by'          =>      1,
+            'processed_by'          =>      Auth::id(),
         ]);
         return redirect()->back()->with('success','Budget Ceiling added successfully');
     }
@@ -118,20 +167,21 @@ class BudgetCeilingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CampusBudgetCeiling $campusBudgetCeiling)
+    public function update(BudgetCeilingUpdateRequest $request, CampusBudgetCeiling $budget_ceiling)
     {
         $psAmount = str_replace(',', '', $request->ps);
         $mooeAmount = str_replace(',', '', $request->mooe);
         $coAmount = str_replace(',', '', $request->co);
         $totalAmount = $psAmount + $mooeAmount + $coAmount;
-        $campusBudgetCeiling->update([
+        $budget_ceiling->update([
             'pap_id'                =>      $request->pap,
             'ps'                    =>      $psAmount,
             'mooe'                  =>      $mooeAmount,
             'co'                    =>      $coAmount,
             'total_amount'          =>      $totalAmount,
-            'processed_by'          =>      1,
+            'processed_by'          =>      Auth::id(),
         ]);
+        return redirect()->back()->with('success','Budget Ceiling updated successfully');
     }
 
     /**
@@ -140,8 +190,9 @@ class BudgetCeilingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(CampusBudgetCeiling $budget_ceiling)
     {
-        //
+        $budget_ceiling->delete();
+        return response()->json(['message' => 'Budget Ceiling deleted successfully'], 200);
     }
 }

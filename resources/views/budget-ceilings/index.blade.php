@@ -67,7 +67,7 @@
                                         </div>
                                     </a>
                                 </div>
-                                @include('budget-ceilings.modals.add_budget_ceiling', ['campus' => $campus, 'activeYear' => $activeYear, 'fundSources' => $fundSources, 'mfos' => $mfos, 'paps' => $paps])
+                                @include('budget-ceilings.modals.add-budget-ceiling', ['campus' => $campus, 'activeYear' => $activeYear, 'fundSources' => $fundSources, 'mfos' => $mfos, 'paps' => $paps])
                             </div>
                         </div>
 
@@ -92,8 +92,9 @@
                                     <table id="example" class="table text-nowrap table-centered mt-0" style="width: 100%">
                                         <thead class="table-light">
                                             <tr>
-                                                <th>PAP</th>
-                                                <th>MFO</th>
+                                                <th>PAPs</th>
+                                                <th>Fund Source</th>
+                                                <th>MFOs</th>
                                                 <th>PS</th>
                                                 <th>MOOE</th>
                                                 <th>CO</th>
@@ -105,11 +106,12 @@
                                             @foreach ($budgetCeilings as $budgetCeiling)
                                                 <tr>
                                                     <td>{{ $budgetCeiling->programActivityProject?->code }}</td>
+                                                    <td>{{ $budgetCeiling->programActivityProject->fundSource?->abbreviation }}</td>
                                                     <td>{{ $budgetCeiling->programActivityProject->majorFinalOutput?->abbreviation }}</td>
-                                                    <td>{{ number_format($budgetCeiling->ps, 2) }}</td>
-                                                    <td>{{ number_format($budgetCeiling->mooe, 2) }}</td>
-                                                    <td>{{ number_format($budgetCeiling->co, 2) }}</td>
-                                                    <td>{{ number_format($budgetCeiling->ps + $budgetCeiling->mooe + $budgetCeiling->co, 2) }}</td>
+                                                    <td>&#8369 {{ number_format($budgetCeiling->ps, 2) }}</td>
+                                                    <td>&#8369 {{ number_format($budgetCeiling->mooe, 2) }}</td>
+                                                    <td>&#8369 {{ number_format($budgetCeiling->co, 2) }}</td>
+                                                    <td>&#8369 {{ number_format($budgetCeiling->ps + $budgetCeiling->mooe + $budgetCeiling->co, 2) }}</td>
                                                     <td>
                                                         <!-- Edit Button -->
                                                         <a href="#editBudgetCeilingModal-{{$budgetCeiling->id}}"
@@ -122,17 +124,18 @@
                                                         </a>
 
                                                         <!-- Delete Button -->
-                                                        <a href="#deleteBudgetCeilingModal-{{$budgetCeiling->id}}"
-                                                        class="btn btn-outline-danger btn-sm rounded-circle shadow-sm"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="top"
-                                                        title="Delete">
+                                                        <a href="javascript:void(0);"
+                                                            class="btn btn-outline-danger btn-sm rounded-circle shadow-sm"
+                                                            data-url="{{ route('budget-ceilings.delete', $budgetCeiling->id) }}"
+                                                            onclick="confirmDelete(this, '{{ $budgetCeiling->programActivityProject?->code }}')"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="top"
+                                                            title="Delete">
                                                             <i class="bi bi-trash"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
-                                                @include('budget-ceilings.modals.edit_budget_ceiling', ['budgetCeiling' => $budgetCeiling])
+                                                @include('budget-ceilings.modals.edit-budget-ceiling', ['budgetCeiling' => $budgetCeiling])
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -177,162 +180,218 @@
 @endsection
 
 @push('page-scripts')
-<script>
-$(document).ready(function() {
-    // =================== Add Budget Ceiling Modal Code ===================
+    <script>
+        $(document).ready(function() {
+            // =================== Add Budget Ceiling Modal Code ===================
 
-    // Initialize Select2 on the PAP select element for the Add modal
-    initializeSelect2('#pap', '#addBudgetCeilingModal');
+            // Initialize Select2 on the PAP select element for the Add modal
+            initializeSelect2('#pap', '#addBudgetCeilingModal');
 
-    // Attach input event listeners to PS, MOOE, and CO fields for the Add modal
-    $('#ps, #mooe, #co').on('input', function() {
-        formatInput($(this)); // Format input fields with commas
-        // updateTotal(['#ps', '#mooe', '#co'], '#total'); // Update total for Add modal
-        updateTotal($(this).closest('.add-budget-ceiling-modal'), ['.ps', '.mooe', '.co'], '.total');
-    });
+            // Attach input event listeners to PS, MOOE, and CO fields for the Add modal
+            $('#ps, #mooe, #co').on('input', function() {
+                formatInput($(this)); // Format input fields with commas
+                // updateTotal(['#ps', '#mooe', '#co'], '#total'); // Update total for Add modal
+                updateTotal($(this).closest('.add-budget-ceiling-modal'), ['.ps', '.mooe', '.co'], '.total');
+            });
 
-    // Common change handler for PAP selection for Add modal
-    handlePapChange('#pap', '#fund_source', '#mfo');
-    // Common change handler for Fund Source and MFO selection for Add modal
-    handleFilterChange('.add-fund-source', '.add-mfo', '.add-pap');
-});
+            // Common change handler for PAP selection for Add modal
+            handlePapChange('#pap', '#fund_source', '#mfo');
+            // Common change handler for Fund Source and MFO selection for Add modal
+            handleFilterChange('.add-fund-source', '.add-mfo', '.add-pap');
+        });
 
-// =================== Edit Budget Ceiling Modal Code ===================
-$(document).on('shown.bs.modal', '.edit-budget-ceiling-modal', function(e) {
-    const editBudgetCeilingModal = $(this);
-    const editPapInput = editBudgetCeilingModal.find('.edit-pap');
-    const editFundSourceInput = editBudgetCeilingModal.find('.edit-fund-source');
-    const editMofInput = editBudgetCeilingModal.find('.edit-mfo');
-    initializeSelect2(editPapInput, editBudgetCeilingModal);
-    // Reattach input event listeners for the Edit modal
-    editBudgetCeilingModal.find('.edit-ps, .edit-mooe, .edit-co').on('input', function() {
-        formatInput($(this)); // Format input fields with commas
-        updateTotal($(this).closest('.edit-budget-ceiling-modal'), ['.edit-ps', '.edit-mooe', '.edit-co'], '.edit-total'); // Update total for Edit modal
-    });
+        // =================== Edit Budget Ceiling Modal Code ===================
+        $(document).on('shown.bs.modal', '.edit-budget-ceiling-modal', function(e) {
+            const editBudgetCeilingModal = $(this);
+            const editPapInput = editBudgetCeilingModal.find('.edit-pap');
+            const editFundSourceInput = editBudgetCeilingModal.find('.edit-fund-source');
+            const editMofInput = editBudgetCeilingModal.find('.edit-mfo');
 
-    // Rebind change listeners for the Fund Source, MFO, and PAP in the Edit modal
-    handleFilterChange(editFundSourceInput, editMofInput, editPapInput);
+            initializeSelect2(editPapInput, editBudgetCeilingModal);
 
-    // Make sure the PAP change handler runs once
-    editBudgetCeilingModal.find('.edit-pap').off('change').on('change', function() {
-        handlePapChange('.edit-pap', '.edit-fund-source', '.edit-mfo');
-    });
-});
+            // Reattach input event listeners for the Edit modal
+            editBudgetCeilingModal.find('.edit-ps, .edit-mooe, .edit-co').on('input', function() {
+                formatInput($(this)); // Format input fields with commas
+                updateTotal($(this).closest('.edit-budget-ceiling-modal'), ['.edit-ps', '.edit-mooe', '.edit-co'], '.edit-total'); // Update total for Edit modal
+            });
 
-// =================== Shared Functions ===================
-// Function to initialize Select2 on a specific select element
-function initializeSelect2(selector, parentModal) {
-    $(selector).select2({
-        dropdownParent: $(parentModal),
-        theme: "bootstrap-5",
-        width: '100%',
-    });
-}
+            // Rebind change listeners for the Fund Source, MFO, and PAP in the Edit modal
+            handleFilterChange(editFundSourceInput, editMofInput, editPapInput);
+            // Make sure the PAP change handler runs once
+            handlePapChange('.edit-pap', '.edit-fund-source', '.edit-mfo');
+            // editBudgetCeilingModal.find('.edit-pap').off('change').on('change', function() {
+            //
+            // });
+        });
 
-// Function to format input with commas as the user types
-function formatInput(input) {
-    let value = input.val();
-    // Remove all non-numeric characters except for decimal points
-    value = value.replace(/[^0-9.]/g, '');
-    // Ensure there's only one decimal point
-    const parts = value.split('.');
-    if (parts.length > 2) {
-        value = parts[0] + '.' + parts[1]; // Keep only the first decimal point
-    }
-    // Add commas to the integer part of the number and leave decimals intact
-    if (parts.length === 2) {
-        value = parseFloat(parts[0]).toLocaleString() + '.' + parts[1];
-    } else if (parts[0] !== '') {
-        value = parseFloat(parts[0]).toLocaleString();
-    }
-    // Update the input field value
-    input.val(value);
-}
+        // =================== Shared Functions ===================
+        // Function to initialize Select2 on a specific select element
+        function initializeSelect2(selector, parentModal) {
+            $(selector).select2({
+                dropdownParent: $(parentModal),
+                theme: "bootstrap-5",
+                width: '100%',
+            });
+        }
 
-// Function to handle PAP selection changes
-function handlePapChange(papSelector, fundSourceSelector, mfoSelector) {
-    $(papSelector).change(function() {
-        const papId = $(this).val();
-        if (papId) {
-            $.ajax({
-                url: `/get-fundsource-and-mfo-by-paps/${papId}`,
-                method: 'GET',
-                success: function(data) {
-                    if (data.status === 'success') {
-                        $(fundSourceSelector).val(data.fund_source_id);
-                        $(mfoSelector).val(data.mfo_id);
-                    } else {
-                        alert(data.message);
-                    }
+        // Function to format input with commas as the user types
+        function formatInput(input) {
+            let value = input.val();
+            // Remove all non-numeric characters except for decimal points
+            value = value.replace(/[^0-9.]/g, '');
+            // Ensure there's only one decimal point
+            const parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts[1]; // Keep only the first decimal point
+            }
+            // Add commas to the integer part of the number and leave decimals intact
+            if (parts.length === 2) {
+                value = parseFloat(parts[0]).toLocaleString() + '.' + parts[1];
+            } else if (parts[0] !== '') {
+                value = parseFloat(parts[0]).toLocaleString();
+            }
+            // Update the input field value
+            input.val(value);
+        }
+
+        // Function to calculate and update the total for modal inputs
+        function updateTotal(modal, totalFields, totalSelector) {
+            let total = 0;
+            totalFields.forEach(function(field) {
+                total += parseFloat(modal.find(field).val().replace(/,/g, '')) || 0; // Use modal context to find fields
+            });
+            // Update total display
+            modal.find(totalSelector).text(total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        }
+
+        // Function to handle PAP selection changes
+        function handlePapChange(papSelector, fundSourceSelector, mfoSelector) {
+            $(papSelector).change(function() {
+                const papId = $(this).val();
+                if (papId) {
+                    $.ajax({
+                        url: `/admin/get-fundsource-and-mfo-by-paps/${papId}`,
+                        method: 'GET',
+                        success: function(data) {
+                            if (data.status === 'success') {
+                                $(fundSourceSelector).val(data.fund_source_id);
+                                $(mfoSelector).val(data.mfo_id);
+                            } else {
+                                alert(data.message);
+                            }
+                        }
+                    });
                 }
             });
         }
-    });
-}
 
-// =================== Handle Filter Change Function ===================
-function handleFilterChange(fundSourceSelector, mfoSelector, papSelector) {
-    // Convert selectors to jQuery objects
-    const $fundSource = $(fundSourceSelector);
-    const $mfo = $(mfoSelector);
-    const $pap = $(papSelector);
+        // =================== Handle Filter Change Function ===================
+        function handleFilterChange(fundSourceSelector, mfoSelector, papSelector) {
+            // Convert selectors to jQuery objects
+            const $fundSource = $(fundSourceSelector);
+            const $mfo = $(mfoSelector);
+            const $pap = $(papSelector);
 
-    // Bind the change event on both fundSource and MFO selectors
-    $fundSource.add($mfo).on('change', function() {
-        const fundSourceId = $fundSource.val();
-        const mfoId = $mfo.val();
+            // Bind the change event on both fundSource and MFO selectors
+            $fundSource.add($mfo).on('change', function() {
+                const fundSourceId = $fundSource.val();
+                const mfoId = $mfo.val();
 
-        console.log(fundSourceId, mfoId);
+                // Reset the PAP dropdown
+                $pap.empty().append('<option value=""> -- Select Program, Activity, Projects -- </option>');
 
-        // Reset the PAP dropdown
-        $pap.empty().append('<option value=""> -- Select Program, Activity, Projects -- </option>');
+                // Construct the URL for the AJAX request
+                let url = '/admin/get-paps';
+                const params = [];
 
-        // Construct the URL for the AJAX request
-        let url = '/get-paps';
-        const params = [];
+                // Add fundSourceId to the params if it exists
+                if (fundSourceId) {
+                    params.push(`fundSourceId=${fundSourceId}`);
+                }
 
-        // Add fundSourceId to the params if it exists
-        if (fundSourceId) {
-            params.push(`fundSourceId=${fundSourceId}`);
-        }
+                // Add mfoId to the params if it exists
+                if (mfoId) {
+                    params.push(`mfoId=${mfoId}`);
+                }
 
-        // Add mfoId to the params if it exists
-        if (mfoId) {
-            params.push(`mfoId=${mfoId}`);
-        }
-
-        // If there are parameters, execute the AJAX call
-        if (params.length > 0) {
-            url += '?' + params.join('&');
-            $.ajax({
-                url: url,
-                method: 'GET',
-                success: function(data) {
-                    if (data.length > 0) {
-                        // Populate the PAP dropdown with the returned data
-                        data.forEach(function(pap) {
-                            console.log(pap.id, pap.code);
-                            $pap.append(`<option value="${pap.id}">${pap.code}</option>`).prop('disabled', false);
-                        });
-                    } else {
-                        // If no data is returned, show a disabled option
-                        $pap.append('<option value="">No PAPs found</option>');
-                    }
+                // If there are parameters, execute the AJAX call
+                if (params.length > 0) {
+                    url += '?' + params.join('&');
+                    $.ajax({
+                        url: url,
+                        method: 'GET',
+                        success: function(data) {
+                            // console.log(data);
+                            if (data.length > 0) {
+                                // Populate the PAP dropdown with the returned data
+                                data.forEach(function(pap) {
+                                    // console.log(pap.id, pap.code);
+                                    $pap.append(`<option value="${pap.id}">${pap.code}</option>`);
+                                });
+                                // Reinitialize Select2 on the PAP field after appending new options
+                                $pap.select2({
+                                    dropdownParent: $pap.closest('.modal'),
+                                    theme: "bootstrap-5",
+                                    width: '100%'
+                                }).prop('disabled', false);
+                            } else {
+                                // If no data is returned, show a disabled option
+                                $pap.append('<option value="">No PAPs found</option>');
+                            }
+                        }
+                    });
                 }
             });
         }
-    });
-}
 
-
-// Function to calculate and update the total for modal inputs
-function updateTotal(modal, totalFields, totalSelector) {
-    let total = 0;
-    totalFields.forEach(function(field) {
-        total += parseFloat(modal.find(field).val().replace(/,/g, '')) || 0; // Use modal context to find fields
-    });
-    // Update total display
-    modal.find(totalSelector).text(total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-}
-</script>
+        function confirmDelete(element, programActivityProjectCode) {
+        const deleteUrl = $(element).data('url');  // Get the delete URL from the data-url attribute
+        // Display the SweetAlert with the PAP code inline in the title
+            Swal.fire({
+                html: `<div style="font-size: 18px;">Are you sure you want to delete budget ceiling for ${programActivityProjectCode}?</div>`,  // PAP code in the title
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+                cancelButtonText: 'Cancel',
+                reverseButtons: false,  // Keep the buttons in default order (Delete on the left)
+                width: '350px',  // Reduced size for a more compact alert
+                customClass: {
+                    confirmButton: 'btn btn-danger btn-sm mx-2',  // Smaller delete button
+                    cancelButton: 'btn btn-secondary btn-sm mx-2',  // Smaller cancel button with margin for space
+                },
+                buttonsStyling: false,  // Disable default button styling to apply Bootstrap styles
+                background: '#f5f5f5',  // Light grey background
+                padding: '20px',
+                iconColor: '#d9534f',  // Custom icon color
+            }).then((result) => {
+                // console.log('Delete URL:', deleteUrl);
+                if (result.isConfirmed) {
+                    // Perform the delete action (make an AJAX request)
+                    $.ajax({
+                        url: deleteUrl,
+                        method: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'  // Include CSRF token for security
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                'Deleted!',
+                                `The budget ceiling for "${programActivityProjectCode}" has been deleted successfully.`,
+                                'success'
+                            );
+                            // Optionally reload or remove the row from the DOM
+                            location.reload();  // Refresh the page or remove the row
+                        },
+                        error: function() {
+                            Swal.fire(
+                                'Error!',
+                                'There was an issue deleting the record. Please try again later.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 @endpush

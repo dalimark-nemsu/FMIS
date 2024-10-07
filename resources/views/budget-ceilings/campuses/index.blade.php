@@ -24,12 +24,22 @@
                         <div class="flex-grow-1"></div>
                         <div class="mb-3 d-flex align-items-center">
                             <label for="budgetYear" class="col-form-label me-2 text-nowrap">Budget Year:</label>
-                            <select class="form-select" name="year" id="year">
+                            {{-- <select class="form-select" name="year" id="year">
                                 <option value="" disabled> -- Select Year -- </option>
                                 @foreach ($budgetYears as $budgetYear)
                                     <option value="{{ $budgetYear->id }}"
                                         data-active="{{ $budgetYear->is_active }}"
                                         {{ $budgetYear->id == $activeYear->year ? 'selected' : '' }}>
+                                        {{ $budgetYear->year }} {{ $budgetYear->is_active ? '(Active)' : '' }}
+                                    </option>
+                                @endforeach
+                            </select> --}}
+                            <select class="form-select" name="year" id="year">
+                                <option value="" disabled> -- Select Year -- </option>
+                                @foreach ($budgetYears as $budgetYear)
+                                    <option value="{{ $budgetYear->id }}"
+                                        data-active="{{ $budgetYear->is_active }}"
+                                        {{ isset($selectedYear) && $budgetYear->id == $selectedYear->id ? 'selected' : '' }}>
                                         {{ $budgetYear->year }} {{ $budgetYear->is_active ? '(Active)' : '' }}
                                     </option>
                                 @endforeach
@@ -49,18 +59,22 @@
                         </thead>
                         <tbody>
                             @foreach ($campuses as $campus)
+                            @php
+                                $totalAmount = $campus->campusBudgetCeilings->where('budget_year_id', $selectedYear->id)->sum('total_amount');
+                            @endphp
                                 <tr data-campus-id="{{ $campus->id }}" data-year-active="{{ $budgetYears->firstWhere('id', $campus->budget_year_id)->is_active ?? 0 }}">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $campus->name }}</td>
-                                    <td></td>
+                                    <td>&#8369 {{ number_format($totalAmount, 2) }}</td>
                                     <td>
                                         <!-- Manage Button -->
-                                        <a href="{{ route('show-campus', ['id' => $campus->id]) }}"
-                                        class="btn btn-outline-success btn-sm rounded-circle shadow-sm manage-btn d-none"
-                                        data-bs-placement="top"
-                                        title="Manage">
-                                        <i class="bi bi-gear"></i>
-                                        </a>
+                                        {{-- {{ $selectedYear->id }} --}}
+                                        <a href="{{ route('show-campus', ['id' => $campus->id, 'budgetYearId' => $selectedYear->id]) }}"
+                                            class="btn btn-outline-success btn-sm rounded-circle shadow-sm manage-btn d-none"
+                                            data-bs-placement="top"
+                                            title="Manage">
+                                             <i class="bi bi-gear"></i>
+                                         </a>
 
                                         <!-- Show Button -->
                                         <a href="#"
@@ -83,71 +97,7 @@
           </div>
         </div>
       </div>
-
 </div>
-
-<!-- Edit Fund Source Modal -->
-{{-- @foreach ($fundSources as $fundSource)
-<div class="modal fade" id="editFundSourceModal-{{$fundSource->id}}" tabindex="-1"
-    aria-labelledby="editFundSourceModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editFundSourceModalLabel">Edit Fund Source</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('fund-sources.update', $fundSource->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="abbrev" class="form-label">Abbreviation:</label>
-                        <input type="text" class="form-control" id="abbrev" name="abbrev" value="{{ $fundSource->abbreviation }}" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="edit-name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="edit-name" name="name" value="{{ $fundSource->name }}" required>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@endforeach --}}
-
-
-<!-- Delete Fund Source Modal -->
-{{-- @foreach ($fundSources as $fundSource)
-<div class="modal fade" id="deleteFundSourceModal-{{$fundSource->id}}" tabindex="-1"
-    aria-labelledby="deleteFundSourceModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteFundSourceModalLabel">Delete Confirmation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('fund-sources.delete', $fundSource->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="modal-body">
-                    Are you sure to delete Fund Source: <strong>{{ $fundSource->abbreviation }}</strong> ?
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Confirm</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@endforeach --}}
-
 @endsection
 
 @push('page-scripts')
@@ -179,7 +129,17 @@
             updateButtons();
 
             // Update buttons when the selection changes
-            $yearSelect.on('change', updateButtons);
+            // $yearSelect.on('change', updateButtons);
+
+            // Update buttons and trigger route change when the selection changes
+            $yearSelect.on('change', function() {
+                var selectedYearId = $(this).val(); // Get the selected year ID
+                console.log(selectedYearId);
+                if (selectedYearId) {
+                    // Redirect to the desired route with the selected year as a parameter
+                    window.location.href = "{{ route('budget-ceiling.by-year') }}?year=" + selectedYearId;
+                }
+            });
         });
     </script>
 @endpush
