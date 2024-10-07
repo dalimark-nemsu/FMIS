@@ -6,7 +6,7 @@
                 <h5 class="modal-title" id="editBudgetCeilingModalLabel">Edit Budget Ceiling ({{ $campus->name }} Campus)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('budget-ceilings.update', ['budget_ceiling' => 'placeholder_budget_ceiling_id']) }}" method="POST" id="editBudgetCeilingForm">
+            <form action="{{ route('budget-ceilings.update',  $budgetCeiling->id) }}" method="POST" id="editBudgetCeilingForm">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">

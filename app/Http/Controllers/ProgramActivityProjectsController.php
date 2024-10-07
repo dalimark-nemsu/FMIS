@@ -109,22 +109,22 @@ class ProgramActivityProjectsController extends Controller
     // }
 
     public function getPaps(Request $request)
-{
-    $query = ProgramActivityProject::query();
+    {
+        $query = ProgramActivityProject::query();
 
-    // Apply filters based on the request
-    if ($request->has('fundSourceId')) {
-        $query->where('fund_source_id', $request->fundSourceId);
+        // Apply filters based on the request
+        if ($request->has('fundSourceId')) {
+            $query->where('fund_source_id', $request->fundSourceId);
+        }
+
+        if ($request->has('mfoId')) {
+            $query->where('mfo_id', $request->mfoId);
+        }
+
+        $paps = $query->get(['id', 'code']); // Adjust as necessary to fetch needed fields
+
+        return response()->json($paps);
     }
-
-    if ($request->has('mfoId')) {
-        $query->where('mfo_id', $request->mfoId);
-    }
-
-    $paps = $query->get(['id', 'code']); // Adjust as necessary to fetch needed fields
-
-    return response()->json($paps);
-}
 
 
     public function getFundSourceAndMfoByPaps($papId)

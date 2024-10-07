@@ -43,7 +43,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
         'update'    =>  'fund-sources.update',
         'destroy'   =>  'fund-sources.delete',
     ]);
-    
+
     Route::resource('units', UnitController::class)->names([
         'index'     =>  'units.index',
         'create'    =>  'units.create',
@@ -53,9 +53,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
         'update'    =>  'units.update',
         'destroy'   =>  'units.delete',
     ]);
-    
+
     Route::put('/units/{id}/assign-mfo', [UnitController::class, 'assignMfo'])->name('units.assignMfo');
-    
+
     Route::resource('campuses', CampusController::class)->names([
         'index'     =>  'campuses.index',
         'create'    =>  'campuses.create',
@@ -65,7 +65,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
         'update'    =>  'campuses.update',
         'destroy'   =>  'campuses.delete',
     ]);
-    
+
     Route::resource('budget-year', BudgetYearController::class)->names([
         'index'     =>  'budget-year.index',
         'create'    =>  'budget-year.create',
@@ -75,7 +75,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
         'update'    =>  'budget-year.update',
         'destroy'   =>  'budget-year.delete',
     ]);
-    
+
     Route::resource('mfos', MajorFinalOutputController::class)->names([
         'index'     =>  'mfos.index',
         'create'    =>  'mfos.create',
@@ -85,7 +85,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
         'update'    =>  'mfos.update',
         'destroy'   =>  'mfos.delete',
     ]);
-    
+
     Route::resource('paps', ProgramActivityProjectsController::class)->names([
         'index'     =>  'paps.index',
         'create'    =>  'paps.create',
@@ -95,7 +95,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
         'update'    =>  'paps.update',
         'destroy'   =>  'paps.delete',
     ]);
-    
+
     Route::resource('budget-ceilings', BudgetCeilingController::class)->names([
         'index'     =>  'budget-ceilings.index',
         'create'    =>  'budget-ceilings.create',
@@ -105,9 +105,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
         'update'    =>  'budget-ceilings.update',
         'destroy'   =>  'budget-ceilings.delete',
     ]);
-    
-    Route::get('budget-ceilings/campus/{id}', [BudgetCeilingController::class, 'showCampus'])->name('show-campus');
-    
+
+    Route::get('/campus/{id}/budget-ceilings/{budgetYearId}', [BudgetCeilingController::class, 'showCampus'])->name('show-campus');
+    Route::get('/by-year/budget-ceilings/', [BudgetCeilingController::class, 'getCampusBudgetCeilingByYear'])->name('budget-ceiling.by-year');
+
     // Route::get('/get-paps-by-fundsource/{fundSourceId}', [ProgramActivityProjectsController::class, 'getPapsByFundSource']);
     // Route::get('/get-paps-by-mfo/{mfoId}', [ProgramActivityProjectsController::class, 'getPapsByMfo']);
     // Route::get('/get-paps-by-fundsource-and-mfo/{fundSourceId}/{mfoId}', [ProgramActivityProjectsController::class, 'getPapsByFundSourceAndMfo']);
