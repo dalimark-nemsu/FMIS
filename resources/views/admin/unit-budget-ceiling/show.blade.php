@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Budget Ceiling')
+@section('page-title', 'Unit Budget Ceiling')
 @prepend('page-style')
   <style>
     /* .card-title {
@@ -13,6 +13,9 @@
 @section('content')
 @include('message.success')
 @include('message.error')
+<div class="pagetitle mb-4">
+  <h1 class="fs-4">Budget Year {{ $campusBudgetCeiling->budgetYear?->year }}</h1>
+</div>
 <section class="section dashboard">
   <div class="row">
     <div class="col-3">
@@ -46,22 +49,24 @@
     <div class="col-3">
       <div class="card info-card sales-card">
         <div class="card-body">
-          <h5 class="card-title mb-0">Total</h5>
+          <h5 class="card-title mb-0">Amount</h5>
     
           <div class="d-flex align-items-center">
             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
               <i class="bi bi-wallet-fill"></i>
             </div>
             <div class="ps-3 ms-auto text-end">
-              <div class="mb-0">
-                <span class="fs-6 text-muted">PS<span class="fw-bold"> {{ '₱' . number_format($campusBudgetCeiling->ps,2) }}</span></span>
-              </div>
-              <div class="mb-0">
-                <span class="fs-6 text-muted">MOOE<span class="fw-bold"> {{ '₱' . number_format($campusBudgetCeiling->mooe,2) }}</span></span>
-              </div>
-              <div class="mb-0">
-                <span class="fs-6 text-muted">CO<span class="fw-bold"> {{ '₱' . number_format($campusBudgetCeiling->co,2) }}</span></span>
-              </div>
+              @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
+                <div class="mb-0">
+                  <span class="fs-6 text-muted">PS<span class="fw-bold"> {{ '₱' . number_format($campusBudgetCeiling->ps,2) }}</span></span>
+                </div>
+                <div class="mb-0">
+                  <span class="fs-6 text-muted">MOOE<span class="fw-bold"> {{ '₱' . number_format($campusBudgetCeiling->mooe,2) }}</span></span>
+                </div>
+                <div class="mb-0">
+                  <span class="fs-6 text-muted">CO<span class="fw-bold"> {{ '₱' . number_format($campusBudgetCeiling->co,2) }}</span></span>
+                </div>
+              @endif
               <div class="mb-0">
                 <span class="fs-5 fw-bold">{{ '₱' . number_format($campusBudgetCeiling->total_amount,2) }}</span>
               </div>
@@ -83,15 +88,17 @@
               <i class="bi bi-currency-dollar"></i>
             </div>
             <div class="ps-3 ms-auto text-end">
-              <div class="mb-0">
-                <span class="fs-6 text-muted">PS<span class="fw-bold"> {{ '₱' . number_format($psAllocatedSum,2) }}</span></span>
-              </div>
-              <div class="mb-0">
-                <span class="fs-6 text-muted">MOOE<span class="fw-bold"> {{ '₱' . number_format($mooeAllocatedSum,2) }}</span></span>
-              </div>
-              <div class="mb-0">
-                <span class="fs-6 text-muted">CO<span class="fw-bold"> {{ '₱' . number_format($coAllocatedSum,2) }}</span></span>
-              </div>
+              @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
+                <div class="mb-0">
+                  <span class="fs-6 text-muted">PS<span class="fw-bold"> {{ '₱' . number_format($psAllocatedSum,2) }}</span></span>
+                </div>
+                <div class="mb-0">
+                  <span class="fs-6 text-muted">MOOE<span class="fw-bold"> {{ '₱' . number_format($mooeAllocatedSum,2) }}</span></span>
+                </div>
+                <div class="mb-0">
+                  <span class="fs-6 text-muted">CO<span class="fw-bold"> {{ '₱' . number_format($coAllocatedSum,2) }}</span></span>
+                </div>
+              @endif
               <div class="mb-0">
                 <span class="fs-5 fw-bold">{{ '₱' . number_format($totalAllocatedSum,2) }}</span>
               </div>
@@ -114,15 +121,17 @@
               <i class="bi bi-currency-dollar"></i> 
             </div>
             <div class="ps-3 ms-auto text-end">
-              <div class="mb-0">
-                <span class="fs-6 text-muted">PS<span class="fw-bold"> {{ '₱' . number_format($psUnallocated,2) }}</span></span>
-              </div>
-              <div class="mb-0">
-                <span class="fs-6 text-muted">MOOE<span class="fw-bold"> {{ '₱' . number_format($mooeUnallocated,2) }}</span></span>
-              </div>
-              <div class="mb-0">
-                <span class="fs-6 text-muted">CO<span class="fw-bold"> {{ '₱' . number_format($coUnallocated,2) }}</span></span>
-              </div>
+              @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
+                <div class="mb-0">
+                  <span class="fs-6 text-muted">PS<span class="fw-bold"> {{ '₱' . number_format($psUnallocated,2) }}</span></span>
+                </div>
+                <div class="mb-0">
+                  <span class="fs-6 text-muted">MOOE<span class="fw-bold"> {{ '₱' . number_format($mooeUnallocated,2) }}</span></span>
+                </div>
+                <div class="mb-0">
+                  <span class="fs-6 text-muted">CO<span class="fw-bold"> {{ '₱' . number_format($coUnallocated,2) }}</span></span>
+                </div>
+              @endif
               <div class="mb-0">
                 <span class="fs-5 fw-bold">{{ '₱' . number_format($totalUnallocated,2) }}</span>
               </div>
@@ -139,62 +148,77 @@
 <div id="app-content">
     <!-- Container fluid -->
     <div class="app-content-area">
-        <div class="container-fluid">
-            <!-- row -->
-            <div class="row">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <button
-                      type="button"
-                      class="btn btn-primary"
-                      data-bs-toggle="modal"
-                      data-bs-target="#assignUnitBudgetCeilingModal"
-                    >
-                      <i class="bi bi-plus-circle"></i>
-                    </button>
-                    <div
-                    class="modal fade"
-                    id="assignUnitBudgetCeilingModal"
-                    tabindex="-1"
-                    data-bs-backdrop="static"
-                    data-bs-keyboard="false"
-                    
-                    role="dialog"
-                    aria-labelledby="modalTitleId"
-                    aria-hidden="true"
+          <!-- row -->
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#assignUnitBudgetCeilingModal"
                   >
-                    <div
-                      class="modal-dialog modal-lg modal-dialog-scrollable"
-                      role="document"
-                    >
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="modalTitleId">
-                            Assign Allocated Budget
-                          </h5>
-                          <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                          ></button>
-                        </div>
-                        <form action="{{ route('admin.unit-budget-ceiling.store',['pap_id' => $campusBudgetCeiling->pap_id, 'budget_year_id' => $campusBudgetCeiling->budget_year_id ]) }}" method="POST">
-                          @csrf
-                        <div class="modal-body">
-                          <div class="row mb-3">
-                            <div class="col">
-                              <select name="units[]" id="unit" class="form-control" data-placeholder="Choose anything" multiple>
-                                {{-- <option value="" selected>--Select Office--</option> --}}
-                                @foreach ($units as $unit)
-                                  <option value="{{ $unit->id }}" @if ($unit->hasUnitBudgetCeilingForYear('2024'))
-                                    disabled
-                                  @endif>{{ $unit->name }}</option>
-                                @endforeach
-                              </select>
-                            </div>
+                    <i class="bi bi-plus-circle"></i>
+                  </button>
+                  <div
+                  class="modal fade"
+                  id="assignUnitBudgetCeilingModal"
+                  tabindex="-1"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                  
+                  role="dialog"
+                  aria-labelledby="modalTitleId"
+                  aria-hidden="true"
+                >
+                  <div
+                    class="modal-dialog modal-lg modal-dialog-scrollable"
+                    role="document"
+                  >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitleId">
+                          Assign Allocated Budget
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                    <form action="{{ route('admin.unit-budget-ceiling.store',['campus_budget_ceiling' => $campusBudgetCeiling->id, 'pap_id' => $campusBudgetCeiling->pap_id, 'budget_year_id' => $campusBudgetCeiling->budget_year_id ]) }}" method="POST">
+                      @csrf
+                      <div class="modal-body">
+                        <div class="row mb-3">
+                          <div class="col-12">
+                            <label for="" class="form-label">Units</label>
+                            <select name="unit" id="unit" class="form-control" data-placeholder="Choose Unit">
+                              <option value=""></option>
+                              @foreach ($units as $unit)
+                                <option value="{{ $unit->id }}" @if ($unit->hasUnitBudgetCeilingForYear('2024'))
+                                  disabled
+                                @endif>{{ $unit->name }}</option>
+                              @endforeach
+                            </select>
                           </div>
+                          {{-- <div class="col-6">
+                            <label for="total" class="form-label">Amount</label>
+                            <div class="input-group">
+                              <span class="input-group-text">&#8369;</span>
+                              <input
+                                type="text"
+                                name="total"
+                                id="total"
+                                class="form-control"
+                                placeholder="0.00"
+                                aria-describedby="helpId"
+                              />
+                            </div>
+                          </div> --}}
+                        </div>
+                        {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES") --}}
                           <div class="row mb-3">
                             <div class="col-4">
                               <label for="" class="form-label">PS</label>
@@ -207,6 +231,7 @@
                                   class="form-control"
                                   placeholder="0.00"
                                   aria-describedby="helpId"
+                                  @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif
                                 />
                               </div>
                               {{-- <small id="helpId" class="text-muted">Help text</small> --}}
@@ -222,6 +247,7 @@
                                   class="form-control"
                                   placeholder="0.00"
                                   aria-describedby="helpId"
+                                  @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif
                                 />
                               </div>
                               {{-- <small id="helpId" class="text-muted">Help text</small> --}}
@@ -237,78 +263,89 @@
                                   class="form-control"
                                   placeholder="0.00"
                                   aria-describedby="helpId"
+                                  @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif
                                 />
                               </div>
                               {{-- <small id="helpId" class="text-muted">Help text</small> --}}
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="text-end">
-                              <label for="total" class="form-label fs-5 fw-bold">Total:</label>
-                              <span id="total" class="fs-5 fw-bold total">₱0.00</span>
-                            </div>
+                          <div class="row mb-4">
+                              <div class="col-8"></div>
+                              <div class="col-4">
+                                <label for="total" class="form-label">Amount</label>
+                                <div class="input-group">
+                                  <span class="input-group-text">&#8369;</span>
+                                  <input
+                                    type="text"
+                                    name="total"
+                                    id="total"
+                                    class="form-control"
+                                    placeholder="0.00"
+                                    aria-describedby="helpId"
+                                    @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES") readonly @endif
+                                  />
+                                </div>
+                              </div>
                           </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="submit" class="btn btn-primary">Save</button>
-                          <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                          >
-                            Close
-                          </button>
-                        </div>
-                        </form>
+                        {{-- @endif --}}
                       </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                      </div>
+                      </form>
                     </div>
-                  </div>   
-                  </div>                   
-                  <div class="card-body">                  
-                    <div class="table-responsive table-card mt-4">
-                      <table id="papsDataTable" class="table table-hover text-nowrap table-centered mt-0" style="width: 100%">
-                        <thead class="table-primary">
-                          <tr>
-                            <th>Unit</th>
-                            @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA")
-                              <th>PS</th>
-                              <th>MOOE</th>
-                              <th>CO</th>
-                            @endif
-                            <th>Total</th>
-                            <th class="text-center">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($unitBudgetCeilings as $unitBudgetCeiling)
-                                <tr>
-                                    <td class="fw-bold">{{ $unitBudgetCeiling->operatingUnit?->name }}</td>
-                                    @if ($unitBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA")
-                                      <td>{{ '₱' . number_format($unitBudgetCeiling->ps, 2) }}</td>
-                                      <td>{{ '₱' . number_format($unitBudgetCeiling->mooe, 2) }}</td>
-                                      <td>{{ '₱' . number_format($unitBudgetCeiling->co, 2) }}</td>
-                                    @endif
-                                    <td>{{ '₱' . number_format($unitBudgetCeiling->total_amount, 2) }}</td>
-                                    <td class="text-center">
-                                      <a href="#" class="btn btn-outline-primary btn-sm rounded-circle shadow-sm manage-btn" data-bs-placement="top" title="Manage">
-                                        <i class="bi bi-pencil"></i>
-                                      </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                
-                            @endforelse
-                        </tbody>
-                      </table>
-                    </div>
+                  </div>
+                </div>   
+                </div>                   
+                <div class="card-body">                  
+                  <div class="table-responsive table-card mt-4">
+                    <table id="papsDataTable" class="table table-hover text-nowrap table-centered mt-0" style="width: 100%">
+                      <thead class="table-primary">
+                        <tr>
+                          <th>Unit</th>
+                          @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
+                            <th>PS</th>
+                            <th>MOOE</th>
+                            <th>CO</th>
+                          @endif
+                          <th>Amount</th>
+                          <th class="text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          @forelse ($unitBudgetCeilings as $unitBudgetCeiling)
+                              <tr>
+                                  <td class="fw-bold">{{ $unitBudgetCeiling->operatingUnit?->name }}</td>
+                                  @if ($unitBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA")
+                                    <td>{{ '₱' . number_format($unitBudgetCeiling->ps, 2) }}</td>
+                                    <td>{{ '₱' . number_format($unitBudgetCeiling->mooe, 2) }}</td>
+                                    <td>{{ '₱' . number_format($unitBudgetCeiling->co, 2) }}</td>
+                                  @endif
+                                  <td>{{ '₱' . number_format($unitBudgetCeiling->total_amount, 2) }}</td>
+                                  <td class="text-center">
+                                    <a href="#" class="btn btn-outline-primary btn-sm rounded-circle shadow-sm manage-btn" data-bs-placement="top" title="Manage">
+                                      <i class="bi bi-pencil"></i>
+                                    </a>
+                                  </td>
+                              </tr>
+                          @empty
+                              
+                          @endforelse
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
- 
-        </div>
-      </div>
-
+          </div>
+    </div>
 </div>
 @endsection
 
@@ -317,7 +354,7 @@
   const psInput = document.querySelector('#ps');
   const mooeInput = document.querySelector('#mooe');
   const coInput = document.querySelector('#co');
-  const totalSpan = document.querySelector('#total');
+  const totalInput = document.querySelector('#total');
 
   // Helper function to format number to currency with commas and decimal places
   const formatCurrency = (value) => {
@@ -359,24 +396,31 @@
     const co = parseInput(coInput.value);
     const total = ps + mooe + co;
 
-    totalSpan.textContent = '₱' + formatCurrency(total);
+    totalInput.value = formatCurrency(total);
   };
 
   // Add event listeners to format the inputs and calculate the total
-  const inputs = [psInput, mooeInput, coInput];
-  inputs.forEach(input => {
-    input.addEventListener('input', () => {
-      formatOnInput(input);  // Format the input as currency while typing
-      calculateTotal();      // Update the total in real-time
+  if (psInput || mooeInput || coInput) {
+    const inputs = [psInput, mooeInput, coInput];
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        formatOnInput(input);  // Format the input as currency while typing
+        calculateTotal();      // Update the total in real-time
+      });
     });
+  }
+
+  totalInput.addEventListener('input', (event) => {
+    formatOnInput(event.target);
   });
 
   $(document).ready(function () {
     $('#unit').select2({
       theme: "bootstrap-5",
-    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-    placeholder: $( this ).data( 'placeholder' ),
-    closeOnSelect: false,
+      width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+      placeholder: $( this ).data( 'placeholder' ),
+      closeOnSelect: false,
+      allowClear: true
     });
   });
 </script>
