@@ -26,10 +26,6 @@ class UnitBudgetCeilingController extends Controller
         $fundSources = FundSource::all();;
         $majorFinalOutputs = MajorFinalOutput::all();
 
-       $allocated = UnitBudgetCeiling::where('budget_year_id', $selectedYear->id)->whereHas('operatingUnit', function($query){
-        $query->where('campus_id', Auth::user()->unit->campus_id);
-       })->sum('total_amount');
-
         $query = CampusBudgetCeiling::query()->with(['programActivityProject', 'programActivityProject.fundSource', 'programActivityProject.majorFinalOutput', 'budgetYear']);
         
         $query->when(!Auth::user()->hasRole('super-admin'), function($query){
@@ -38,13 +34,21 @@ class UnitBudgetCeilingController extends Controller
 
         $campusBudgetCeilings = $query->where('budget_year_id', $selectedYear->id)->get();
 
+        $allocated = UnitBudgetCeiling::where('budget_year_id', $selectedYear->id)->whereHas('operatingUnit', function($query){
+            $query->where('campus_id', Auth::user()->unit->campus_id);
+           })->sum('total_amount');
+        
+        $unAllocated = $campusBudgetCeilings->sum('total_amount') - $allocated;
+
         return view('admin.unit-budget-ceiling.index', [
             'campusBudgetCeilings' => $campusBudgetCeilings, 
             'budgetYears' => $budgetYears, 
             'fundSources' => $fundSources, 
             'activeYear' => $activeYear, 
             'selectedYear' => $selectedYear,
-            'majorFinalOutputs' => $majorFinalOutputs
+            'majorFinalOutputs' => $majorFinalOutputs,
+            'allocated' => $allocated,
+            'unAllocated'   =>  $unAllocated
         ]);
     }
 

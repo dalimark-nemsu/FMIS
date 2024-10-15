@@ -37,7 +37,7 @@
             </div>
             <div class="ps-3 ">
               <div class="mb-0">
-                <span class="fs-5 fw-bold">{{ '₱0.00' }}</span>
+                <span class="fs-5 fw-bold">{{ '₱' . number_format($allocated, 2) }}</span>
               </div>
             </div>
           </div>
@@ -55,7 +55,7 @@
             </div>
             <div class="ps-3 ">
               <div class="mb-0">
-                <span class="fs-5 fw-bold">{{ '₱0.00' }}</span>
+                <span class="fs-5 fw-bold">{{ '₱' . number_format($unAllocated) }}</span>
               </div>
             </div>
           </div>

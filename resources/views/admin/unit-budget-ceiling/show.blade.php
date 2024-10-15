@@ -197,7 +197,7 @@
                             <select name="unit" id="unit" class="form-control" data-placeholder="Choose Unit">
                               <option value=""></option>
                               @foreach ($units as $unit)
-                                <option value="{{ $unit->id }}" @if ($unit->hasUnitBudgetCeilingForYear('2024'))
+                                <option value="{{ $unit->id }}" @if ($unit->hasUnitBudgetCeilingForYear($campusBudgetCeiling->budget_year_id))
                                   disabled
                                 @endif>{{ $unit->name }}</option>
                               @endforeach
