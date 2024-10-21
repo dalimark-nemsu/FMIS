@@ -21,7 +21,7 @@ class ProgramActivityProjectsController extends Controller
      */
     public function index(Request $request)
     {
-        $paps = ProgramActivityProject::with('campusBugetCeilings', 'unitBudgetCeilings', 'majorFinalOutput', 'fundSource')->orderBy('created_at', 'desc')->get();
+        $paps = ProgramActivityProject::with('campusBugetCeilings', 'majorFinalOutput', 'fundSource')->orderBy('created_at', 'desc')->get();
         $fundSources = $this->getAllFundSources();
         $mfos = $this->getAllMFOs();
 

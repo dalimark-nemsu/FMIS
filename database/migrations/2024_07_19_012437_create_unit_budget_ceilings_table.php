@@ -15,15 +15,17 @@ return new class extends Migration
     {
         Schema::create('unit_budget_ceilings', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('budget_year_id');
+            //  $table->bigInteger('budget_year_id');
             $table->bigInteger('operating_unit');//unit_id
-            $table->bigInteger('mfo_id')->nullable();
-            $table->bigInteger('pap_id');//pap_id (mfo dependent) (nullable) need to clarify if unit have separate pap from campus pap
+            $table->bigInteger('campus_budget_ceiling_id');
+            // $table->bigInteger( 'mfo_id')->nullable();
+            // $table->bigInteger('pap_id');//pap_id (mfo dependent) (nullable) need to clarify if unit have separate pap from campus pap
             $table->decimal('ps', 15, 2); // personnel services amount
             $table->decimal('mooe', 15, 2); // maintenance and other operating expenses amount
             $table->decimal('co', 15, 2); // capital outlay amount
             $table->decimal('total_amount', 15, 2); // total amount
             $table->bigInteger('processed_by');//user_id budget officer II
+            $table->boolean('is_posted')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
