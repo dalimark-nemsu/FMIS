@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('parent_id')->nullable(); // Self-referencing foreign key
+            $table->integer('sequence')->nullable(); // For ordering units
             $table->string('abbreviation')->nullable();
             $table->string('name');
-            $table->bigInteger('campus_id');
-            // $table->bigInteger('mfo_id');
+            $table->bigInteger('unit_head')->nullable(); // Foreign key referencing user_id
+            $table->bigInteger('campus_id'); // Foreign key referencing campus_id
             $table->timestamps();
             $table->softDeletes();
         });
