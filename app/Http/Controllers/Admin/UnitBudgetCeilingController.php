@@ -8,6 +8,7 @@ use App\Models\CampusBudgetCeiling;
 use App\Models\FundSource;
 use App\Models\MajorFinalOutput;
 use App\Models\ProgramActivityProject;
+use App\Models\Unit;
 use App\Models\UnitBudgetCeiling;
 use App\Traits\DataRetrievalTrait;
 use Illuminate\Http\Request;
@@ -26,11 +27,7 @@ class UnitBudgetCeilingController extends Controller
         $fundSources = FundSource::all();;
         $majorFinalOutputs = MajorFinalOutput::all();
 
-       $allocated = UnitBudgetCeiling::where('budget_year_id', $selectedYear->id)->whereHas('operatingUnit', function($query){
-        $query->where('campus_id', Auth::user()->unit->campus_id);
-       })->sum('total_amount');
-
-        $query = CampusBudgetCeiling::query()->with(['programActivityProject', 'programActivityProject.fundSource', 'programActivityProject.majorFinalOutput', 'budgetYear']);
+        $query = CampusBudgetCeiling::query()->with(['unitBudgetCeilings', 'programActivityProject', 'programActivityProject.fundSource', 'programActivityProject.majorFinalOutput', 'budgetYear']);
         
         $query->when(!Auth::user()->hasRole('super-admin'), function($query){
             return $query->where('campus_id', Auth::user()?->unit?->campus_id);
@@ -38,23 +35,29 @@ class UnitBudgetCeilingController extends Controller
 
         $campusBudgetCeilings = $query->where('budget_year_id', $selectedYear->id)->get();
 
+        $allocated = $campusBudgetCeilings->map(function($budget) {
+            return $budget->unitBudgetCeilings->sum('total_amount');
+        })->sum();
+
+        
+        $unAllocated = $campusBudgetCeilings->sum('total_amount') - $allocated;
+
         return view('admin.unit-budget-ceiling.index', [
             'campusBudgetCeilings' => $campusBudgetCeilings, 
             'budgetYears' => $budgetYears, 
             'fundSources' => $fundSources, 
             'activeYear' => $activeYear, 
             'selectedYear' => $selectedYear,
-            'majorFinalOutputs' => $majorFinalOutputs
+            'majorFinalOutputs' => $majorFinalOutputs,
+            'allocated' => $allocated,
+            'unAllocated'   =>  $unAllocated
         ]);
     }
 
     public function show($id)
     {
         $campusBudgetCeiling = CampusBudgetCeiling::with(['programActivityProject', 'programActivityProject.majorFinalOutput', 'programActivityProject.majorFinalOutput.units'])->find($id);
-        $unitBudgetCeilings = UnitBudgetCeiling::with(['programActivityProject', 'budgetYear', 'operatingUnit'])
-            ->where('budget_year_id', $campusBudgetCeiling->budget_year_id)
-            ->where('pap_id', $campusBudgetCeiling->pap_id)
-            ->get();
+        $unitBudgetCeilings = $campusBudgetCeiling->unitBudgetCeilings;
         $units = $campusBudgetCeiling->programActivityProject->majorFinalOutput->units;
 
         $psTotal = $campusBudgetCeiling->ps;
@@ -89,15 +92,16 @@ class UnitBudgetCeilingController extends Controller
     public function store(Request $request)
     {
         $campusBudgetCeiling = CampusBudgetCeiling::findOrFail($request->campus_budget_ceiling);
-        $papsTotal = UnitBudgetCeiling::where('budget_year_id', $campusBudgetCeiling->budget_year_id)->where('pap_id', $request->pap_id)->sum('total_amount');
-
+        $papsTotal = UnitBudgetCeiling::where('campus_budget_ceiling_id', $campusBudgetCeiling->id)->sum('total_amount');
+        $campusBudgetCeiling = CampusBudgetCeiling::findOrFail($request->campus_budget_ceiling);
+        return $campusBudgetCeiling;
         $this->validate($request, [
             'unit' => [
                 'required',
                 'max:255',
                 Rule::unique('unit_budget_ceilings', 'operating_unit')->where(function ($query) use ($campusBudgetCeiling) {
-                    return $query->where('pap_id', $campusBudgetCeiling->pap_id)
-                                 ->where('budget_year_id', $campusBudgetCeiling->budget_year_id);
+                    return $query->where('campus_budget_ceiling_id', $campusBudgetCeiling->id);
+                                //  ->where('budget_year_id', $campusBudgetCeiling->budget_year_id);
                 })
             ],
             'ps' => ['sometimes', 'required', 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/', 'min:0'],
@@ -151,19 +155,44 @@ class UnitBudgetCeilingController extends Controller
 
         $total = floatval(str_replace(',', '', $request->total));
 
-        foreach ($request->units as $key => $unit) {
-            UnitBudgetCeiling::create([
-                'budget_year_id' => $request->budget_year_id,
-                'pap_id' => $request->pap_id,
-                'operating_unit' => $unit,
-                'ps' => $ps,
-                'mooe' => $mooe,
-                'co' => $co,
-                'total_amount' => $total,
-                'processed_by'   => Auth::id()
-            ]);
+        $campusBudgetCeiling->unitBudgetCeilings()->create([
+            'operating_unit' => $request->unit,
+            'ps' => $ps,
+            'mooe' => $mooe,
+            'co' => $co,
+            'total_amount' => $total,
+            'processed_by'   => Auth::id()
+        ]);
+
+        return redirect()->back()->with('success', 'Budget has been allocated.');
+    }
+
+    public function update(Request $request, $unitBudgetCeilingId)
+    {
+        $unitBudgetCeiling = UnitBudgetCeiling::with(['campusBudgetCeiling', 'campusBudgetCeiling.programActivityProject', 'campusBudgetCeiling.programActivityProject.fundSource'])->find($unitBudgetCeilingId);
+        $unit = Unit::find($request->unit);
+
+        $ps = 0;
+        $mooe = 0;
+        $co = 0;
+        $total = 0;
+        
+
+        if ($unitBudgetCeiling->campusBudgetCeiling?->programActivityProject?->fundSource?->abbreviation === "GAA" || $unitBudgetCeiling->campusBudgetCeiling?->programActivityProject?->fundSource?->abbreviation === "TES") {
+            $ps = floatval(str_replace(',', '', $request->ps));
+            $mooe = floatval(str_replace(',', '', $request->mooe));
+            $co = floatval(str_replace(',', '', $request->co));
+    
+            $total = array_sum([$ps, $mooe, $co]);
         }
 
-        return redirect()->back()->with('success', 'Budget has been assigned.');
+        $unitBudgetCeiling->ps = $ps;
+        $unitBudgetCeiling->mooe = $mooe;
+        $unitBudgetCeiling->co = $co;
+        $unitBudgetCeiling->total_amount = $total;
+        $unitBudgetCeiling->processed_by = Auth::id();
+        $unitBudgetCeiling->save();
+
+        return redirect()->back()->with('success', 'Budget allocation has been updated.');
     }
 }

@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Unit extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
+
+    // protected $connection = 'mysql2';
 
     protected $fillable = [
         'abbreviation',
@@ -39,10 +41,10 @@ class Unit extends Model
      * @param int $budgetYearId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeHasUnitBudgetCeilingForYear($query, $budgetYearId)
+    public function scopeHasUnitBudgetCeilingForYear($query, $campusBudgetCeilingId)
     {
-        return $query->whereHas('unitBudgetCeilings', function ($q) use ($budgetYearId) {
-            $q->where('budget_year_id', $budgetYearId);
+        return $query->whereHas('unitBudgetCeilings', function ($q) use ($campusBudgetCeilingId) {
+            $q->where('campus_budget_ceiling_id', $campusBudgetCeilingId);
         })->exists();
     }
 }

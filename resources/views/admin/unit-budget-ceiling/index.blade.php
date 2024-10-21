@@ -1,10 +1,31 @@
 @extends('layouts.app')
 
-@section('page-title', 'Unit Budget Ceiling')
+@section('page-title-with-icon')
+  <a href="{{ route('admin.unit-budget-ceiling.index') }}" style="color: #012970;"><i class="bi bi-arrow-left"></i>
+    Unit Budget Ceiling
+  </a>
+@endsection
+
+@section('page-title-text')
+    Unit Budget Ceiling
+@endsection
+
+@prepend('page-style')
+  <style>
+    th:nth-child(7), td:nth-child(7){
+      background-color: #e0f8e9;
+    }
+  th:nth-child(4), td:nth-child(4),
+  th:nth-child(5), td:nth-child(5),
+  th:nth-child(6), td:nth-child(6) {
+    background-color: #cfe2ff;
+  }
+  </style>
+@endprepend
 
 @section('content')
 <div class="pagetitle mb-4">
-  <h1 class="fs-4">Budget Year {{ $selectedYear->year }}</h1>
+  <h1 class="fs-5 card-title p-0">Budget Year {{ $selectedYear->year }}</h1>
 </div>
 <section class="section dashboard">
   <div class="row">
@@ -37,7 +58,7 @@
             </div>
             <div class="ps-3 ">
               <div class="mb-0">
-                <span class="fs-5 fw-bold">{{ '₱0.00' }}</span>
+                <span class="fs-5 fw-bold">{{ '₱' . number_format($allocated, 2) }}</span>
               </div>
             </div>
           </div>
@@ -55,7 +76,7 @@
             </div>
             <div class="ps-3 ">
               <div class="mb-0">
-                <span class="fs-5 fw-bold">{{ '₱0.00' }}</span>
+                <span class="fs-5 fw-bold">{{ '₱' . number_format($unAllocated) }}</span>
               </div>
             </div>
           </div>
@@ -108,17 +129,17 @@
             </div>
           
             <div class="table-responsive table-card">
-              <table id="papsDataTable" class="table table-hover text-nowrap table-centered mt-0" style="width: 100%">
-                <thead class="table-primary">
+              <table id="papsDataTable" class="table table-hover text-nowrap mt-0" style="width: 100%">
+                <thead class="table-secondary">
                   <tr>
                     <th>PAPs</th>
                     <th class="text-center">Fund Source</th>
                     <th class="text-center">MFOs</th>
-                    <th class="text-center">PS</th>
-                    <th class="text-center">MOOE</th>
-                    <th class="text-center">CO</th>
-                    <th class="text-center">Total</th>
-                    <th>Action</th>
+                    <th class="text-end">PS</th>
+                    <th class="text-end">MOOE</th>
+                    <th class="text-end">CO</th>
+                    <th class="text-end">Total</th>
+                    <th class="text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -127,12 +148,12 @@
                             <td class="fw-bold">{{ $campusBudgetCeiling->programActivityProject?->name }}</td>
                             <td class="text-center">{{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation }}</td>
                             <td class="text-center">{{ $campusBudgetCeiling->programActivityProject?->majorFinalOutput?->abbreviation }}</td>
-                            <td class="text-center">{{ '₱' . number_format($campusBudgetCeiling->ps, 2) }}</td>
-                            <td class="text-center">{{ '₱' . number_format($campusBudgetCeiling->mooe, 2) }}</td>
-                            <td class="text-center">{{ '₱' . number_format($campusBudgetCeiling->co, 2) }}</td>
-                            <td class="text-center">{{ '₱' . number_format($campusBudgetCeiling->total_amount, 2) }}</td>
+                            <td class="text-end">{{ '₱' . number_format($campusBudgetCeiling->ps, 2) }}</td>
+                            <td class="text-end">{{ '₱' . number_format($campusBudgetCeiling->mooe, 2) }}</td>
+                            <td class="text-end">{{ '₱' . number_format($campusBudgetCeiling->co, 2) }}</td>
+                            <td class="text-end fw-bold">{{ '₱' . number_format($campusBudgetCeiling->total_amount, 2) }}</td>
                             <td class="text-center">
-                              <a href="{{ route('admin.unit-budget-ceiling.show', $campusBudgetCeiling->id) }}" class="btn btn-outline-success btn-sm rounded-circle shadow-sm manage-btn" data-bs-placement="top" title="Manage">
+                              <a href="{{ route('admin.unit-budget-ceiling.show', $campusBudgetCeiling->id) }}" class="btn btn-outline-primary btn-sm rounded-circle shadow-sm manage-btn" data-bs-placement="top" title="Manage">
                                 <i class="bi bi-gear"></i>
                               </a>
                             </td>
