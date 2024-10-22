@@ -26,8 +26,9 @@ class DatabaseSeeder extends Seeder
             BudgetYearTableSeeder::class,
             FundSourceTableSeeder::class,
             MajorFinalOutputTableSeeder::class,
-            ProgramActivityProjectTableSeeder::class
-            // ProgramActivityProjectTableSeeder::class
+            ProgramActivityProjectTableSeeder::class,
+            AllotmentClassSeeder::class,
+            ObjectExpenditureSeeder::class
         ]);
     }
 }

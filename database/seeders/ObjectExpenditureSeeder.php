@@ -1,0 +1,185 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\ObjectExpenditure;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class ObjectExpenditureSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $expenditures = [
+
+            
+            //PS
+            ['allotment_class_id' => 1, 'uacs_code' => '5010101001', 'short_description' => 'Basic Salary - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010102000', 'short_description' => 'Salaries and Wages - Casual/Contractual'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010201001', 'short_description' => 'PERA - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010202000', 'short_description' => 'Representation Allowance (RA)'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010203001', 'short_description' => 'Transportation Allowance (TA)'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010204001', 'short_description' => 'Clothing/Uniform Allowance - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010205003', 'short_description' => 'Subsistence Allowance - Magna Carta Benefits for Public Health Workers under R.A. 7305'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010206004', 'short_description' => 'Laundry Allowance - Magna Carta Benefits for Public Health Workers under R.A. 7305'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010210001', 'short_description' => 'Honoraria - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010211005', 'short_description' => 'HP - Magna Carta Benefits for Public Health Workers under R.A. 7305'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010213001', 'short_description' => 'Overtime Pay'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010214001', 'short_description' => 'Year-End Bonus - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010215001', 'short_description' => 'Cash Gift - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010216001', 'short_description' => 'Mid-Year Bonus - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010299011', 'short_description' => 'Collective Negotiation Agreement Incentive - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010299012', 'short_description' => 'Productivity Enhancement Incentive - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010299014', 'short_description' => 'Performance Based Bonus - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010299036', 'short_description' => 'Mid-Year Bonus - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010299038', 'short_description' => 'Anniversary Bonus - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010301000', 'short_description' => 'Retirement and Life Insurance Premiums'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010302001', 'short_description' => 'Pag-IBIG - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010303001', 'short_description' => 'PhilHealth - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010304001', 'short_description' => 'ECIP - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010403001', 'short_description' => 'Terminal Leave Benefits - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010499007', 'short_description' => 'Lump-sum for Filling of Positions - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010499010', 'short_description' => 'Lump-sum for Step Increments - Length of Service'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010499015', 'short_description' => 'Loyalty Award - Civilian'],
+            ['allotment_class_id' => 1, 'uacs_code' => '5010499099', 'short_description' => 'Other Personnel Benefits'],
+
+
+            //MOOE
+            ['allotment_class_id' => 2, 'uacs_code' => '5020101000', 'short_description' => 'Traveling Expenses - Local'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020102000', 'short_description' => 'Traveling Expenses - Foreign'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020201001', 'short_description' => 'ICT Training Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020201002', 'short_description' => 'Training Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020202000', 'short_description' => 'Scholarship Grants/Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020301001', 'short_description' => 'ICT Office Supplies Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020301002', 'short_description' => 'Office Supplies Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020304000', 'short_description' => 'Animal/Zoological Supplies Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020307000', 'short_description' => 'Drugs and Medicines Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020308000', 'short_description' => 'Medical, Dental and Laboratory Supplies Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020309000', 'short_description' => 'Fuel, Oil and Lubricants Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020310000', 'short_description' => 'Agricultural and Marine Supplies Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020311001', 'short_description' => 'Textbooks and Instructional Materials Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321001', 'short_description' => 'Semi-Expendable Expenses - Machinery'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321002', 'short_description' => 'Semi-Expendable Expenses - Office Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321003', 'short_description' => 'Semi-Expendable Expenses - ICT Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321004', 'short_description' => 'Semi-Expendable Expenses - Agricultural and Forestry Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321005', 'short_description' => 'Semi-Expendable Expenses - Marine and Fishery Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321007', 'short_description' => 'Semi-Expendable Expenses - Communications Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321008', 'short_description' => 'Semi-Expendable Expenses - Disaster Response and Rescue Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321010', 'short_description' => 'Semi-Expendable Expenses - Medical Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321011', 'short_description' => 'Semi-Expendable Expenses - Printing Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321012', 'short_description' => 'Semi-Expendable Expenses - Sports Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321013', 'short_description' => 'Semi-Expendable Expenses - Technical and Scientific Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020321099', 'short_description' => 'Semi-Expendable Expenses - Other Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020322001', 'short_description' => 'Semi-Expendable Expenses - Furniture and Fixtures'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020322002', 'short_description' => 'Semi-Expendable Expenses - Books'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020399000', 'short_description' => 'Other Supplies and Materials Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020401000', 'short_description' => 'Water Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020402000', 'short_description' => 'Electricity Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020403000', 'short_description' => 'Gas/Heating Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020499000', 'short_description' => 'Other Utility Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020501000', 'short_description' => 'Postage and Courier Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020502001', 'short_description' => 'Telephone Expenses-Mobile'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020502002', 'short_description' => 'Telephone Expenses-Landline'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020503000', 'short_description' => 'Internet Subscription Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020504000', 'short_description' => 'Cable, Satellite, Telegraph and Radio Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020601001', 'short_description' => 'Awards/Rewards Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020602000', 'short_description' => 'Prizes'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020701002', 'short_description' => 'Survey Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5020702002', 'short_description' => 'Research, Exploration and Development Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021101000', 'short_description' => 'Legal Services'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021102000', 'short_description' => 'Auditing Services'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021199000', 'short_description' => 'Other Professional Services'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021202000', 'short_description' => 'Janitorial Services'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021299001', 'short_description' => 'Other General Services - ICT Services'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021299099', 'short_description' => 'Other General Services'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021302099', 'short_description' => 'Repairs and Maintenance - Other Land Improvements'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021303001', 'short_description' => 'Repairs and Maintenance - Road Networks'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021304001', 'short_description' => 'Repairs and Maintenance - Buildings'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021304002', 'short_description' => 'Repairs and Maintenance - School Buildings'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021304006', 'short_description' => 'Repairs and Maintenance - Hostels and Dormitories'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021304099', 'short_description' => 'Repairs and Maintenance - Other Structures'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305001', 'short_description' => 'Repairs and Maintenance - Machinery'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305002', 'short_description' => 'Repairs and Maintenance - Office Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305003', 'short_description' => 'Repairs and Maintenance - ICT Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305004', 'short_description' => 'Repairs and Maintenance - Agricultural and Forestry Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305005', 'short_description' => 'Repairs and Maintenance - Marine and Fishery Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305007', 'short_description' => 'Repairs and Maintenance - Communications Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305009', 'short_description' => 'Repairs and Maintenance - Disaster Response and Rescue Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305011', 'short_description' => 'Repairs and Maintenance - Medical Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305012', 'short_description' => 'Repairs and Maintenance - Printing Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305013', 'short_description' => 'Repairs and Maintenance - Sports Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305014', 'short_description' => 'Repairs and Maintenance - Technical and Scientific Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021305099', 'short_description' => 'Repairs and Maintenance - Other Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021306001', 'short_description' => 'Repairs and Maintenance - Motor Vehicles'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021307000', 'short_description' => 'Repairs and Maintenance - Furniture and Fixtures'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321001', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Machinery'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321002', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Office Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321003', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Information and Communications Technology Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321004', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Agricultural and Forestry Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321005', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Marine and Fishery Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321007', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Communications Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321008', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Disaster Response and Rescue Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321010', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Medical Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321011', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Printing Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321012', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Sports Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021321013', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Technical and Scientific Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021322001', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Furniture and Fixtures'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021322002', 'short_description' => 'Repairs and Maintenance - Semi-Expendable Books'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021399099', 'short_description' => 'Repairs and Maintenance - Other Property, Plant and Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021501001', 'short_description' => 'Taxes, Duties and Licenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021501002', 'short_description' => 'Tax Refund'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021502000', 'short_description' => 'Fidelity Bond Premiums'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5021503000', 'short_description' => 'Insurance Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029901000', 'short_description' => 'Advertising Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029902000', 'short_description' => 'Printing and Publication Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029903000', 'short_description' => 'Representation Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029904000', 'short_description' => 'Transportation and Delivery Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029905001', 'short_description' => 'Rents - Building and Structures'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029905003', 'short_description' => 'Rents - Motor Vehicles'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029905004', 'short_description' => 'Rents - Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029905008', 'short_description' => 'Rents - ICT Machinery and Equipment'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029906000', 'short_description' => 'Membership Dues and Contributions to Organizations'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029907001', 'short_description' => 'ICT Software Subscription'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029907004', 'short_description' => 'Library and Other Reading Materials Subscription Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029907099', 'short_description' => 'Other Subscription Expenses'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029922000', 'short_description' => 'Bank Transaction Fee'],
+            ['allotment_class_id' => 2, 'uacs_code' => '5029999099', 'short_description' => 'Other Maintenance and Operating Expenses'],
+
+
+            //CO
+            ['allotment_class_id' => 3, 'uacs_code' => '5060403001', 'short_description' => 'Road Networks'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060404001', 'short_description' => 'Buildings'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060404002', 'short_description' => 'School Buildings'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060404006', 'short_description' => 'Hostels and Dormitories'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405001', 'short_description' => 'Machinery'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405002', 'short_description' => 'Office Equipment'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405003', 'short_description' => 'Information and Communication Technology Equipment'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405004', 'short_description' => 'Agricultural and Forestry Equipment'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405005', 'short_description' => 'Marine and Fishery Equipment '],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405007', 'short_description' => 'Communications Equipment'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405009', 'short_description' => 'Disaster Response and Rescue Equipment'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405011', 'short_description' => 'Medical Equipment'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405012', 'short_description' => 'Printing Equipment'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405013', 'short_description' => 'Sports Equipment'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405014', 'short_description' => 'Technical and Scientific Equipment '],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405015', 'short_description' => 'ICT Software'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060405099', 'short_description' => 'Other Machinery and Equipment'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060406001', 'short_description' => 'Motor Vehicles'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060407001', 'short_description' => 'Furniture and Fixtures'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060407002', 'short_description' => 'Books'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060409001', 'short_description' => 'Work/Zoo Animals'],
+            ['allotment_class_id' => 3, 'uacs_code' => '5060409099', 'short_description' => 'Other Property, Plant and Equipment'],
+
+
+        ];
+
+        foreach ($expenditures as $expenditure) {
+            ObjectExpenditure::create($expenditure);
+        }
+    }
+}
