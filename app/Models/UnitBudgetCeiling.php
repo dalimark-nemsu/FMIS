@@ -19,6 +19,11 @@ class UnitBudgetCeiling extends Model
         'co',
         'total_amount',
         'processed_by',
+        'is_posted'
+    ];
+
+    protected $casts = [
+        'is_posted' => 'boolean'
     ];
 
     public function campusBudgetCeiling()
@@ -39,5 +44,10 @@ class UnitBudgetCeiling extends Model
     public function programActivityProject()
     {
         return $this->belongsTo(ProgramActivityProject::class, 'pap_id');
+    }
+
+    public function scopeIsPosted($query)
+    {
+        return $query->where('is_posted', true);
     }
 }

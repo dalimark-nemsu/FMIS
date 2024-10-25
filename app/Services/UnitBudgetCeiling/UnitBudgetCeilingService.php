@@ -42,7 +42,7 @@ class UnitBudgetCeilingService
             return $query->where('campus_id', $campusId);
         });
     
-        $campusBudgetCeilings = $query->where('budget_year_id', $selectedYear->id)->get();
+        $campusBudgetCeilings = $query->where('budget_year_id', $selectedYear->id)->isPosted()->get();
 
         $calculateBudgetData = [
             'campusTotalAllocatedBudget' => $this->budgetCeilingCalculation->getCampusTotalAllocatedBudget($campusBudgetCeilings),
@@ -63,7 +63,7 @@ class UnitBudgetCeilingService
             'programActivityProject.majorFinalOutput', 
             'programActivityProject.majorFinalOutput.units', 
             'unitBudgetCeilings'
-        ])->find($budgetCeilingId);
+        ])->isPosted()->findOrFail($budgetCeilingId);
 
         $calculateBudgetData = [
             'unitPSTotalAllocated' => $this->budgetCeilingCalculation->getUnitPSTotalAllocated($campusBudgetCeiling),
@@ -117,6 +117,23 @@ class UnitBudgetCeilingService
         $unitBudgetCeiling->processed_by = Auth::id();
         
         return $unitBudgetCeiling->save();
+    }
+
+    public function post($id){
+        $unitBudgetCeiling = UnitBudgetCeiling::findOrFail($id);
+        $unitBudgetCeiling->is_posted = true;
+        return $unitBudgetCeiling->save();
+    }
+
+    public function unpost($id){
+        $unitBudgetCeiling = UnitBudgetCeiling::findOrFail($id);
+        $unitBudgetCeiling->is_posted = false;
+        return $unitBudgetCeiling->save();
+    }
+
+    public function destroy($id){
+        $unitBudgetCeiling = UnitBudgetCeiling::findOrFail($id);
+        return $unitBudgetCeiling->delete();
     }
 
     /**

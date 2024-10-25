@@ -43,21 +43,21 @@ class UnitBudgetCeilingStoreRequest extends FormRequest
                 })
             ],
             'ps' => ['sometimes', 'nullable', 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/', 'min:0', function ($attribute, $value, $fail) use ($campusBudgetCeiling) {
-                $unitPSUnAllocatedTotal = $this->budgetCeilingCalculation->getUnitPSTotalUnallocated($campusBudgetCeiling);
+                $unitPSUnAllocatedTotal = $campusBudgetCeiling->ps - $campusBudgetCeiling->unitBudgetCeilings->sum('ps');
                 if (floatval(str_replace(',', '', $this->ps)) > $unitPSUnAllocatedTotal) {
-                    $fail('You have exceeded the allocated PS budget for this paps.');
+                    $fail('The :attribute exceeds the assigned budget limit for this PAPS.');
                 }
             }],
             'mooe' => ['sometimes', 'nullable', 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/', 'min:0', function ($attribute, $value, $fail) use ($campusBudgetCeiling) {
-                $unitMOOEUnAllocatedTotal = $this->budgetCeilingCalculation->getUnitMOOETotalUnallocated($campusBudgetCeiling);
+                $unitMOOEUnAllocatedTotal = $campusBudgetCeiling->mooe - $campusBudgetCeiling->unitBudgetCeilings->sum('mooe');
                 if (floatval(str_replace(',', '', $this->mooe)) > $unitMOOEUnAllocatedTotal) {
-                    $fail('You have exceeded the allocated MOOE budget for this paps.');
+                    $fail('The :attribute exceeds the assigned budget limit for this PAPS.');
                 }
             }],
             'co' => ['sometimes', 'nullable', 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/', 'min:0', function ($attribute, $value, $fail) use ($campusBudgetCeiling) {
-                $unitCOUnAllocatedTotal = $this->budgetCeilingCalculation->getUnitCOTotalUnallocated($campusBudgetCeiling);
+                $unitCOUnAllocatedTotal = $campusBudgetCeiling->co - $campusBudgetCeiling->unitBudgetCeilings->sum('co');
                 if (floatval(str_replace(',', '', $this->co)) > $unitCOUnAllocatedTotal) {
-                    $fail('You have exceeded the allocated CO budget for this paps.');
+                    $fail('The :attribute exceeds the assigned budget limit for this PAPS.');
                 }
             }],
             'total' => [
@@ -66,9 +66,9 @@ class UnitBudgetCeilingStoreRequest extends FormRequest
                 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/',
                 'min:0',
                 function ($attribute, $value, $fail) use ($campusBudgetCeiling) {
-                    $unitUnAllocatedTotal = $this->budgetCeilingCalculation->getUnitTotalUnallocated($campusBudgetCeiling);
+                    $unitUnAllocatedTotal = $campusBudgetCeiling->total_amount - $campusBudgetCeiling->unitBudgetCeilings->sum('total_amount');
                     if (floatval(str_replace(',', '', $this->total)) > $unitUnAllocatedTotal) {
-                        $fail('You have exceeded the allocated budget for this paps.');
+                        $fail('The :attribute exceeds the assigned budget limit for this PAPS.');
                     }
                 }
             ]
@@ -85,7 +85,7 @@ class UnitBudgetCeilingStoreRequest extends FormRequest
         return [
             'unit.required' => 'The unit name is required.',
             'unit.max' => 'The unit name cannot exceed 255 characters.',
-            'unit.unique' => 'This unit already has a budget allocated for the selected paps.',
+            'unit.unique' => 'This unit already has a budget assigned for the selected paps.',
             
             'ps.required' => 'Please enter the PS (Personnel Services) amount.',
             'ps.regex' => 'The PS amount must be a valid monetary value.',
@@ -102,7 +102,6 @@ class UnitBudgetCeilingStoreRequest extends FormRequest
             'total.required' => 'Please enter the total budget amount.',
             'total.regex' => 'The total budget must be a valid monetary value.',
             'total.min' => 'The total budget cannot be negative.',
-            'total.exceeded' => 'You have exceeded the allocated budget for this paps.'
         ];
     }
 }

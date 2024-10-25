@@ -46,6 +46,7 @@ class BudgetLimit implements Rule
      */
     public function message()
     {
-        return "The :attribute exceeds the assigned budget limit for this PAPS. The total assigned budget is {$this->assignedBudget}.";
+        $assignedBudget = number_format($this->assignedBudget, 2);
+        return "The :attribute exceeds the assigned budget limit for this PAPS. The total assigned budget is ₱{$assignedBudget}.";
     }
 }

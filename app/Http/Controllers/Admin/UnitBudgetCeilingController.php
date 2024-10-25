@@ -78,6 +78,24 @@ class UnitBudgetCeilingController extends Controller
         return redirect()->back()->with('success', 'Budget assignment has been updated.');
     }
 
+    public function post($unitBudgetCeilingId)
+    {
+        $this->unitBudgetCeilingService->post($unitBudgetCeilingId);
+        return redirect()->back()->with('success', 'Budget assignment has been posted.');
+    }
+
+    public function unpost($unitBudgetCeilingId)
+    {
+        $this->unitBudgetCeilingService->unpost($unitBudgetCeilingId);
+        return redirect()->back()->with('success', 'Budget assignment has been unposted.');
+    }
+
+    public function destroy($unitBudgetCeilingId)
+    {
+        $this->unitBudgetCeilingService->destroy($unitBudgetCeilingId);
+        return redirect()->back()->with('success', 'Budget assignment has been deleted.');
+    }
+
     private function getSelectedYear(Request $request)
     {
         if ($request->has('budget_year_id')) {
@@ -88,6 +106,6 @@ class UnitBudgetCeilingController extends Controller
     
     private function getSelectedCampus(Request $request)
     {
-        return optional(Campus::find($request->campus_id))->name;
+        return optional(Campus::find($request->campus_id));
     }
 }

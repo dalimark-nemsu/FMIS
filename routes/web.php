@@ -132,5 +132,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
     Route::get('unit/{id}/budget-ceiling', [UnitBudgetCeilingController::class, 'show'])->name('admin.unit-budget-ceiling.show');
     Route::post('unit/budget-ceiling', [UnitBudgetCeilingController::class, 'store'])->name('admin.unit-budget-ceiling.store');
     Route::put('unit/budget-ceiling/{unitBudgetCeilingId}', [UnitBudgetCeilingController::class, 'update'])->name('admin.unit-budget-ceiling.update');
+    Route::put('unit/budget-ceiling/post/{unitBudgetCeilingId}', [UnitBudgetCeilingController::class, 'post'])->name('admin.unit-budget-ceiling.post');
+    Route::put('unit/budget-ceiling/unpost/{unitBudgetCeilingId}', [UnitBudgetCeilingController::class, 'unpost'])->name('admin.unit-budget-ceiling.unpost');
+    Route::delete('unit/budget-ceiling/destroy/{unitBudgetCeilingId}', [UnitBudgetCeilingController::class, 'destroy'])->name('admin.unit-budget-ceiling.destroy');
 });
 

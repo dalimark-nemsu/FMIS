@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('page-title-with-icon')
-<a href="{{ route('admin.unit-budget-ceiling.index', ['campus_id' => $campusBudgetCeiling->campus_id]) }}" class="text-decoration-none" style="color: #012970;">
+<a href="{{ route('admin.unit-budget-ceiling.index', ['campus_id' => $campusBudgetCeiling->campus_id, 'budget_year_id' => $campusBudgetCeiling->budget_year_id]) }}" class="text-decoration-none" style="color: #012970;">
   <i class="bi bi-arrow-left"></i>
   {{ $campusBudgetCeiling->programActivityProject?->name }}
 </a>
 <div class="fs-6 mt-1">
-    MFO: {{ $campusBudgetCeiling->programActivityProject?->majorFinalOutput?->abbreviation }} | Fund Source: {{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation }}
+    MFO: {{ $campusBudgetCeiling->programActivityProject?->majorFinalOutput?->abbreviation }} | Fund Source: {{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation }} | Campus: {{ $campusBudgetCeiling->campus?->name }}
 </div>
 @endsection
 
@@ -22,33 +22,6 @@
 </div>
 <section class="section dashboard">
   <div class="row">
-    {{-- <div class="col-3">
-      <div class="card info-card sales-card">
-        <div class="card-body">
-          <h5 class="card-title f-6 mb-0">Details</h5>
-
-          <div class="d-flex align-items-center">
-            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-              <i class="bi bi-info"></i>
-            </div>
-            <div class="ps-3">
-              <div class="mb-0">
-                <span class="fs-6 fw-bold">{{ $campusBudgetCeiling->programActivityProject?->name }}</span>
-              </div>
-              <div class="mb-0">
-                <span class="fs-6 text-secondary">MFOs:</span>
-                <span class="fs-6 fw-bold text-secondary">{{ $campusBudgetCeiling->programActivityProject?->majorFinalOutput?->abbreviation }}</span>
-              </div>
-              <div class="mb-0">
-                <span class="fs-6  text-secondary">Fund Source:</span>
-                <span class="fs-6 fw-bold text-secondary">{{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div> --}}
     <div class="col-12 co-md-4 col-lg-4">
       <div class="card info-card sales-card">
         <div class="card-body">
@@ -272,17 +245,19 @@
                 </div>   
                 </div>                   
                 <div class="card-body">                  
-                  <div class="table-responsive table-card mt-4">
-                    <table id="unitsDataTable" class="table table-hover text-nowrap mt-0" style="width: 100%">
+                  <div class="table-responsive mt-4">
+                    <table id="unitsDataTable" class="table table-hover text-nowrap display" style="width: 100%;">
                       <thead class="table-secondary">
                         <tr>
                           <th>Unit</th>
+                          <th class="text-center">Status</th>
                           @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
                             <th class="text-end" style="background-color: {{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === 'GAA' ? '#cfe2ff' : '' }};">PS</th>
                             <th class="text-end" style="background-color: {{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === 'GAA' ? '#cfe2ff' : '' }};">MOOE</th>
                             <th class="text-end" style="background-color: {{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === 'GAA' ? '#cfe2ff' : '' }};">CO</th>
                           @endif
                           <th class="text-end" style="background-color: #e0f8e9; {{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === 'GAA' ? '#e0f8e9' : '' }};">Amount</th>
+                          <th class="text-center">Last Updated</th>
                           <th class="text-center">Action</th>
                         </tr>
                       </thead>
@@ -290,164 +265,288 @@
                           @foreach ($unitBudgetCeilings as $unitBudgetCeiling)
                               <tr>
                                   <td class="fw-bold">{{ $unitBudgetCeiling->operatingUnit?->name }}</td>
+                                  <td class="text-center">
+                                    @if ($unitBudgetCeiling->is_posted)
+                                      <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Posted</span>
+                                      @else
+                                      <span class="badge bg-warning text-dark"><i class="bi bi-pencil"></i> Draft</span>
+                                    @endif
+                                  </td>
                                   @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
                                     <td class="text-end @if($unitBudgetCeiling->ps == 0) text-danger @endif" style="background-color: #cfe2ff;">{{ '₱' . number_format($unitBudgetCeiling->ps, 2) }}</td>
                                     <td class="text-end @if($unitBudgetCeiling->mooe == 0) text-danger @endif" style="background-color: #cfe2ff;">{{ '₱' . number_format($unitBudgetCeiling->mooe, 2) }}</td>
                                     <td class="text-end @if($unitBudgetCeiling->co == 0) text-danger @endif" style="background-color: #cfe2ff;">{{ '₱' . number_format($unitBudgetCeiling->co, 2) }}</td>
                                    @endif
-                                <td class="text-end fw-bold" style="background-color: #e0f8e9;">{{ '₱' . number_format($unitBudgetCeiling->total_amount, 2) }}</td>
-                                  <td class="text-center">
-                                    <a href="#" class="btn btn-outline-primary btn-sm rounded-circle shadow-sm manage-btn" data-bs-placement="top" title="Manage" data-bs-toggle="modal" data-bs-target="#editModal{{ $unitBudgetCeiling->id }}">
-                                      <i class="bi bi-pencil"></i>
-                                    </a>                                    
-                                    <!-- Modal Body -->
-                                    <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
-                                    <div
-                                      class="modal fade edit-modal text-start"
-                                      id="editModal{{ $unitBudgetCeiling->id }}"
-                                      tabindex="-1"
-                                      data-bs-backdrop="static"
-                                      data-bs-keyboard="false"
-                                      
-                                      role="dialog"
-                                      aria-labelledby="modalTitleId{{ $unitBudgetCeiling->id }}"
-                                      aria-hidden="true"
-                                    >
-                                      <div
-                                        class="modal-dialog modal-dialog-scrollable"
-                                        role="document"
-                                      >
-                                        <div class="modal-content">
-                                          <div class="modal-header">
-                                            <h5 class="modal-title" id="{{ $unitBudgetCeiling->id }}">
-                                              Modify Budget Assignment
-                                            </h5>
-                                            <button
-                                              type="button"
-                                              class="btn-close"
-                                              data-bs-dismiss="modal"
-                                              aria-label="Close"
-                                            ></button>
+                                  <td class="text-end fw-bold" style="background-color: #e0f8e9;">{{ '₱' . number_format($unitBudgetCeiling->total_amount, 2) }}</td>
+                                  <td class="text-center">{{ $unitBudgetCeiling->updated_at->format('F d, Y') }}</td>
+                                  <td class="text-center">                               
+                                    @if(!$unitBudgetCeiling->is_posted)
+                                      @permission('update-unit-budget-ceiling')
+                                        <a href="#" class="btn btn-outline-primary btn-sm rounded-circle shadow-sm manage-btn" data-bs-placement="top" title="Manage" data-bs-toggle="modal" data-bs-target="#editModal{{ $unitBudgetCeiling->id }}">
+                                          <i class="bi bi-pencil"></i>
+                                        </a>                                    
+                                        <!-- Modal Body -->
+                                        <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+                                        <div
+                                          class="modal fade edit-modal text-start"
+                                          id="editModal{{ $unitBudgetCeiling->id }}"
+                                          tabindex="-1"
+                                          data-bs-backdrop="static"
+                                          data-bs-keyboard="false"
+                                          
+                                          role="dialog"
+                                          aria-labelledby="modalTitleId{{ $unitBudgetCeiling->id }}"
+                                          aria-hidden="true"
+                                        >
+                                          <div
+                                            class="modal-dialog modal-dialog-scrollable"
+                                            role="document"
+                                          >
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="{{ $unitBudgetCeiling->id }}">
+                                                  Modify Budget Assignment
+                                                </h5>
+                                                <button
+                                                  type="button"
+                                                  class="btn-close"
+                                                  data-bs-dismiss="modal"
+                                                  aria-label="Close"
+                                                ></button>
+                                              </div>
+                                              <form action="{{ route('admin.unit-budget-ceiling.update', $unitBudgetCeiling->id) }}" method="POST" class="edit-form">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="modal-body text-start p-4">
+                                                  <div class="row mb-3">
+                                                    <label for="editUnitInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">Units</label>
+                                                    <div class="col-sm-8">
+                                                      <select name="unit" id="editUnitInput{{ $unitBudgetCeiling->id }}" class="form-control unit-select border-dark text-dark" data-placeholder="Choose Unit">
+                                                        <option value=""></option>
+                                                        @foreach ($units as $unit)
+                                                          <option value="{{ $unit->id }}" @if ($unitBudgetCeiling->operating_unit === $unit->id)
+                                                            selected
+                                                          @endif>{{ $unit->name }}</option>
+                                                        @endforeach
+                                                      </select>
+                                                    </div>
+                                                  </div>
+                                                  @if ($unitBudgetCeiling->campusBudgetCeiling?->programActivityProject?->fundSource?->abbreviation === "GAA" || $unitBudgetCeiling->campusBudgetCeiling?->programActivityProject?->fundSource?->abbreviation === "TES")
+                                                    <div class="row mb-3">
+                                                      <label for="editPsInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">PS</label>
+                                                      <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                          <span class="input-group-text">&#8369;</span>
+                                                          <input
+                                                            type="text"
+                                                            name="ps"
+                                                            id="editPsInput{{ $unitBudgetCeiling->id }}"
+                                                            class="form-control money-input text-end"
+                                                            placeholder="0.00"
+                                                            aria-describedby="helpId"
+                                                            {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif --}}
+                                                            value="{{ number_format($unitBudgetCeiling->ps, 2) }}"
+                                                          />
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                      <label for="editMooeInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">MOOE</label>
+                                                      <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                          <span class="input-group-text">&#8369;</span>
+                                                          <input
+                                                            type="text"
+                                                            name="mooe"
+                                                            id="editMooeInput{{ $unitBudgetCeiling->id }}"
+                                                            class="form-control money-input text-end"
+                                                            placeholder="0.00"
+                                                            aria-describedby="helpId"
+                                                            {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif --}}
+                                                            value="{{ number_format($unitBudgetCeiling->mooe, 2) }}"
+                                                          />
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                      <label for="editCoInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">CO</label>
+                                                      <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                          <span class="input-group-text">&#8369;</span>
+                                                          <input
+                                                            type="text"
+                                                            name="co"
+                                                            id="editCoInput{{ $unitBudgetCeiling->id }}"
+                                                            class="form-control money-input text-end"
+                                                            placeholder="0.00"
+                                                            aria-describedby="helpId"
+                                                            {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif\ --}}
+                                                            value="{{ number_format($unitBudgetCeiling->co, 2) }}"
+                                                          />
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  @endif
+                                                  <div class="row mb-3">
+                                                    <label for="editTotalInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">Total Amount</label>
+                                                    <div class="col-sm-8">
+                                                      <div class="input-group">
+                                                        <span class="input-group-text">&#8369;</span>
+                                                        <input
+                                                          type="text"
+                                                          name="total"
+                                                          id="editTotalInput{{ $unitBudgetCeiling->id }}"
+                                                          class="form-control total-input text-end fw-bold"
+                                                          placeholder="0.00"
+                                                          aria-describedby="helpId"
+                                                            @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES") readonly @endif
+                                                            value="{{ number_format($unitBudgetCeiling->total_amount, 2) }}"
+                                                        />
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                  <button type="submit" class="btn btn-primary">Update</button>
+                                                  <button
+                                                  type="button"
+                                                  class="btn btn-outline-secondary"
+                                                  data-bs-dismiss="modal"
+                                                >
+                                                  Cancel
+                                                </button>
+                                                </div>
+                                              </form>
+                                            </div>
                                           </div>
-                                          <form action="{{ route('admin.unit-budget-ceiling.update', $unitBudgetCeiling->id) }}" method="POST" class="edit-form">
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="modal-body text-start p-4">
-                                              <div class="row mb-3">
-                                                <label for="editUnitInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">Units</label>
-                                                <div class="col-sm-8">
-                                                  <select name="unit" id="editUnitInput{{ $unitBudgetCeiling->id }}" class="form-control unit-select border-dark text-dark" data-placeholder="Choose Unit">
-                                                    <option value=""></option>
-                                                    @foreach ($units as $unit)
-                                                      <option value="{{ $unit->id }}" @if ($unitBudgetCeiling->operating_unit === $unit->id)
-                                                        selected
-                                                      @endif>{{ $unit->name }}</option>
-                                                    @endforeach
-                                                  </select>
-                                                </div>
-                                              </div>
-                                              @if ($unitBudgetCeiling->campusBudgetCeiling?->programActivityProject?->fundSource?->abbreviation === "GAA" || $unitBudgetCeiling->campusBudgetCeiling?->programActivityProject?->fundSource?->abbreviation === "TES")
-                                                <div class="row mb-3">
-                                                  <label for="editPsInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">PS</label>
-                                                  <div class="col-sm-8">
-                                                    <div class="input-group">
-                                                      <span class="input-group-text">&#8369;</span>
-                                                      <input
-                                                        type="text"
-                                                        name="ps"
-                                                        id="editPsInput{{ $unitBudgetCeiling->id }}"
-                                                        class="form-control money-input text-end"
-                                                        placeholder="0.00"
-                                                        aria-describedby="helpId"
-                                                        {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif --}}
-                                                        value="{{ number_format($unitBudgetCeiling->ps, 2) }}"
-                                                      />
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                  <label for="editMooeInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">MOOE</label>
-                                                  <div class="col-sm-8">
-                                                    <div class="input-group">
-                                                      <span class="input-group-text">&#8369;</span>
-                                                      <input
-                                                        type="text"
-                                                        name="mooe"
-                                                        id="editMooeInput{{ $unitBudgetCeiling->id }}"
-                                                        class="form-control money-input text-end"
-                                                        placeholder="0.00"
-                                                        aria-describedby="helpId"
-                                                        {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif --}}
-                                                        value="{{ number_format($unitBudgetCeiling->mooe, 2) }}"
-                                                      />
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                  <label for="editCoInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">CO</label>
-                                                  <div class="col-sm-8">
-                                                    <div class="input-group">
-                                                      <span class="input-group-text">&#8369;</span>
-                                                      <input
-                                                        type="text"
-                                                        name="co"
-                                                        id="editCoInput{{ $unitBudgetCeiling->id }}"
-                                                        class="form-control money-input text-end"
-                                                        placeholder="0.00"
-                                                        aria-describedby="helpId"
-                                                        {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif\ --}}
-                                                        value="{{ number_format($unitBudgetCeiling->co, 2) }}"
-                                                      />
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              @endif
-                                              <div class="row mb-3">
-                                                <label for="editTotalInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">Total Amount</label>
-                                                <div class="col-sm-8">
-                                                  <div class="input-group">
-                                                    <span class="input-group-text">&#8369;</span>
-                                                    <input
-                                                      type="text"
-                                                      name="total"
-                                                      id="editTotalInput{{ $unitBudgetCeiling->id }}"
-                                                      class="form-control total-input text-end fw-bold"
-                                                      placeholder="0.00"
-                                                      aria-describedby="helpId"
-                                                        @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES") readonly @endif
-                                                        value="{{ number_format($unitBudgetCeiling->total_amount, 2) }}"
-                                                    />
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                              <button type="submit" class="btn btn-primary">Update</button>
-                                              <button
-                                              type="button"
-                                              class="btn btn-outline-secondary"
-                                              data-bs-dismiss="modal"
-                                            >
-                                              Cancel
-                                            </button>
-                                            </div>
-                                          </form>
                                         </div>
-                                      </div>
-                                    </div>                                    
+                                      @endpermission
+                                      @permission('post-unit-budget-ceiling')
+                                        <button type="submit" class="btn btn-outline-success btn-sm rounded-circle shadow-sm" title="Post" data-bs-toggle="modal" data-bs-target="#modalPost{{ $unitBudgetCeiling->id }}">
+                                          <i class="bi bi-sticky"></i>
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modalPost{{ $unitBudgetCeiling->id }}" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true" style="text-wrap: wrap;">
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title text-start" id="modalTitleId">
+                                                  Confirm Budget Posting for {{ $unitBudgetCeiling->operatingUnit?->name }}
+                                                </h5>
+                                              </div>
+                                              <form action="{{ route('admin.unit-budget-ceiling.post', $unitBudgetCeiling->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="modal-body text-start">
+                                                  <p>You are about to post the assigned budget for the {{ $unitBudgetCeiling->operatingUnit?->name }} for the following allocations:</p>
+                                                  @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
+                                                    <ul>
+                                                      <li>PS (Personal Services): ₱{{ number_format($unitBudgetCeiling->ps, 2) }}</li>
+                                                      <li>MOOE (Maintenance and Other Operating Expenses): ₱{{ number_format($unitBudgetCeiling->mooe, 2) }}</li>
+                                                      <li>CO (Capital Outlay): ₱{{ number_format($unitBudgetCeiling->co, 2) }}</li>
+                                                    </ul>
+                                                  @endif
+                                                  <p>Total Budget Allocation: ₱{{ number_format($unitBudgetCeiling->total_amount, 2) }}</p>            
+                                                </div>
+                                                <div class="modal-footer">
+                                                  <button type="submit" class="btn btn-primary">Post</button>
+                                                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                              </form>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      @endpermission
+                                      @permission('delete-unit-budget-ceiling')
+                                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-circle shadow-sm" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $unitBudgetCeiling->id }}">
+                                          <i class="bi bi-trash"></i>
+                                        </button>
+                                        
+                                        <div class="modal fade" id="modalDelete{{ $unitBudgetCeiling->id }}" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                                          <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="modalTitleId">
+                                                  Delete Confirmation
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                              </div>
+                                              <form action="{{ route('admin.unit-budget-ceiling.destroy', $unitBudgetCeiling->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <div class="modal-body">Do you want to delete budget allocation for this unit?</div>
+                                                <div class="modal-footer">
+                                                  <button type="submit" class="btn btn-danger">Delete</button>
+                                                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"> Cancel</button>
+                                                </div>
+                                              </form>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      @endpermission
+                                    @else
+                                        <button class="btn btn-outline-danger btn-sm rounded-circle" title="Unpost" data-bs-toggle="modal"  data-bs-target="#modaUnpost{{ $unitBudgetCeiling->id }}">
+                                          <i class="bi bi-x-circle"></i>
+                                        </button>
+                                        
+                                        <!-- Modal Body -->
+                                        <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+                                        <div class="modal fade text-start" id="modaUnpost{{ $unitBudgetCeiling->id }}" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId"aria-hidden="true" style="text-wrap: wrap;">
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="modalTitleId">
+                                                  Confirm Unposting of Budget for {{ $unitBudgetCeiling->operatingUnit?->name }}
+                                                </h5>
+                                              </div>
+                                              <form action="{{ route('admin.unit-budget-ceiling.unpost', $unitBudgetCeiling->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="modal-body">
+                                                  <p>You are about to unpost the assigned budget for the {{ $unitBudgetCeiling->operatingUnit?->name }}. </p>
+                                                  @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
+                                                    <ul>
+                                                      <li>PS (Personal Services): ₱{{ number_format($unitBudgetCeiling->ps, 2) }}</li>
+                                                      <li>MOOE (Maintenance and Other Operating Expenses): ₱{{ number_format($unitBudgetCeiling->mooe, 2) }}</li>
+                                                      <li>CO (Capital Outlay): ₱{{ number_format($unitBudgetCeiling->co, 2) }}</li>
+                                                    </ul>
+                                                  @endif
+                                                  <p>Total Budget Allocation: ₱{{ number_format($unitBudgetCeiling->total_amount, 2) }}</p>     
+                                                  <p>Unposting this budget will make it **editable** again and will remove its status as a final budget allocation. Please confirm if you want to proceed with this action.</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                  <button type="submit" class="btn btn-danger">Unpost</button>
+                                                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                              </form>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        
+                                        <!-- Optional: Place to the bottom of scripts -->
+                                        <script>
+                                          const myModal = new bootstrap.Modal(
+                                            document.getElementById("modalId"),
+                                            options,
+                                          );
+                                        </script>
+                                        
+                                    @endif
                                   </td>
                               </tr>
                           @endforeach
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td class="text-end fw-bold">Total</td>
+                          <td class="text-end fw-bold"></td>
+                          <td class="text-end fw-bold"></td>
                           @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
-                            <td class="text-end fw-bold">{{ '₱' . number_format($unitBudgetCeilings->sum('ps'), 2) }}</td>
-                            <td class="text-end fw-bold">{{ '₱' . number_format($unitBudgetCeilings->sum('mooe'), 2) }}</td>
-                            <td class="text-end fw-bold">{{ '₱' . number_format($unitBudgetCeilings->sum('co'), 2) }}</td>
+                            <td class="text-end fw-bold" style="background-color: #b8d1f6">{{ '₱' . number_format($unitBudgetCeilings->sum('ps'), 2) }}</td>
+                            <td class="text-end fw-bold" style="background-color: #b8d1f6">{{ '₱' . number_format($unitBudgetCeilings->sum('mooe'), 2) }}</td>
+                            <td class="text-end fw-bold" style="background-color: #b8d1f6">{{ '₱' . number_format($unitBudgetCeilings->sum('co'), 2) }}</td>
                           @endif
-                          <td class="text-end fw-bold">{{ '₱' . number_format($unitBudgetCeilings->sum('total_amount'), 2) }}</td>
+                          <td class="text-end fw-bold" style="background-color: #b9f7d0;">{{ '₱' . number_format($unitBudgetCeilings->sum('total_amount'), 2) }}</td>
+                          <td></td>
                           <td></td>
                         </tr>
                       </tfoot>
@@ -577,7 +676,13 @@
         });
     });
 
-    $("#unitsDataTable").DataTable();
+    $("#unitsDataTable").DataTable({
+      fixedHeader: true,
+      footer: true,
+      paging: false, // Disable pagination
+      scrollY: 480,  // Set vertical scroll
+      scrollCollapse: true,  // Collapse if less content
+    });
   });
 </script>
 @endpush

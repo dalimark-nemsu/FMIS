@@ -3,12 +3,12 @@
 @section('page-title-with-icon')
   <a href="{{ route('admin.unit-budget-ceiling.index') }}" style="color: #012970;">
     <i class="bi bi-arrow-left"></i>
-    Unit Budget Ceiling {{ (!is_null($selectedCampus)) ? ' - ' . $selectedCampus : ''  }} 
+    Unit Budget Ceiling {{ (!is_null($selectedCampus->name)) ? ' - ' . $selectedCampus->name : ''  }} 
   </a>
 @endsection
 
 @section('page-title-text')
-Unit Budget Ceiling {{ (!is_null($selectedCampus)) ? ' - ' . $selectedCampus : ''  }} 
+Unit Budget Ceiling {{ (!is_null($selectedCampus->name)) ? ' - ' . $selectedCampus->name : ''  }} 
 @endsection
 
 @prepend('page-style')
@@ -101,7 +101,6 @@ Unit Budget Ceiling {{ (!is_null($selectedCampus)) ? ' - ' . $selectedCampus : '
             <div class="row mt-2 mb-2">
               <div class="col-auto d-flex align-items-center">
                   <select id="budgetYear" class="form-select me-2 border-secondary">
-                    <option value="" selected>Budget Year</option>
                     @foreach ($budgetYears as $budgetYear)
                       <option value="{{ $budgetYear->id }}" @if($budgetYear->id === $selectedYear->id) selected @endif>{{ $budgetYear->year }}</option>
                     @endforeach
@@ -144,7 +143,7 @@ Unit Budget Ceiling {{ (!is_null($selectedCampus)) ? ' - ' . $selectedCampus : '
                   </tr>
                 </thead>
                 <tbody>
-                    @forelse ($campusBudgetCeilings as $campusBudgetCeiling)
+                    @foreach ($campusBudgetCeilings as $campusBudgetCeiling)
                         <tr>
                             <td class="fw-bold">{{ $campusBudgetCeiling->programActivityProject?->name }}</td>
                             <td class="text-center">{{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation }}</td>
@@ -159,9 +158,7 @@ Unit Budget Ceiling {{ (!is_null($selectedCampus)) ? ' - ' . $selectedCampus : '
                               </a>
                             </td>
                         </tr>
-                    @empty
-                        
-                    @endforelse
+                    @endforeach
                 </tbody>
               </table>
             </div>
@@ -207,6 +204,7 @@ $(document).ready(function() {
       // Ensure the user has selected a budget year
       if (selectedBudgetYearId) {
           const url = new URL(window.location.origin + '/admin/unit/budget-ceiling');
+          url.searchParams.set('campus_id', "{{ $selectedCampus->id }}");
           url.searchParams.set('budget_year_id', selectedBudgetYearId);
           // Redirect to the route with the query string
           window.location.href = url.toString();

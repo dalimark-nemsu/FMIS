@@ -50,6 +50,7 @@
     <!-- Datatables CSS B5 -->
      {{-- <link href="{{ asset('assets/datatables5/css/bootstrap.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('assets/datatables5/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap5.css">
 
     @stack('page-style')
 
@@ -106,6 +107,8 @@
   <script src="{{ asset('assets/datatables5/js/jquery-3.5.1.js')}}"></script>
   <script src="{{ asset('assets/datatables5/js/jquery.dataTables.min.js')}}"></script>
   <script src="{{ asset('assets/datatables5/js/dataTables.bootstrap5.min.js')}}"></script>
+  <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.bootstrap5.js"></srcript>
   {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 
 {{-- <!-- jQuery -->

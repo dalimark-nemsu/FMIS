@@ -43,10 +43,10 @@ class UnitBudgetCeilingUpdateRequest extends FormRequest
                     })
                     ->ignore($this->unitBudgetCeilingId) // Ignore current record during uniqueness check
             ],
-            'ps' => ['sometimes', 'nullable', 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/', 'min:0', new BudgetLimit($campusBudgetCeiling->ps, $this->budgetCeilingCalculation->getUnitPSTotalAllocated($campusBudgetCeiling), $unitBudgetCeiling->ps)],
-            'mooe' => ['sometimes', 'nullable', 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/', 'min:0', new BudgetLimit($campusBudgetCeiling->mooe, $this->budgetCeilingCalculation->getUnitMOOETotalAllocated($campusBudgetCeiling), $unitBudgetCeiling->mooe)],
-            'co' => ['sometimes', 'nullable', 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/', 'min:0', new BudgetLimit($campusBudgetCeiling->co, $this->budgetCeilingCalculation->getUnitCOTotalAllocated($campusBudgetCeiling), $unitBudgetCeiling->co)],
-            'total' => ['sometimes', 'required','regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/','min:0', new BudgetLimit($campusBudgetCeiling->total_amount, $this->budgetCeilingCalculation->getUnitTotalAllocated($campusBudgetCeiling), $unitBudgetCeiling->total_amount)]
+            'ps' => ['sometimes', 'nullable', 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/', 'min:0', new BudgetLimit($campusBudgetCeiling->ps, $campusBudgetCeiling->unitBudgetCeilings->sum('ps'), $unitBudgetCeiling->ps)],
+            'mooe' => ['sometimes', 'nullable', 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/', 'min:0', new BudgetLimit($campusBudgetCeiling->mooe, $campusBudgetCeiling->unitBudgetCeilings->sum('mooe'), $unitBudgetCeiling->mooe)],
+            'co' => ['sometimes', 'nullable', 'regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/', 'min:0', new BudgetLimit($campusBudgetCeiling->co, $campusBudgetCeiling->unitBudgetCeilings->sum('co'), $unitBudgetCeiling->co)],
+            'total' => ['sometimes', 'required','regex:/^\d{1,3}(,\d{3})*(\.\d{2})?$/','min:0', new BudgetLimit($campusBudgetCeiling->total_amount, $campusBudgetCeiling->unitBudgetCeilings->sum('total_amount'), $unitBudgetCeiling->total_amount)]
         ];
     }
 

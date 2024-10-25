@@ -28,7 +28,7 @@ class BudgetCeilingCalculation
     public static function getCampusUnitTotalAllocated(Collection $data): float
     {
         return $data->map(function ($budget) {
-            return $budget->unitBudgetCeilings->sum('total_amount');
+            return $budget->postedUnitBudgetCeilings->sum('total_amount');
         })->sum();
     }
 
@@ -56,7 +56,7 @@ class BudgetCeilingCalculation
      */
     public static function getUnitPSTotalAllocated(CampusBudgetCeiling $data): float
     {
-        return $data->unitBudgetCeilings->sum('ps');
+        return $data->postedUnitBudgetCeilings->sum('ps');
     }
 
     /**
@@ -67,7 +67,7 @@ class BudgetCeilingCalculation
      */
     public static function getUnitMOOETotalAllocated(CampusBudgetCeiling $data): float
     {
-        return $data->unitBudgetCeilings->sum('mooe');
+        return $data->postedUnitBudgetCeilings->sum('mooe');
     }
 
     /**
@@ -78,7 +78,7 @@ class BudgetCeilingCalculation
      */
     public static function getUnitCOTotalAllocated(CampusBudgetCeiling $data): float
     {
-        return $data->unitBudgetCeilings->sum('co');
+        return $data->postedUnitBudgetCeilings->sum('co');
     }
 
     /**
@@ -89,7 +89,7 @@ class BudgetCeilingCalculation
      */
     public static function getUnitTotalAllocated(CampusBudgetCeiling $data): float
     {
-        return $data->unitBudgetCeilings->sum('total_amount');
+        return $data->postedUnitBudgetCeilings->sum('total_amount');
     }
 
     /**

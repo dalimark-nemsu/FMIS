@@ -17,12 +17,22 @@ class CampusBudgetCeiling extends Model
         'mooe',
         'co',
         'total_amount',
-        'processed_by'
+        'processed_by',
+        'is_posted'
+    ];
+
+    protected $casts = [
+        'is_posted' => 'boolean'
     ];
 
     public function unitBudgetCeilings()
     {
         return $this->hasMany(UnitBudgetCeiling::class, 'campus_budget_ceiling_id');
+    }
+
+    public function postedUnitBudgetCeilings()
+    {
+        return $this->hasMany(UnitBudgetCeiling::class, 'campus_budget_ceiling_id')->where('is_posted', true);
     }
 
     public function programActivityProject()
@@ -50,5 +60,8 @@ class CampusBudgetCeiling extends Model
         return $this->belongsTo(User::class, 'processed_by');
     }
 
-    
+    public function scopeIsPosted($query)
+    {
+        return $query->where('is_posted', true);
+    }
 }
