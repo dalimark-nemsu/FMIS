@@ -100,7 +100,7 @@ class BudgetCeilingController extends Controller
         $mfos = $this->getAllMFOs();
         $paps = $this->getAllPAPs();
 
-        return view('budget-ceilings.index', compact('campus', 'activeYear', 'fundSources', 'mfos', 'paps', 'groupedBudgetCeilings', 'grandTotal'));
+        return view('budget-ceilings.index', compact('campus', 'activeYear', 'fundSources', 'mfos', 'paps', 'groupedBudgetCeilings', 'grandTotal', 'budgetYearId'));
     }
 
     /**
@@ -121,10 +121,15 @@ class BudgetCeilingController extends Controller
      */
     public function store(BudgetCeilingStoreRequest $request)
     {
-        $psAmount = str_replace(',', '', $request->ps);
-        $mooeAmount = str_replace(',', '', $request->mooe);
-        $coAmount = str_replace(',', '', $request->co);
-        $totalAmount = $psAmount + $mooeAmount + $coAmount;
+        $psAmount = (float) str_replace(',', '', $request->ps);
+        $mooeAmount = (float) str_replace(',', '', $request->mooe);
+        $coAmount = (float) str_replace(',', '', $request->co);
+        if (!empty($psAmount) || !empty($mooeAmount) || !empty($coAmount)) {
+            // Calculate totalAmount if at least one of the values is present
+            $totalAmount = $psAmount + $mooeAmount + $coAmount;
+        } else {
+            $totalAmount = (float) str_replace(',', '', $request->total);
+        }
         CampusBudgetCeiling::create([
             'campus_id'             =>      $request->campus_id,
             'budget_year_id'        =>      $request->year_id,
@@ -169,10 +174,15 @@ class BudgetCeilingController extends Controller
      */
     public function update(BudgetCeilingUpdateRequest $request, CampusBudgetCeiling $budget_ceiling)
     {
-        $psAmount = str_replace(',', '', $request->ps);
-        $mooeAmount = str_replace(',', '', $request->mooe);
-        $coAmount = str_replace(',', '', $request->co);
-        $totalAmount = $psAmount + $mooeAmount + $coAmount;
+        $psAmount = (float) str_replace(',', '', $request->ps);
+        $mooeAmount = (float) str_replace(',', '', $request->mooe);
+        $coAmount = (float) str_replace(',', '', $request->co);
+        if (!empty($psAmount) || !empty($mooeAmount) || !empty($coAmount)) {
+            // Calculate totalAmount if at least one of the values is present
+            $totalAmount = $psAmount + $mooeAmount + $coAmount;
+        } else {
+            $totalAmount = (float) str_replace(',', '', $request->total);
+        }
         $budget_ceiling->update([
             'pap_id'                =>      $request->pap,
             'ps'                    =>      $psAmount,

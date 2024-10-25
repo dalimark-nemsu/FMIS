@@ -29,20 +29,6 @@
         <!-- End Profile Page Nav -->
 
 
-        {{-- <li class="nav-heading">Master List</li>
-
-        <li class="nav-item">
-          <a class="nav-link {{(request()->is('residents')) ? '' : 'collapsed' }}" href="#">
-            <i class="bi bi-briefcase"></i>
-            <span>Youths</span>
-          </a>
-        </li> --}}
-        <!-- End Residents Nav -->
-    {{-- @endif --}}
-
-
-
-    {{-- @if(auth()->user()->hasRole(['barangay_admin', 'municipal_admin', 'provincial_admin', 'super_admin'])) --}}
     <li class="nav-heading">Maintenance</li>
 
     <li class="nav-item">
@@ -89,16 +75,28 @@
       </a>
     </li>
 
-    <!-- End Users Nav -->
 
-    {{-- <li class="nav-item">
-      <a class="nav-link {{(request()->is('officials')) ? '' : 'collapsed' }}" href="#">
-        <i class="bi bi-people"></i>
-        <span>Officials</span>
+    <!-- Allotment Classes Nav -->
+    <li class="nav-item">
+      <a class="nav-link {{(request()->is('allotment-classes')) ? '' : 'collapsed' }}" href="{{ route('allotment-classes.index') }}">
+            <i class="bi bi-box-seam"></i>
+            <span>Allotment Classes</span>
+          </a>
+    </li>
+
+    <!-- Object Expenditures Nav -->
+    <li class="nav-item">
+    <a class="nav-link {{(request()->is('object-expenditures')) ? '' : 'collapsed' }}" href="{{ route('object-expenditures.index') }}">
+        <i class="bi bi-receipt"></i>
+        <span>Object Expenditures</span>
       </a>
-    </li> --}}
-    <!-- End Officials Nav -->
+    </li>
 
+
+
+
+
+  
     {{-- <li class="nav-item">
       <a class="nav-link {{(request()->is('positions')) ? '' : 'collapsed' }}" href="#">
         <i class="bi bi-person-badge"></i>
@@ -107,63 +105,6 @@
     </li> --}}
     <!-- End Positions Nav -->
 
-    {{-- <li class="nav-item">
-      <a class="nav-link {{(request()->is('puroks')) ? '' : 'collapsed' }}" href="#">
-        <i class="bi bi-house-door"></i>
-        <span>Puroks</span>
-      </a>
-    </li> --}}
-    <!-- End Puroks Nav -->
-    {{-- @endif --}}
-
-    {{-- @if(auth()->user()->hasRole(['municipal_admin', 'provincial_admin', 'super_admin'])) --}}
-    {{-- <li class="nav-item">
-      <a class="nav-link {{(request()->is('barangays')) ? '' : 'collapsed' }}" href="#">
-        <i class="bi bi-geo-alt"></i>
-        <span>Barangays</span>
-      </a>
-    </li> --}}
-    <!-- End Barangays Nav -->
-    {{-- @endif --}}
-
-    {{-- @if(auth()->user()->hasRole(['provincial_admin', 'super_admin'])) --}}
-    {{-- <li class="nav-item">
-      <a class="nav-link {{(request()->is('municipalities')) ? '' : 'collapsed' }}" href="#">
-        <i class="bi bi-building"></i>
-        <span>Municipalities</span>
-      </a>
-    </li> --}}
-    <!-- End Municipalities Nav -->
-    {{-- @endif --}}
-
-    {{-- @if(auth()->user()->hasRole(['super_admin'])) --}}
-    {{-- <li class="nav-item">
-      <a class="nav-link {{(request()->is('provinces')) ? '' : 'collapsed' }}" href="#">
-        <i class="bi bi-geo-alt-fill"></i>
-        <span>Provinces</span>
-      </a>
-    </li> --}}
-    <!-- End Provinces Nav -->
-
-    {{-- <li class="nav-item">
-      <a class="nav-link {{(request()->is('regions')) ? '' : 'collapsed' }}" href="#">
-        <i class="bi bi-globe"></i>
-        <span>Regions</span>
-      </a>
-    </li> --}}
-    <!-- End Regions Nav -->
-    {{-- @endif --}}
-
-    {{-- @if(auth()->user()->hasRole(['barangay_admin', 'municipal_admin', 'provincial_admin', 'super_admin'])) --}}
-      {{-- <li class="nav-item">
-        <a class="nav-link {{ request()->is('reports') ? '' : 'collapsed' }}" href="#">
-
-          <i class="bi bi-file-bar-graph"></i>
-          <span>Reports</span>
-        </a>
-      </li> --}}
-      <!-- End Reports Nav -->
-    {{-- @endif --}}
-
+  
   </ul>
 </aside>

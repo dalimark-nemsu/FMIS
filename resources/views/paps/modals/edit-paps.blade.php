@@ -11,13 +11,15 @@
                 @method('PUT')
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="edit-code" class="form-label">Code:</label>
+                        <label for="edit-code" class="form-label text-muted">Code</label>
                         <input type="text" class="form-control" id="edit-code" name="code" placeholder="Enter PAPs code" value="{{ $paps->code }}" required>
                     </div>
-
                     <div class="mb-3">
-                        <label for="edit-fund-source" class="form-label">Fund Source:</label>
-
+                        <label for="edit-name" class="form-label text-muted">Name</label>
+                        <input type="text" class="form-control" id="edit-name" name="name" placeholder="Enter PAPs name" value="{{ $paps->name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-fund-source" class="form-label text-muted">Fund Source</label>
                         <select class="form-select" name="fund_source_id" id="edit-fund-source-id" value="{{ $paps->fundSource->abbreviation }}>
                             <option value=""> -- Select Fund Source -- </option>
                             @foreach($fundSources as $fundSource)
@@ -25,9 +27,8 @@
                             @endforeach
                         </select>
                     </div>
-
                     <div class="mb-3">
-                        <label for="edit-major-final-output" class="form-label">Major Final Outputs:</label>
+                        <label for="edit-major-final-output" class="form-label text-muted">Major Final Outputs</label>
                         <select class="form-select" name="mfo_id" id="edit-mfo-id" value="{{ $paps->majorFinalOutput->abbreviation }}>
                             <option value=""> -- Select Major Final Outputs -- </option>
                             @foreach($mfos as $mfo)
@@ -35,14 +36,7 @@
                             @endforeach
                         </select>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="edit-name" class="form-label">Name:</label>
-                        <input type="text" class="form-control" id="edit-name" name="name" placeholder="Enter PAPs name" value="{{ $paps->name }}" required>
-                    </div>
-
                 </div>
-
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

@@ -153,14 +153,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="status" class="form-label">Status:</label>
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Status:</label>
-                            <select class="form-select" id="status" name="status">
-                                <option value="" disabled>Select status</option>
-                                <option value="active" {{ $budgetYear->is_active ? 'selected' : '' }}>Active</option>
-                                <option value="inactive" {{ !$budgetYear->is_active ? 'selected' : '' }}>Inactive</option>
-                            </select>
-                        </div>
+                        <select class="form-select" id="status" name="status">
+                            <option value="" disabled>Select status</option>
+                            <option value="active" {{ $budgetYear->is_active ? 'selected' : '' }}>Active</option>
+                            <option value="inactive" {{ !$budgetYear->is_active ? 'selected' : '' }}>Inactive</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

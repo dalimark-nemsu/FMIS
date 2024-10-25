@@ -10,19 +10,18 @@
                 @csrf
                 <div class="modal-body">
                     <div class="row g-3">
-
                         <div class="col-md-6">
-                            <label for="fundSource" class="form-label">Fund Source:</label>
+                            <label for="fundSource" class="form-label text-muted">Fund Source</label>
                             <select class="form-select add-fund-source" name="fundSource" id="fund_source">
-                                <option value="" disabled selected> -- Select Fund Source -- </option>
+                                <option value="" disabled selected > -- Fund Source -- </option>
                                 @foreach ($fundSources as $fundSource )
-                                    <option value="{{ $fundSource->id }}">{{ $fundSource->abbreviation }}</option>
+                                    <option value="{{ $fundSource->id }}" data-abbreviation="{{ $fundSource->abbreviation }}">{{ $fundSource->abbreviation }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="mfo" class="form-label">MFO:</label>
+                            <label for="mfo" class="form-label text-muted">MFO</label>
                             <select class="form-select add-mfo" name="mfo" id="mfo">
                                 <option value="" disabled selected> -- Select Major Final Outputs -- </option>
                                 @foreach ($mfos as $mfo )
@@ -31,47 +30,59 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="pap" class="form-label">PAP:</label>
+                        <div class="col-md-12">
+                            <label for="pap" class="form-label text-muted">PAP</label>
                             <select class="js-example-basic-single js-states form-control add-pap" name="pap" id="pap">
                                 <option value="" disabled selected> -- Select Program, Activity, Projects -- </option>
                                 @foreach ($paps as $pap )
-                                    <option value="{{ $pap->id }}">{{ $pap->code }}</option>
+                                    <option value="{{ $pap->id }}">{{ $pap->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="ps" class="form-label">PS:</label>
-                            <input type="text" class="form-control ps" id="ps" name="ps" required>
+                        <div class="col-md-4">
+                            <label for="ps" class="form-label text-muted">PS</label>
+                            <div class="input-group">
+                                <span class="input-group-text">&#8369</span>
+                                <input type="text" class="form-control ps" id="ps" name="ps" disabled placeholder="0.00">
+                            </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="mooe" class="form-label">MOOE:</label>
-                            <input type="text" class="form-control mooe" id="mooe" name="mooe" required>
+                        <div class="col-md-4">
+                            <label for="mooe" class="form-label text-muted">MOOE</label>
+                            <div class="input-group">
+                                <span class="input-group-text">&#8369</span>
+                                <input type="text" class="form-control mooe" id="mooe" name="mooe" disabled placeholder="0.00">
+                            </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="co" class="form-label">CO:</label>
-                            <input type="text" class="form-control co" id="co" name="co" required>
+                        <div class="col-md-4">
+                            <label for="co" class="form-label text-muted">CO</label>
+                            <div class="input-group">
+                                <span class="input-group-text">&#8369</span>
+                                <input type="text" class="form-control co" id="co" name="co" disabled placeholder="0.00">
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Horizontal line to separate inputs from total -->
-                    <hr class="my-4">
+                    {{-- <!-- Horizontal line to separate inputs from total -->
+                    <hr class="my-4"> --}}
 
                     <!-- Total display -->
-                    <div class="row">
-                        <div class="col-md-12 text-end">
-                            <label for="total" class="form-label fs-5 fw-bold">Total: &#8369</label>
-                            <span id="total" class="fs-5 fw-bold total">0.00</span> <!-- Default total value as 0 -->
+                    <div class="row mt-4">
+                        <div class="col-md-12 text-end d-flex justify-content-end align-items-center">
+                            <label for="total" class="form-label fs-5 fw-bold me-2 mb-0" style="line-height: 1;">Total</label>
+                            <div class="input-group" style="max-width: 245px;">
+                                <span class="input-group-text fs-5 fw-bold">&#8369</span>
+                                <input type="text" id="total" name="total" class="form-control fs-5 fw-bold total" disabled placeholder="0.00">
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>
