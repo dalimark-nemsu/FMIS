@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page-title-with-icon')
-<a href="{{ route('admin.unit-budget-ceiling.index') }}" class="text-decoration-none" style="color: #012970;">
+<a href="{{ route('admin.unit-budget-ceiling.index', ['campus_id' => $campusBudgetCeiling->campus_id]) }}" class="text-decoration-none" style="color: #012970;">
   <i class="bi bi-arrow-left"></i>
   {{ $campusBudgetCeiling->programActivityProject?->name }}
 </a>
@@ -52,7 +52,7 @@
     <div class="col-12 co-md-4 col-lg-4">
       <div class="card info-card sales-card">
         <div class="card-body">
-          <h5 class="card-title f-6 mb-0">Amount</h5>
+          <h5 class="card-title f-6 mb-0">Total Assigned Budget</h5>
     
           <div class="d-flex align-items-center">
             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -84,7 +84,7 @@
     <div class="col-12 co-md-4 col-lg-4">
       <div class="card info-card revenue-card">
         <div class="card-body">
-          <h5 class="card-title f-6 mb-0">Allocated <span></span></h5>
+          <h5 class="card-title f-6 mb-0">Total Allocated Budget <span></span></h5>
 
           <div class="d-flex align-items-center">
             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -93,19 +93,18 @@
             <div class="ps-3 ms-auto text-end">
               @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
                 <div class="mb-1">
-                  <span class="fs-6 text-muted">PS<span> {{ '₱' . number_format($psAllocatedSum,2) }}</span></span>
+                  <span class="fs-6 text-muted">PS<span> {{ '₱' . number_format($budgetData['unitPSTotalAllocated'],2) }}</span></span>
                 </div>
                 <div class="mb-1">
-                  <span class="fs-6 text-muted">MOOE<span> {{ '₱' . number_format($mooeAllocatedSum,2) }}</span></span>
+                  <span class="fs-6 text-muted">MOOE<span> {{ '₱' . number_format($budgetData['unitMOOETotalAllocated'],2) }}</span></span>
                 </div>
                 <div class="mb-2">
-                  <span class="fs-6 text-muted">CO<span> {{ '₱' . number_format($coAllocatedSum,2) }}</span></span>
+                  <span class="fs-6 text-muted">CO<span> {{ '₱' . number_format($budgetData['unitCOTotalAllocated'],2) }}</span></span>
                 </div>
               @endif
               <div class="mb-0">
-                <span class="fs-5 fw-bold">{{ '₱' . number_format($totalAllocatedSum,2) }}</span>
+                <span class="fs-5 fw-bold">{{ '₱' . number_format($budgetData['unitTotalAllocated'],2) }}</span>
               </div>
-              {{-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> --}}
     
             </div>
           </div>
@@ -117,7 +116,7 @@
       <div class="card info-card customers-card">
 
         <div class="card-body">
-          <h5 class="card-title f-6 mb-0">Unallocated</h5>
+          <h5 class="card-title f-6 mb-0"> Total Unallocated Budget</h5>
 
           <div class="d-flex align-items-center">
             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -126,19 +125,18 @@
             <div class="ps-3 ms-auto text-end">
               @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
                 <div class="mb-1">
-                  <span class="fs-6 text-muted">PS<span> {{ '₱' . number_format($psUnallocated,2) }}</span></span>
+                  <span class="fs-6 text-muted">PS<span> {{ '₱' . number_format($budgetData['unitPSTotalUnallocated'],2) }}</span></span>
                 </div>
                 <div class="mb-1">
-                  <span class="fs-6 text-muted">MOOE<span> {{ '₱' . number_format($mooeUnallocated,2) }}</span></span>
+                  <span class="fs-6 text-muted">MOOE<span> {{ '₱' . number_format($budgetData['unitMOOETotalUnallocated'],2) }}</span></span>
                 </div>
                 <div class="mb-2">
-                  <span class="fs-6 text-muted">CO<span> {{ '₱' . number_format($coUnallocated,2) }}</span></span>
+                  <span class="fs-6 text-muted">CO<span> {{ '₱' . number_format($budgetData['unitCOTotalUnallocated'],2) }}</span></span>
                 </div>
               @endif
               <div class="mb-0">
-                <span class="fs-5 fw-bold">{{ '₱' . number_format($totalUnallocated,2) }}</span>
+                <span class="fs-5 fw-bold">{{ '₱' . number_format($budgetData['unitTotalUnallocated'],2) }}</span>
               </div>
-              {{-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> --}}
     
             </div>
           </div>
@@ -157,24 +155,18 @@
               <div class="card">
                 <div class="card-header">
                   <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#assignUnitBudgetCeilingModal">
-                    <i class="bi bi-plus-circle"></i> Allocate Budget
+                    <i class="bi bi-plus-circle"></i> Assign Budget
                   </button>
                   <div class="modal fade add-modal text-dark" id="assignUnitBudgetCeilingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-scrollable" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h5 class="modal-title" id="modalTitleId">
-                          Allocate Budget
+                          Assign Budget to Unit
                         </h5>
-                        {{-- <button
-                          type="button"
-                          class="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                        ></button> --}}
                       </div>
 
-                      <form action="{{ route('admin.unit-budget-ceiling.store',['campus_budget_ceiling' => $campusBudgetCeiling->id, 'pap_id' => $campusBudgetCeiling->pap_id, 'budget_year_id' => $campusBudgetCeiling->budget_year_id ]) }}" method="POST">
+                      <form action="{{ route('admin.unit-budget-ceiling.store',['campus_budget_ceiling' => $campusBudgetCeiling->id, 'pap_id' => $campusBudgetCeiling->pap_id, 'budget_year_id' => $campusBudgetCeiling->budget_year_id ]) }}" class="allocate-budget-form" method="POST">
                         @csrf
                         <div class="modal-body p-4">
                           <div class="row mb-3">
@@ -183,65 +175,70 @@
                               <select name="unit" id="unit" class="form-select border-dark text-dark" data-placeholder="Choose Unit">
                                 <option value=""></option>
                                 @foreach ($units as $unit)
-                                  <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                  <option value="{{ $unit->id }}" @if(old('unit')) selected @endif>{{ $unit->name }}</option>
                                 @endforeach
                               </select>
                             </div>
                           </div>
-                          <div class="row mb-3">
-                            <label for="" class="col-sm-4 col-form-label">PS</label>
-                            <div class="col-sm-8">
-                              <div class="input-group">
-                                <span class="input-group-text">&#8369;</span>
-                                <input
-                                  type="text"
-                                  name="ps"
-                                  id="ps"
-                                  class="form-control money-input text-end"
-                                  placeholder="0.00"
-                                  aria-describedby="helpId"
-                                  @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif
-                                  
-                                />
+                          @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
+                            <div class="row mb-3">
+                              <label for="" class="col-sm-4 col-form-label">PS</label>
+                              <div class="col-sm-8">
+                                <div class="input-group">
+                                  <span class="input-group-text">&#8369;</span>
+                                  <input
+                                    type="text"
+                                    name="ps"
+                                    id="ps"
+                                    class="form-control money-input text-end"
+                                    placeholder="0.00"
+                                    aria-describedby="helpId"
+                                    value="{{ old('ps') }}"
+                                    {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif --}}
+                                    
+                                  />
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="row mb-3">
-                            <label for="" class="col-sm-4 col-form-label">MOOE</label>
-                            <div class="col-sm-8">
-                              <div class="input-group">
-                                <span class="input-group-text">&#8369;</span>
-                                <input
-                                  type="text"
-                                  name="mooe"
-                                  id="mooe"
-                                  class="form-control money-input text-end"
-                                  placeholder="0.00"
-                                  aria-describedby="helpId"
-                                  @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif
-                                />
+                            <div class="row mb-3">
+                              <label for="" class="col-sm-4 col-form-label">MOOE</label>
+                              <div class="col-sm-8">
+                                <div class="input-group">
+                                  <span class="input-group-text">&#8369;</span>
+                                  <input
+                                    type="text"
+                                    name="mooe"
+                                    id="mooe"
+                                    class="form-control money-input text-end"
+                                    placeholder="0.00"
+                                    aria-describedby="helpId"
+                                    value="{{ old('mooe') }}"
+                                    {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif --}}
+                                  />
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="row mb-3">
-                            <label for="" class="col-sm-4 col-form-label">CO</label>
-                            <div class="col-sm-8">
-                              <div class="input-group">
-                                <span class="input-group-text">&#8369;</span>
-                                <input
-                                  type="text"
-                                  name="co"
-                                  id="co"
-                                  class="form-control money-input text-end"
-                                  placeholder="0.00"
-                                  aria-describedby="helpId"
-                                  @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif
-                                />
+                            <div class="row mb-3">
+                              <label for="" class="col-sm-4 col-form-label">CO</label>
+                              <div class="col-sm-8">
+                                <div class="input-group">
+                                  <span class="input-group-text">&#8369;</span>
+                                  <input
+                                    type="text"
+                                    name="co"
+                                    id="co"
+                                    class="form-control money-input text-end"
+                                    placeholder="0.00"
+                                    aria-describedby="helpId"
+                                    value="{{ old('co') }}"
+                                    {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif --}}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          </div>
+                            </div>                           
+                          @endif
                           <div class="row mb-3">
-                            <label for="" class="col-sm-4 col-form-label">Amount</label>
+                            <label for="" class="col-sm-4 col-form-label">Total Amount</label>
                             <div class="col-sm-8">
                               <div class="input-group">
                                 <span class="input-group-text">&#8369;</span>
@@ -252,6 +249,7 @@
                                   class="form-control total-input text-end fw-bold"
                                   placeholder="0.00"
                                   aria-describedby="helpId"
+                                  value="{{ old('total') }}"
                                   @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES") readonly @endif
                                 />
                               </div>
@@ -289,10 +287,10 @@
                         </tr>
                       </thead>
                       <tbody>
-                          @forelse ($unitBudgetCeilings as $unitBudgetCeiling)
+                          @foreach ($unitBudgetCeilings as $unitBudgetCeiling)
                               <tr>
                                   <td class="fw-bold">{{ $unitBudgetCeiling->operatingUnit?->name }}</td>
-                                  @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA")
+                                  @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
                                     <td class="text-end @if($unitBudgetCeiling->ps == 0) text-danger @endif" style="background-color: #cfe2ff;">{{ '₱' . number_format($unitBudgetCeiling->ps, 2) }}</td>
                                     <td class="text-end @if($unitBudgetCeiling->mooe == 0) text-danger @endif" style="background-color: #cfe2ff;">{{ '₱' . number_format($unitBudgetCeiling->mooe, 2) }}</td>
                                     <td class="text-end @if($unitBudgetCeiling->co == 0) text-danger @endif" style="background-color: #cfe2ff;">{{ '₱' . number_format($unitBudgetCeiling->co, 2) }}</td>
@@ -322,7 +320,7 @@
                                         <div class="modal-content">
                                           <div class="modal-header">
                                             <h5 class="modal-title" id="{{ $unitBudgetCeiling->id }}">
-                                              Edit Budget Allocation
+                                              Modify Budget Assignment
                                             </h5>
                                             <button
                                               type="button"
@@ -348,62 +346,64 @@
                                                   </select>
                                                 </div>
                                               </div>
-                                              <div class="row mb-3">
-                                                <label for="editPsInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">PS</label>
-                                                <div class="col-sm-8">
-                                                  <div class="input-group">
-                                                    <span class="input-group-text">&#8369;</span>
-                                                    <input
-                                                      type="text"
-                                                      name="ps"
-                                                      id="editPsInput{{ $unitBudgetCeiling->id }}"
-                                                      class="form-control money-input text-end"
-                                                      placeholder="0.00"
-                                                      aria-describedby="helpId"
-                                                      @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif
-                                                      value="{{ number_format($unitBudgetCeiling->ps, 2) }}"
-                                                    />
+                                              @if ($unitBudgetCeiling->campusBudgetCeiling?->programActivityProject?->fundSource?->abbreviation === "GAA" || $unitBudgetCeiling->campusBudgetCeiling?->programActivityProject?->fundSource?->abbreviation === "TES")
+                                                <div class="row mb-3">
+                                                  <label for="editPsInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">PS</label>
+                                                  <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                      <span class="input-group-text">&#8369;</span>
+                                                      <input
+                                                        type="text"
+                                                        name="ps"
+                                                        id="editPsInput{{ $unitBudgetCeiling->id }}"
+                                                        class="form-control money-input text-end"
+                                                        placeholder="0.00"
+                                                        aria-describedby="helpId"
+                                                        {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif --}}
+                                                        value="{{ number_format($unitBudgetCeiling->ps, 2) }}"
+                                                      />
+                                                    </div>
                                                   </div>
                                                 </div>
-                                              </div>
-                                              <div class="row mb-3">
-                                                <label for="editMooeInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">MOOE</label>
-                                                <div class="col-sm-8">
-                                                  <div class="input-group">
-                                                    <span class="input-group-text">&#8369;</span>
-                                                    <input
-                                                      type="text"
-                                                      name="mooe"
-                                                      id="editMooeInput{{ $unitBudgetCeiling->id }}"
-                                                      class="form-control money-input text-end"
-                                                      placeholder="0.00"
-                                                      aria-describedby="helpId"
-                                                      @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif
-                                                      value="{{ number_format($unitBudgetCeiling->mooe, 2) }}"
-                                                    />
+                                                <div class="row mb-3">
+                                                  <label for="editMooeInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">MOOE</label>
+                                                  <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                      <span class="input-group-text">&#8369;</span>
+                                                      <input
+                                                        type="text"
+                                                        name="mooe"
+                                                        id="editMooeInput{{ $unitBudgetCeiling->id }}"
+                                                        class="form-control money-input text-end"
+                                                        placeholder="0.00"
+                                                        aria-describedby="helpId"
+                                                        {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif --}}
+                                                        value="{{ number_format($unitBudgetCeiling->mooe, 2) }}"
+                                                      />
+                                                    </div>
                                                   </div>
                                                 </div>
-                                              </div>
-                                              <div class="row mb-3">
-                                                <label for="editCoInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">CO</label>
-                                                <div class="col-sm-8">
-                                                  <div class="input-group">
-                                                    <span class="input-group-text">&#8369;</span>
-                                                    <input
-                                                      type="text"
-                                                      name="co"
-                                                      id="editCoInput{{ $unitBudgetCeiling->id }}"
-                                                      class="form-control money-input text-end"
-                                                      placeholder="0.00"
-                                                      aria-describedby="helpId"
-                                                      @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif\
-                                                      value="{{ number_format($unitBudgetCeiling->co, 2) }}"
-                                                    />
+                                                <div class="row mb-3">
+                                                  <label for="editCoInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">CO</label>
+                                                  <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                      <span class="input-group-text">&#8369;</span>
+                                                      <input
+                                                        type="text"
+                                                        name="co"
+                                                        id="editCoInput{{ $unitBudgetCeiling->id }}"
+                                                        class="form-control money-input text-end"
+                                                        placeholder="0.00"
+                                                        aria-describedby="helpId"
+                                                        {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif\ --}}
+                                                        value="{{ number_format($unitBudgetCeiling->co, 2) }}"
+                                                      />
+                                                    </div>
                                                   </div>
                                                 </div>
-                                              </div>
+                                              @endif
                                               <div class="row mb-3">
-                                                <label for="editTotalInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">Amount</label>
+                                                <label for="editTotalInput{{ $unitBudgetCeiling->id }}" class="col-sm-4 col-form-label">Total Amount</label>
                                                 <div class="col-sm-8">
                                                   <div class="input-group">
                                                     <span class="input-group-text">&#8369;</span>
@@ -437,10 +437,20 @@
                                     </div>                                    
                                   </td>
                               </tr>
-                          @empty
-                              
-                          @endforelse
+                          @endforeach
                       </tbody>
+                      <tfoot>
+                        <tr>
+                          <td class="text-end fw-bold">Total</td>
+                          @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
+                            <td class="text-end fw-bold">{{ '₱' . number_format($unitBudgetCeilings->sum('ps'), 2) }}</td>
+                            <td class="text-end fw-bold">{{ '₱' . number_format($unitBudgetCeilings->sum('mooe'), 2) }}</td>
+                            <td class="text-end fw-bold">{{ '₱' . number_format($unitBudgetCeilings->sum('co'), 2) }}</td>
+                          @endif
+                          <td class="text-end fw-bold">{{ '₱' . number_format($unitBudgetCeilings->sum('total_amount'), 2) }}</td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
                     </table>
                   </div>
                 </div>
@@ -558,6 +568,13 @@
     $('.edit-modal').on('hidden.bs.modal', function () {
       const modalForm = $(this).find('.edit-form');
       modalForm[0].reset(); // Reset the form
+    });
+
+    $('#assignUnitBudgetCeilingModal').on('hidden.bs.modal', function () {
+        const modalForm = $(this).find('.allocate-budget-form');
+        modalForm.find('select, input').each(function() {
+            $(this).val(''); // Set value to empty string
+        });
     });
 
     $("#unitsDataTable").DataTable();

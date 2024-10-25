@@ -1,13 +1,14 @@
 @extends('layouts.app')
 
 @section('page-title-with-icon')
-  <a href="{{ route('admin.unit-budget-ceiling.index') }}" style="color: #012970;"><i class="bi bi-arrow-left"></i>
-    Unit Budget Ceiling
+  <a href="{{ route('admin.unit-budget-ceiling.index') }}" style="color: #012970;">
+    <i class="bi bi-arrow-left"></i>
+    Unit Budget Ceiling {{ (!is_null($selectedCampus)) ? ' - ' . $selectedCampus : ''  }} 
   </a>
 @endsection
 
 @section('page-title-text')
-    Unit Budget Ceiling
+Unit Budget Ceiling {{ (!is_null($selectedCampus)) ? ' - ' . $selectedCampus : ''  }} 
 @endsection
 
 @prepend('page-style')
@@ -40,7 +41,7 @@
             </div>
             <div class="ps-3 ">
               <div class="mb-0">
-                <span class="fs-5 fw-bold">{{ '₱' . number_format($campusBudgetCeilings->sum('total_amount'),2) }}</span>
+                <span class="fs-5 fw-bold">{{ '₱' . number_format($budgetData['campusTotalAllocatedBudget'],2) }}</span>
               </div>
             </div>
           </div>
@@ -58,7 +59,7 @@
             </div>
             <div class="ps-3 ">
               <div class="mb-0">
-                <span class="fs-5 fw-bold">{{ '₱' . number_format($allocated, 2) }}</span>
+                <span class="fs-5 fw-bold">{{ '₱' . number_format($budgetData['campusUnitTotalAllocatedBudget'], 2) }}</span>
               </div>
             </div>
           </div>
@@ -76,7 +77,7 @@
             </div>
             <div class="ps-3 ">
               <div class="mb-0">
-                <span class="fs-5 fw-bold">{{ '₱' . number_format($unAllocated) }}</span>
+                <span class="fs-5 fw-bold">{{ '₱' . number_format($budgetData['campusUnitTotalUnallocatedBudget'], 2) }}</span>
               </div>
             </div>
           </div>
