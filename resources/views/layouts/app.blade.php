@@ -67,16 +67,17 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>@yield('page-title')</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <!-- <li class="breadcrumb-item active">Dashboard</li> -->
-          <li class="breadcrumb-item active">@yield('page-title')</li>
-
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+        <h1 class="fw-bolder">
+          @yield('page-title-with-icon')  <!-- This includes the icon -->
+        </h1>
+        <nav>
+          <ol class="breadcrumb mt-1">
+            <li class="breadcrumb-item"><a href="{{ url('/') }}">Dashboard</a></li>
+            <!-- Use the plain title text for the breadcrumb -->
+            <li class="breadcrumb-item active">@yield('page-title-text')</li>
+          </ol>
+        </nav>
+      </div><!-- End Page Title -->
 
     @yield('content')
 

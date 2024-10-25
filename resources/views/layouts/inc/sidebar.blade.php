@@ -8,35 +8,11 @@
           </a>
         </li>
         <!-- End Dashboard Nav -->
-
-      @if(auth()->user()->hasRole('super-admin'))
-        <!-- Super Admin: Dropdown for Budget Ceilings -->
-        <li class="nav-item dropdown">
-            {{-- <a class="nav-link dropdown-toggle {{ request()->is('budget-ceiling', 'unit/budget-ceiling') ? '' : 'collapsed' }}" href="#" id="budgetCeilingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-bar-chart"></i>
-                <span>Budget Ceiling</span>
-            </a> --}}
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-              <i class="bi bi-menu-button-wide"></i><span>Budget Ceiling</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a class="dropdown-item {{ request()->is('budget-ceiling') ? 'active' : '' }}" href="{{ route('budget-ceilings.index') }}">
-                        Campus
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item {{ request()->is('unit/budget-ceiling') ? 'active' : '' }}" href="{{ route('admin.unit-budget-ceiling.index') }}">
-                        Unit
-                    </a>
-                </li>
-            </ul>
-        </li>
-      @elseif(auth()->user()->hasRole('budget-officer-iii'))
+      @if(auth()->user()->hasRole(['budget-officer-iii', 'super-admin']))
         <!-- Budget Officer III: Access to Budget Ceiling -->
         <li class="nav-item">
             <a class="nav-link {{ request()->is('budget-ceiling') ? '' : 'collapsed' }}" href="{{ route('budget-ceilings.index') }}">
-                <i class="bi bi-bar-chart"></i>
+                <i class="bi bi-menu-button-wide"></i>
                 <span>Budget Ceiling</span>
             </a>
         </li>
@@ -44,8 +20,8 @@
         <!-- Budget Officer II: Access to Unit Budget Ceiling -->
         <li class="nav-item">
             <a class="nav-link {{ request()->is('unit/budget-ceiling') ? '' : 'collapsed' }}" href="{{ route('admin.unit-budget-ceiling.index') }}">
-                <i class="bi bi-bar-chart"></i>
-                <span>Unit Budget Ceiling</span>
+              <i class="bi bi-menu-button-wide"></i>
+                <span>Budget Ceiling</span>
             </a>
         </li>
       @endif
