@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\UnitBudgetCeilingController;
+use App\Http\Controllers\AllotmentClassController;
 use App\Http\Controllers\BudgetCeilingController;
 use App\Http\Controllers\BudgetYearController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\FundSourceController;
 use App\Http\Controllers\MajorFinalOutputController;
+use App\Http\Controllers\ObjectExpenditureController;
 use App\Http\Controllers\ProgramActivityProjectsController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\User\HomeController as UserHomeController;
@@ -116,6 +118,26 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
         'edit'      =>  'budget-ceilings.edit',
         'update'    =>  'budget-ceilings.update',
         'destroy'   =>  'budget-ceilings.delete',
+    ]);
+
+    Route::resource('allotment-classes', AllotmentClassController::class)->names([
+        'index'     =>  'allotment-classes.index',
+        'create'    =>  'allotment-classes.create',
+        'store'     =>  'allotment-classes.store',
+        'show'      =>  'allotment-classes.show',
+        'edit'      =>  'allotment-classes.edit',
+        'update'    =>  'allotment-classes.update',
+        'destroy'   =>  'allotment-classes.delete',
+    ]);
+
+    Route::resource('object-expenditures', ObjectExpenditureController::class)->names([
+        'index'     =>  'object-expenditures.index',
+        'create'    =>  'object-expenditures.create',
+        'store'     =>  'object-expenditures.store',
+        'show'      =>  'object-expenditures.show',
+        'edit'      =>  'object-expenditures.edit',
+        'update'    =>  'object-expenditures.update',
+        'destroy'   =>  'object-expenditures.delete',
     ]);
 
     Route::get('/campus/{id}/budget-ceilings/{budgetYearId}', [BudgetCeilingController::class, 'showCampus'])->name('show-campus');

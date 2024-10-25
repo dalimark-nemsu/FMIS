@@ -50,7 +50,7 @@ class FundSourceController extends Controller
             'abbreviation'      =>      $request->abbrev,
             'name'              =>      $request->name,
         ]);
-        return redirect()->route('fund-sources.index')->with('success','Fund Source added successfully');
+        return redirect()->route('allotment-classes.index')->with('success','Allotment Class added successfully');
     }
 
     /**
