@@ -125,7 +125,7 @@
                                     </div>
                                 </div>
                                 <!-- Units Card (Clickable) -->
-                                <a href="{{ route('units.index') }}" class="text-decoration-none">
+                                <a href="{{ route('admin.unit-budget-ceiling.index', ['campus_id' => $campus->id, 'active_year_id' => $activeYear->id]) }}" class="text-decoration-none">
                                     <div class="card shadow-lg border-0 rounded-4 me-4 units-card" style="min-width: 220px; max-width: 100%; transition: transform 0.3s ease-in-out;">
                                         <div class="card-body d-flex justify-content-start align-items-center p-4 bg-white rounded-4 position-relative" style="background: linear-gradient(135deg, #f7fafc 0%, #ffffff 100%);">
                                             <!-- Icon Container -->
