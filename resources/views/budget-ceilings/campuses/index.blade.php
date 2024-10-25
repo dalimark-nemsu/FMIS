@@ -2,6 +2,22 @@
 
 @section('page-title', 'Budget Ceiling')
 
+@push('page-style')
+    <style>
+        /* Apply hover effect on entire rows */
+        table tbody tr:hover {
+            font-size: 1.1em;   /* Slightly increase font size for the whole row */
+            font-weight: bold;  /* Make all text in the row bold */
+            transition: all 0.2s ease-in-out; /* Smooth transition effect */
+        }
+        /* Resize buttons when the row is hovered */
+        table tbody tr:hover .btn {
+            transform: scale(1.1);  /* Increase the button size by 10% */
+            transition: transform 0.2s ease-in-out; /* Smooth transition effect for the button */
+        }
+    </style>
+@endpush
+
 @section('content')
 <div id="app-content">
     <!-- Container fluid -->
@@ -24,16 +40,6 @@
                         <div class="flex-grow-1"></div>
                         <div class="mb-3 d-flex align-items-center">
                             <label for="budgetYear" class="col-form-label me-2 text-nowrap">Budget Year:</label>
-                            {{-- <select class="form-select" name="year" id="year">
-                                <option value="" disabled> -- Select Year -- </option>
-                                @foreach ($budgetYears as $budgetYear)
-                                    <option value="{{ $budgetYear->id }}"
-                                        data-active="{{ $budgetYear->is_active }}"
-                                        {{ $budgetYear->id == $activeYear->year ? 'selected' : '' }}>
-                                        {{ $budgetYear->year }} {{ $budgetYear->is_active ? '(Active)' : '' }}
-                                    </option>
-                                @endforeach
-                            </select> --}}
                             <select class="form-select" name="year" id="year">
                                 <option value="" disabled> -- Select Year -- </option>
                                 @foreach ($budgetYears as $budgetYear)
@@ -46,51 +52,49 @@
                             </select>
                         </div>
                     </div>
-                  <div class="card-body">
-                    <div class="table-responsive table-card">
-                      <table id="example" class="table text-nowrap table-centered mt-0" style="width: 100%">
-                        <thead class="table-light">
-                          <tr>
-                            <th>No.</th>
-                            <th>Campus</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($campuses as $campus)
-                            @php
-                                $totalAmount = $campus->campusBudgetCeilings->where('budget_year_id', $selectedYear->id)->sum('total_amount');
-                            @endphp
-                                <tr data-campus-id="{{ $campus->id }}" data-year-active="{{ $budgetYears->firstWhere('id', $campus->budget_year_id)->is_active ?? 0 }}">
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $campus->name }}</td>
-                                    <td>&#8369 {{ number_format($totalAmount, 2) }}</td>
-                                    <td>
-                                        <!-- Manage Button -->
-                                        {{-- {{ $selectedYear->id }} --}}
-                                        <a href="{{ route('show-campus', ['id' => $campus->id, 'budgetYearId' => $selectedYear->id]) }}"
-                                            class="btn btn-outline-success btn-sm rounded-circle shadow-sm manage-btn d-none"
-                                            data-bs-placement="top"
-                                            title="Manage">
-                                             <i class="bi bi-gear"></i>
-                                         </a>
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <div class="table-responsive table-card">
+                                <table id="example" class="table table-striped table-hover table-centered align-middle mb-0" style="width: 100%">
+                                    <thead style="background-color: #36454F; color: white;">
+                                        <tr>
+                                            <th class="text-center">No.</th>
+                                            <th>Campus</th>
+                                            <th class="text-end">Amount</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($campuses as $campus)
+                                        @php
+                                            $totalAmount = $campus->campusBudgetCeilings->where('budget_year_id', $selectedYear->id)->sum('total_amount');
+                                        @endphp
+                                        <tr data-campus-id="{{ $campus->id }}" data-year-active="{{ $budgetYears->firstWhere('id', $campus->budget_year_id)->is_active ?? 0 }}">
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td>{{ $campus->name }}</td>
+                                            <td class="text-end">&#8369 {{ number_format($totalAmount, 2) }}</td>
+                                            <td class="text-center">
+                                                <!-- Manage Button -->
+                                                <a href="{{ route('show-campus', ['id' => $campus->id, 'budgetYearId' => $selectedYear->id]) }}"
+                                                   class="btn btn-outline-success btn-sm rounded-circle shadow-sm manage-btn d-none"
+                                                   data-bs-toggle="tooltip" data-bs-placement="top" title="Manage">
+                                                    <i class="bi bi-gear"></i>
+                                                </a>
 
-                                        <!-- Show Button -->
-                                        <a href="#"
-                                        class="btn btn-outline-primary btn-sm rounded-circle shadow-sm show-btn d-none"
-                                        data-bs-toggle="modal"
-                                        data-bs-placement="top"
-                                        title="Show">
-                                        <i class="bi bi-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                      </table>
+                                                <!-- Show Button -->
+                                                <a href="{{ route('show-campus', ['id' => $campus->id, 'budgetYearId' => $selectedYear->id]) }}"
+                                                   class="btn btn-outline-primary btn-sm rounded-circle shadow-sm show-btn d-none"
+                                                   data-bs-toggle="tooltip" data-bs-placement="top" title="Show">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
               </div>
             </div>

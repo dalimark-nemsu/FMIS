@@ -41,9 +41,9 @@
                           <tr>
                             <th class="text-center">No.</th>
                             <th class="text-center">Code</th>
+                            <th>Name</th>
                             <th class="text-center">Fund Source</th>
                             <th class="text-center">Major Final Outputs</th>
-                            <th>Name</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -78,12 +78,15 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="code" class="form-label">Code:</label>
+                        <label for="code" class="form-label text-muted">Code</label>
                         <input type="text" class="form-control" id="code" name="code" placeholder="Enter PAPs code" required>
                     </div>
-
                     <div class="mb-3">
-                        <label for="fund-source" class="form-label">Fund Source:</label>
+                        <label for="name" class="form-label text-muted">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter PAPs name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fund-source" class="form-label text-muted">Fund Source</label>
                         <select class="form-select" name="fund_source_id" id="fund_source_id">
                             <option value=""> -- Select Fund Source -- </option>
                             @foreach($fundSources as $fundSource)
@@ -91,9 +94,8 @@
                             @endforeach
                         </select>
                     </div>
-
                     <div class="mb-3">
-                        <label for="major-final-output" class="form-label">Major Final Outputs:</label>
+                        <label for="major-final-output" class="form-label text-muted">Major Final Outputs</label>
                         <select class="form-select" name="mfo_id" id="mfo_id">
                             <option value=""> -- Select Major Final Outputs -- </option>
                             @foreach($mfos as $mfo)
@@ -101,14 +103,7 @@
                             @endforeach
                         </select>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter PAPs name" required>
-                    </div>
-
                 </div>
-
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -133,16 +128,16 @@
                 },
                 columnDefs: [
                     {
-                        targets: [0, 1, 2, 3], // Index of the column (0-based) you want to center
+                        targets: [0, 1, 3, 4], // Index of the column (0-based) you want to center
                         className: 'text-center', // Apply the 'text-center' class to center the content
                     },
                 ],
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                     { data: 'code', name: 'code' },
+                    { data: 'name', name: 'name' },
                     { data: 'fund_source_abbrev', name: 'fund_source_abbrev' },
                     { data: 'mfos_abbrev', name: 'mfos_abbrev' },
-                    { data: 'name', name: 'name' },
                     { data: 'action', name: 'action', orderable: false, searchable: false },
                 ],
                 pagingType: 'full_numbers', // or 'simple' for simple pagination

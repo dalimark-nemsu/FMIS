@@ -47,7 +47,7 @@
       <div class="card info-card sales-card">
         <div class="card-body">
           <h5 class="card-title mb-0">Total</h5>
-    
+
           <div class="d-flex align-items-center">
             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
               <i class="bi bi-wallet-fill"></i>
@@ -66,11 +66,11 @@
                 <span class="fs-5 fw-bold">{{ '₱' . number_format($campusBudgetCeiling->total_amount,2) }}</span>
               </div>
               {{-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> --}}
-    
+
             </div>
           </div>
         </div>
-    
+
       </div>
     </div>
     <div class="col-3">
@@ -96,7 +96,7 @@
                 <span class="fs-5 fw-bold">{{ '₱' . number_format($totalAllocatedSum,2) }}</span>
               </div>
               {{-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> --}}
-    
+
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
 
           <div class="d-flex align-items-center">
             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-              <i class="bi bi-currency-dollar"></i> 
+              <i class="bi bi-currency-dollar"></i>
             </div>
             <div class="ps-3 ms-auto text-end">
               <div class="mb-0">
@@ -127,7 +127,7 @@
                 <span class="fs-5 fw-bold">{{ '₱' . number_format($totalUnallocated,2) }}</span>
               </div>
               {{-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> --}}
-    
+
             </div>
           </div>
 
@@ -159,7 +159,7 @@
                     tabindex="-1"
                     data-bs-backdrop="static"
                     data-bs-keyboard="false"
-                    
+
                     role="dialog"
                     aria-labelledby="modalTitleId"
                     aria-hidden="true"
@@ -262,9 +262,9 @@
                         </form>
                       </div>
                     </div>
-                  </div>   
-                  </div>                   
-                  <div class="card-body">                  
+                  </div>
+                  </div>
+                  <div class="card-body">
                     <div class="table-responsive table-card mt-4">
                       <table id="papsDataTable" class="table table-hover text-nowrap table-centered mt-0" style="width: 100%">
                         <thead class="table-primary">
@@ -296,7 +296,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                
+
                             @endforelse
                         </tbody>
                       </table>
@@ -305,7 +305,7 @@
                 </div>
               </div>
             </div>
- 
+
         </div>
       </div>
 

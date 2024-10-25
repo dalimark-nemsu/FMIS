@@ -121,7 +121,7 @@ class ProgramActivityProjectsController extends Controller
             $query->where('mfo_id', $request->mfoId);
         }
 
-        $paps = $query->get(['id', 'code']); // Adjust as necessary to fetch needed fields
+        $paps = $query->get(['id', 'name']); // Adjust as necessary to fetch needed fields
 
         return response()->json($paps);
     }
