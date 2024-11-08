@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
-@section('page-title', 'Budget Ceiling')
+@section('page-title-with-icon')
+<span class="text-decoration-none" style="color: #012970;">
+    Budget Ceiling
+</span>
+@endsection
+
+@section('page-title-text')
+    Budget Ceiling
+@endsection
 
 @push('page-style')
     <style>
@@ -35,7 +43,7 @@
             <!-- row -->
             <div class="row">
               <div class="col-12">
-                <div class="card">
+                <div class="card my-3 mt-4">
                     <div class="card-header d-md-flex border-bottom-0">
                         <div class="flex-grow-1"></div>
                         <div class="mb-3 d-flex align-items-center">
@@ -55,8 +63,8 @@
                     <div class="card shadow-sm mb-4">
                         <div class="card-body">
                             <div class="table-responsive table-card">
-                                <table id="example" class="table table-striped table-hover table-centered align-middle mb-0" style="width: 100%">
-                                    <thead style="background-color: #36454F; color: white;">
+                                <table id="example" class="table text-nowrap table-centered mt-0" style="width: 100%">
+                                    <thead class="table-light">
                                         <tr>
                                             <th class="text-center">No.</th>
                                             <th>Campus</th>

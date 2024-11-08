@@ -24,4 +24,16 @@ class Campus extends Model
     {
         return $this->hasMany(Unit::class);
     }
+
+    public function allBudgetsPosted()
+    {
+        // Get the total count of campus budget ceilings for this campus
+        $totalBudgets = $this->campusBudgetCeilings()->count();
+
+        // Get the count of posted campus budget ceilings for this campus
+        $postedBudgets = $this->campusBudgetCeilings()->where('is_posted', true)->count();
+
+        // Return true if all budgets are posted
+        return $totalBudgets > 0 && $totalBudgets === $postedBudgets;
+    }
 }

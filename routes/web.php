@@ -141,6 +141,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
     ]);
 
     Route::get('/campus/{id}/budget-ceilings/{budgetYearId}', [BudgetCeilingController::class, 'showCampus'])->name('show-campus');
+    Route::post('/post-budget-ceiling', [BudgetCeilingController::class, 'postBudgetCeiling'])->name('post-budget-ceiling');
     Route::get('/by-year/budget-ceilings/', [BudgetCeilingController::class, 'getCampusBudgetCeilingByYear'])->name('budget-ceiling.by-year');
 
     // Route::get('/get-paps-by-fundsource/{fundSourceId}', [ProgramActivityProjectsController::class, 'getPapsByFundSource']);

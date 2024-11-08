@@ -38,6 +38,14 @@ class UserTableSeeder extends Seeder
         ]);
 
         $user3 = User::create([
+            'name'  =>  'Vincent Angelo T. Acosta',
+            'position_id'  =>  1,
+            'unit_id'  =>  1,
+            'email'  =>  'vinz@nemsu.edu.ph',
+            'password'  =>  bcrypt('password'),
+        ]);
+
+        $user4 = User::create([
             'name'  =>  'University Budget Officer',
             'position_id'  =>  1,
             'unit_id'  =>  1,
@@ -45,7 +53,7 @@ class UserTableSeeder extends Seeder
             'password'  =>  bcrypt('password'),
         ]);
 
-        $user4 = User::create([
+        $user5 = User::create([
             'name'  =>  'Campus Budget Officer',
             'position_id'  =>  2,
             'unit_id'  =>  1,
@@ -55,7 +63,8 @@ class UserTableSeeder extends Seeder
 
         $user1->attachRoles([$roleSuperAdmin, $roleUser]);
         $user2->attachRoles([$roleSuperAdmin, $roleUser]);
-        $user3->attachRoles([$roleBudgetOfficer3, $roleUser]);
-        $user4->attachRoles([$roleBudgetOfficer2, $roleUser]);
+        $user3->attachRoles([$roleSuperAdmin, $roleUser]);
+        $user4->attachRoles([$roleBudgetOfficer3, $roleUser]);
+        $user5->attachRoles([$roleBudgetOfficer2, $roleUser]);
     }
 }
