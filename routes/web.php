@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\FundSource;
 use App\Models\ProgramActivityProject;
 use Illuminate\Support\Facades\Route;
-
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,16 +34,16 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [UserHomeController::class, 'index'])->name('home');
+Route::get('/dashboard', [UserHomeController::class, 'index'])->name('home');
 Route::get('proposals', function(){
-    return 'Proposals';
-})->name('proposals');
-Route::get('ppmp', function(){
-    return 'PPMP';
-})->name('ppmp');
-Route::get('pr', function(){
-    return 'PR';
-})->name('pr');
+    return Inertia::render('User/Proposal/Index');
+})->name('proposals')->middleware('auth');
+Route::get('project-procurement-management-plan', function(){
+    return Inertia::render('User/Ppmp/Index');
+})->name('ppmp')->middleware('auth');
+Route::get('purchase-request', function(){
+    return Inertia::render('User/PurchaseRequest/Index');
+})->name('pr')->middleware('auth');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|budget-officer-iii|budget-officer-ii|president']], function() {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('admin.home');
