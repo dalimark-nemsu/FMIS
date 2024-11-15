@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
-@section('page-title', 'Program, Activity, Projects')
+{{-- @section('page-title', 'Program, Activity, Projects') --}}
+@section('page-title-with-icon')
+<span class="text-decoration-none" style="color: #012970;">
+    Program, Activity, Projects
+</span>
+@endsection
+
+@section('page-title-text')
+    Program, Activity, Projects
+@endsection
 
 @section('content')
 <div id="app-content">
@@ -19,7 +28,7 @@
             <!-- row -->
             <div class="row">
               <div class="col-12">
-                <div class="card">
+                <div class="card my-3 mt-4">
                   <div class="card-header d-md-flex border-bottom-0">
                     <div class="flex-grow-1">
                     </div>

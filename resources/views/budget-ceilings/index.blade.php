@@ -1,9 +1,24 @@
 @extends('layouts.app')
 
-@section('page-title', 'Campus Budget Ceiling')
+{{-- @section('page-title', 'Campus Budget Ceiling') --}}
+@section('page-title-with-icon')
+<a href="{{ route('budget-ceilings.index') }}" class="text-decoration-none" style="color: #012970;">
+  <i class="bi bi-arrow-left"></i>
+  Campus Budget Ceiling
+</a>
+@endsection
+
+@section('page-title-text')
+    Campus Budget Ceiling
+@endsection
 
 @push('page-style')
     <style>
+        /* Toggle switch alignment */
+        .form-check-input {
+            cursor: pointer;
+        }
+
         /* Card enhancements */
         .card {
             border-radius: 12px;
@@ -61,187 +76,194 @@
     <!-- Container fluid -->
     <div class="app-content-area">
         <div class="container-fluid">
-          <div class="row">
-            <div class="col-lg-12 col-md-12 col-12">
-            </div>
-          </div>
-          <div>
 
+            <!-- Display Success and Error Messages -->
             @include('message.success')
             @include('message.error')
 
-            <!-- row -->
+            <!-- Header Row with Cards and Post Toggle -->
             <div class="row">
                 <div class="col-12">
                     <div class="my-3 mt-4">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <!-- Cards on the Left in a single line -->
+                        <div class="d-flex justify-content-between align-items-start flex-wrap">
+                            <!-- Main Cards Section -->
                             <div class="d-flex flex-wrap">
                                 <!-- Campus Card -->
-                                <div class="card shadow-lg border-0 rounded-4 me-4" style="min-width: 220px; max-width: 100%; transition: transform 0.3s ease-in-out;">
-                                    <div class="card-body d-flex justify-content-start align-items-center p-4 bg-white rounded-4 position-relative" style="background: linear-gradient(135deg, #f0f4f7 0%, #ffffff 100%);">
-                                        <!-- Icon Container with a subtle gradient and shadow -->
-                                        <div class="icon-container me-3" style="width: 60px; height: 60px; background-color: #36454F; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                            <i class="bi bi-building fs-3" style="color: white; transition: color 0.3s ease-in-out;"></i>
+                                <div class="card shadow-lg border-0 rounded-4 me-4 mb-3" style="min-width: 220px; transition: transform 0.3s;">
+                                    <div class="card-body d-flex align-items-center p-4 rounded-4 position-relative"
+                                         style="background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);">
+                                        <div class="icon-container me-3 d-flex justify-content-center align-items-center rounded-circle"
+                                             style="width: 60px; height: 60px; background-color: #009688; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                                            <i class="bi bi-building fs-3" style="color: white;"></i>
                                         </div>
                                         <div class="text-start">
-                                            <!-- Campus Label -->
                                             <h5 class="text-muted mb-1" style="letter-spacing: 1px; font-weight: 500;">Campus</h5>
-                                            <!-- Campus Name with larger font and bold style -->
                                             <p class="fs-5 fw-bold text-dark mb-0" style="font-size: 1.25rem;">{{ $campus->name }}</p>
                                         </div>
-                                        <!-- Add a subtle hover effect that lifts the card -->
-                                        <div class="hover-overlay" style="position: absolute; inset: 0; background-color: rgba(255, 255, 255, 0); border-radius: 4px; transition: background-color 0.3s ease-in-out;"></div>
                                     </div>
                                 </div>
+
                                 <!-- Budget Year Card -->
-                                <div class="card shadow-lg border-0 rounded-4 me-4 budget-year-card" style="min-width: 220px; max-width: 100%; transition: transform 0.3s ease-in-out;">
-                                    <div class="card-body d-flex justify-content-start align-items-center p-4 bg-white rounded-4 position-relative" style="background: linear-gradient(135deg, #f7fafc 0%, #ffffff 100%);">
-                                        <!-- Icon Container -->
-                                        <div class="icon-container me-3" style="width: 60px; height: 60px; background-color: #36454F; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease-in-out;">
-                                            <i class="bi bi-calendar-event fs-3" style="color: white; transition: color 0.3s ease-in-out;"></i>
+                                <div class="card shadow-lg border-0 rounded-4 me-4 mb-3" style="min-width: 220px; transition: transform 0.3s;">
+                                    <div class="card-body d-flex align-items-center p-4 rounded-4 position-relative"
+                                         style="background: linear-gradient(135deg, #fce4ec 0%, #ffffff 100%);">
+                                        <div class="icon-container me-3 d-flex justify-content-center align-items-center rounded-circle"
+                                             style="width: 60px; height: 60px; background-color: #e91e63; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                                            <i class="bi bi-calendar-event fs-3" style="color: white;"></i>
                                         </div>
                                         <div class="text-start">
-                                            <!-- Budget Year Label -->
                                             <h5 class="text-muted mb-1" style="letter-spacing: 1px; font-weight: 500;">Budget Year</h5>
-                                            <!-- Active Year with bold font -->
                                             <p class="fs-5 fw-bold text-dark mb-0" style="font-size: 1.25rem;">{{ $activeYear->year }}</p>
                                         </div>
                                     </div>
                                 </div>
+
                                 <!-- Grand Total Card -->
-                                <div class="card shadow-lg border-0 rounded-4 me-4 grand-total-card" style="min-width: 220px; max-width: 100%; transition: transform 0.3s ease-in-out;">
-                                    <div class="card-body d-flex justify-content-start align-items-center p-4 bg-white rounded-4 position-relative" style="background: linear-gradient(135deg, #f7fafc 0%, #ffffff 100%);">
-                                        <!-- Icon Container -->
-                                        <div class="icon-container me-3" style="width: 60px; height: 60px; background-color: #36454F; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease-in-out;">
-                                            <i class="bi bi-cash-stack fs-3" style="color: white; transition: color 0.3s ease-in-out;"></i>
+                                <div class="card shadow-lg border-0 rounded-4 me-4 mb-3" style="min-width: 220px; transition: transform 0.3s;">
+                                    <div class="card-body d-flex align-items-center p-4 rounded-4 position-relative"
+                                         style="background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);">
+                                        <div class="icon-container me-3 d-flex justify-content-center align-items-center rounded-circle"
+                                             style="width: 60px; height: 60px; background-color: #4caf50; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                                            <i class="bi bi-cash-stack fs-3" style="color: white;"></i>
                                         </div>
                                         <div class="text-start">
-                                            <!-- Grand Total Label -->
                                             <h5 class="text-muted mb-1" style="letter-spacing: 1px; font-weight: 500;">Grand Total</h5>
-                                            <!-- Grand Total Amount -->
                                             <p class="fs-5 fw-bold text-dark mb-0" style="font-size: 1.25rem;">&#8369 {{ number_format($grandTotal, 2) }}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Units Card (Clickable) -->
-                                <a href="{{ route('admin.unit-budget-ceiling.index', ['campus_id' => $campus->id, 'active_year_id' => $activeYear->id]) }}" class="text-decoration-none">
-                                    <div class="card shadow-lg border-0 rounded-4 me-4 units-card" style="min-width: 220px; max-width: 100%; transition: transform 0.3s ease-in-out;">
-                                        <div class="card-body d-flex justify-content-start align-items-center p-4 bg-white rounded-4 position-relative" style="background: linear-gradient(135deg, #f7fafc 0%, #ffffff 100%);">
-                                            <!-- Icon Container -->
-                                            <div class="icon-container me-3" style="width: 60px; height: 60px; background-color: #36454F; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease-in-out;">
-                                                <i class="bi bi-diagram-3 fs-3" style="color: white; transition: color 0.3s ease-in-out;"></i>
+                            </div>
+
+                            <!-- Bottom Section with Toggle, Units, and Add Button Cards -->
+                            <div class="d-flex justify-content-start align-items-start w-100 mt-3">
+                                <!-- Add Button Card -->
+                                @if($activeYear && $activeYear->id == $budgetYearId)
+                                    <!-- Toggle Card -->
+                                    <div class="card border-0 rounded-4 me-3"
+                                        style="min-width: 170px; height: 80px; background: linear-gradient(135deg, #f0f4f7 0%, #ffffff 100%);
+                                            border: 1px solid #e0e0e0; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1), 0px 8px 20px rgba(0, 0, 0, 0.15); transition: box-shadow 0.3s, transform 0.3s;">
+                                        <div class="d-flex align-items-center justify-content-between p-3" style="height: 100%;">
+                                            <div class="d-flex align-items-center">
+                                                <i class="{{ $allBudgetsPosted ? 'bi bi-check2-square' : 'bi bi-pencil-square' }} me-2"
+                                                    style="font-size: 1.3rem; color: {{ $allBudgetsPosted ? '#018d3b' : '#d9534f' }};"></i>
+                                                <span id="postStatusLabel" class="fw-bold"
+                                                        style="font-size: 1rem; color: {{ $allBudgetsPosted ? '#018d3b' : '#d9534f' }};">
+                                                    {{ $allBudgetsPosted ? 'POSTED' : 'DRAFT' }}
+                                                </span>
                                             </div>
-                                            <div class="text-start">
-                                                <!-- Units Label -->
-                                                <h5 class="text-muted mb-1" style="letter-spacing: 1px; font-weight: 500;">Units</h5>
-                                                <!-- Unit Count -->
-                                                <p class="fs-5 fw-bold text-dark mb-0" style="font-size: 1.25rem;"></p>
+                                            <!-- Toggle Switch -->
+                                            <div class="form-check form-switch ms-auto">
+                                                <input class="form-check-input" type="checkbox" id="postSwitch" {{ $allBudgetsPosted ? 'checked' : '' }}>
                                             </div>
                                         </div>
                                     </div>
-                                </a>
-                                <!-- Add Button -->
-                                @if($activeYear && $activeYear->id == $budgetYearId)
-                                <div>
-                                    <!-- Budget Ceiling Card -->
-                                    <a href="#addBudgetCeilingModal" class="card shadow-lg border-0 rounded-4 bg-light p-3 text-center create-budget-card"
-                                       data-bs-toggle="modal" data-bs-toggle="tooltip" data-bs-placement="top"
-                                       title="Create New Budget Ceiling"
-                                       style="min-width: 140px; max-width: 100%; height: 100px; transition: transform 0.3s ease-in-out;">
-                                        <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
-                                            <!-- Plus Icon -->
-                                            <i class="bi bi-plus-lg fs-1 text-primary" style="transition: color 0.3s ease-in-out;"></i>
+
+                                    <!-- Units Card -->
+                                    <a href="{{ route('admin.unit-budget-ceiling.index', ['campus_id' => $campus->id, 'active_year_id' => $activeYear->id]) }}"
+                                        class="text-decoration-none me-3">
+                                        <div class="card border-0 rounded-4 d-flex align-items-center justify-content-center"
+                                            style="min-width: 140px; height: 80px; background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
+                                                    border: 1px solid #e0e0e0; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1), 0px 8px 20px rgba(0, 0, 0, 0.15); transition: box-shadow 0.3s, transform 0.3s;">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-diagram-3 me-2" style="font-size: 1.3rem; color: #ff9800;"></i>
+                                                <span class="fw-bold" style="font-size: 1rem; color: #9e6002;">UNITS</span>
+                                            </div>
                                         </div>
                                     </a>
-                                </div>
+
+                                    <a href="#addBudgetCeilingModal" class="text-decoration-none" data-bs-toggle="modal" title="Create New Budget Ceiling">
+                                        <div class="card border-0 rounded-4 d-flex flex-column align-items-center justify-content-center"
+                                            style="min-width: 120px; height: 80px; background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+                                                    border: 1px solid #e0e0e0; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1), 0px 8px 20px rgba(0, 0, 0, 0.15);
+                                                    transition: box-shadow 0.3s, transform 0.3s;">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-plus-lg me-2" style="font-size: 1.3rem; color: #007bff;"></i>
+                                                <span class="fw-bold" style="font-size: 1rem; color: #333;">New</span>
+                                            </div>
+                                        </div>
+                                    </a>
                                 @endif
                                 @include('budget-ceilings.modals.add-budget-ceiling', ['campus' => $campus, 'activeYear' => $activeYear, 'fundSources' => $fundSources, 'mfos' => $mfos, 'paps' => $paps])
                             </div>
                         </div>
 
+                        <!-- Budget Ceilings Table for Each Fund Source -->
                         @if($groupedBudgetCeilings->isNotEmpty())
-                        @foreach ($groupedBudgetCeilings as $fundSource => $budgetCeilings)
-                            <!-- Card for each Fund Source -->
-                            <div class="card shadow-lg mt-4 border-0 rounded-4">
-                                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 px-4">
-                                    <h4 class="mb-0" style="font-weight: 600; color: #36454F;">{{ $fundSource }}</h4> <!-- Display the fund source as the card title -->
-
-                                    <!-- Subtotal Display -->
-                                    <div class="text-end">
-                                        <strong class="text-muted">Subtotal: </strong>
-                                        <span class="fs-4 fw-bold text-dark">
-                                            &#8369 {{ number_format($budgetCeilings->sum('total_amount'), 2) }}
-                                        </span>
+                            @foreach ($groupedBudgetCeilings as $fundSource => $budgetCeilings)
+                                <div class="card shadow-lg mt-4 border-0 rounded-4">
+                                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 px-4">
+                                        <h4 class="mb-0" style="font-weight: 600; color: #36454F;">{{ $fundSource }}</h4>
+                                        <div class="text-end">
+                                            <strong class="text-muted">Subtotal: </strong>
+                                            <span class="fs-4 fw-bold text-dark">&#8369 {{ number_format($budgetCeilings->sum('total_amount'), 2) }}</span>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="table-responsive p-4">
-                                    <table id="example" class="table table-hover table-bordered align-middle text-center" style="width: 100%;">
-                                        <thead style="background-color: #36454F; color: white;">
-                                            <tr>
-                                                <th>PAPs</th>
-                                                <th>Fund Source</th>
-                                                <th>MFOs</th>
-                                                <th>PS</th>
-                                                <th>MOOE</th>
-                                                <th>CO</th>
-                                                <th>Total</th>
-                                                @if($activeYear && $activeYear->id == $budgetYearId)
-                                                <th>Action</th>
-                                                @endif
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($budgetCeilings as $budgetCeiling)
-                                                <tr class="hoverable-row">
-                                                    <td>{{ $budgetCeiling->programActivityProject?->code }}</td>
-                                                    <td>{{ $budgetCeiling->programActivityProject->fundSource?->abbreviation }}</td>
-                                                    <td>{{ $budgetCeiling->programActivityProject->majorFinalOutput?->abbreviation }}</td>
-                                                    <td>&#8369 {{ number_format($budgetCeiling->ps, 2) }}</td>
-                                                    <td>&#8369 {{ number_format($budgetCeiling->mooe, 2) }}</td>
-                                                    <td>&#8369 {{ number_format($budgetCeiling->co, 2) }}</td>
-                                                    <td>&#8369 {{ number_format($budgetCeiling->total_amount, 2) }}</td>
+                                    <div class="table-responsive p-4">
+                                        <table id="example" class="table text-nowrap table-centered mt-0" style="width: 100%;">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>PAPs</th>
+                                                    <th>Fund Source</th>
+                                                    <th>MFOs</th>
+                                                    <th style="background-color: #cfe2ff; color: #1565c0;">PS</th>
+                                                    <th style="background-color: #cfe2ff; color: #1565c0;">MOOE</th>
+                                                    <th style="background-color: #cfe2ff; color: #1565c0;">CO</th>
+                                                    <th style="background-color: #e0f8e9; color: #018d3b; font-weight: bold;">Total</th>
                                                     @if($activeYear && $activeYear->id == $budgetYearId)
-                                                    <td>
-                                                        <!-- Edit Button -->
-                                                        <a href="#editBudgetCeilingModal-{{$budgetCeiling->id}}"
-                                                        class="btn btn-outline-primary btn-sm rounded-circle shadow-sm me-2"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="top"
-                                                        title="Edit">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </a>
-
-                                                        <!-- Delete Button -->
-                                                        <a href="javascript:void(0);"
-                                                            class="btn btn-outline-danger btn-sm rounded-circle shadow-sm"
-                                                            data-url="{{ route('budget-ceilings.delete', $budgetCeiling->id) }}"
-                                                            onclick="confirmDelete(this, '{{ $budgetCeiling->programActivityProject?->code }}')"
-                                                            data-bs-toggle="tooltip"
-                                                            data-bs-placement="top"
-                                                            title="Delete">
-                                                            <i class="bi bi-trash"></i>
-                                                        </a>
-                                                    </td>
+                                                        <th>Action</th>
                                                     @endif
                                                 </tr>
-                                                @include('budget-ceilings.modals.edit-budget-ceiling', ['budgetCeiling' => $budgetCeiling])
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($budgetCeilings as $budgetCeiling)
+                                                    <tr class="hoverable-row">
+                                                        <td>{{ $budgetCeiling->programActivityProject?->name }}</td>
+                                                        <td>{{ $budgetCeiling->programActivityProject->fundSource?->abbreviation }}</td>
+                                                        <td>{{ $budgetCeiling->programActivityProject->majorFinalOutput?->abbreviation }}</td>
+                                                        <td style="background-color: #cfe2ff; color: #1565c0;">
+                                                            &#8369 {{ number_format($budgetCeiling->ps, 2) }}
+                                                        </td>
+                                                        <td style="background-color: #cfe2ff; color: #1565c0;">
+                                                            &#8369 {{ number_format($budgetCeiling->mooe, 2) }}
+                                                        </td>
+                                                        <td style="background-color: #cfe2ff; color: #1565c0;">
+                                                            &#8369 {{ number_format($budgetCeiling->co, 2) }}
+                                                        </td>
+                                                        <td style="background-color: #e0f8e9; color: #018d3b; font-weight: bold;">
+                                                            &#8369 {{ number_format($budgetCeiling->total_amount, 2) }}
+                                                        </td>
+                                                        @if($activeYear && $activeYear->id == $budgetYearId)
+                                                            <td>
+                                                                <a href="#editBudgetCeilingModal-{{$budgetCeiling->id}}"
+                                                                   class="btn btn-outline-primary btn-sm rounded-circle shadow-sm me-2"
+                                                                   data-bs-toggle="modal" title="Edit">
+                                                                    <i class="bi bi-pencil"></i>
+                                                                </a>
+                                                                <a href="javascript:void(0);"
+                                                                   class="btn btn-outline-danger btn-sm rounded-circle shadow-sm"
+                                                                   data-url="{{ route('budget-ceilings.delete', $budgetCeiling->id) }}"
+                                                                   onclick="confirmDelete(this, '{{ $budgetCeiling->programActivityProject?->name }}')"
+                                                                   title="Delete">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </a>
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    @include('budget-ceilings.modals.edit-budget-ceiling', ['budgetCeiling' => $budgetCeiling])
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                        @endforeach
-                    @endif
+                            @endforeach
+                        @endif
+                    </div>
                 </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
 </div>
-
 
 <!-- Delete Fund Source Modal -->
 {{-- @foreach ($fundSources as $fundSource)
@@ -274,10 +296,227 @@
 @push('page-scripts')
     <script>
         $(document).ready(function() {
+            // Attach click event to the switch button
+            $('#postSwitch').on('click', function(event) {
+                var budgetYear = @json($activeYear->year); // Assuming $activeYear is passed to the view
+                var campusId = @json($campus->id); // Assuming $campus is also passed to the view
+                var budgetYearId = @json($budgetYearId);
+                event.preventDefault(); // Prevent immediate toggle action
+
+                // Determine if the switch is checked or unchecked
+                var isPosted = $(this).is(':checked') ? 1 : 0;
+
+                // Show SweetAlert confirmation dialog with dynamic message
+                Swal.fire({
+                    html: `<div style="font-size: 18px;">Are you sure you want to ${isPosted ? 'post' : 'unpost'} this budget ceiling for budget year ${budgetYear}?</div>`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'Cancel',
+                    customClass: {
+                        confirmButton: 'btn btn-primary btn-sm mx-2',
+                        cancelButton: 'btn btn-secondary btn-sm mx-2'
+                    },
+                    buttonsStyling: false,
+                    background: '#f5f5f5',
+                    padding: '20px',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX request to update the is_posted status in the controller
+                        $.ajax({
+                            url: '{{ route('post-budget-ceiling') }}', // Route to your controller
+                            method: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}', // Laravel CSRF token for security
+                                campus_id: campusId,
+                                budget_year_id: budgetYearId,
+                                is_posted: isPosted // Set is_posted to 1 or 0 based on toggle state
+                            },
+                            success: function(response) {
+                                Swal.fire(
+                                    isPosted ? 'Posted!' : 'Unposted!',
+                                    `Your budget ceiling has been ${isPosted ? 'posted' : 'unposted'}.`,
+                                    'success'
+                                ).then(() => {
+                                    // Reload the page after the SweetAlert confirmation
+                                    location.reload();
+                                });
+                            },
+                            error: function() {
+                                Swal.fire(
+                                    'Error!',
+                                    `There was an issue ${isPosted ? 'posting' : 'unposting'} the budget ceiling. Please try again later.`,
+                                    'error'
+                                );
+                                $('#postSwitch').prop('checked', !isPosted); // Revert switch if there's an error
+                            }
+                        });
+                    } else {
+                        // If canceled, revert the switch to its original state
+                        $('#postSwitch').prop('checked', !isPosted);
+                    }
+                });
+            });
+
+            initializeSelect2('#pap', '#addBudgetCeilingModal');
+
+            // Bind change events for Add Modal fields
+            $('.add-fund-source, .add-mfo').on('change', function() {
+                refreshPAPDropdown();
+            });
+
+            $('.add-fund-source').on('change', function() {
+                const abbreviation = getSelectedAbbreviation($(this));
+                toggleBudgetFields(abbreviation);
+            });
+
+            $('#pap').on('change', handlePAPSelection);
+
+            // Bind listeners after modal opens to ensure they are attached properly
+            $(document).on('shown.bs.modal', '#addBudgetCeilingModal', function() {
+                setupInputListeners($(this));
+            });
+
+            $(document).on('shown.bs.modal', '.edit-budget-ceiling-modal', function() {
+                const editModal = $(this);
+                initializeSelect2('.edit-pap', editModal);
+                setupInputListeners(editModal);
+                editModal.find('.edit-fund-source').on('change', function() {
+                    toggleBudgetFields(getSelectedAbbreviation($(this)), editModal);
+                }).trigger('change');
+            });
+        });
+
+        // =================== Helper Functions ===================
+
+        function refreshPAPDropdown() {
+            const fundSourceId = $('.add-fund-source').val();
+            const mfoId = $('.add-mfo').val();
+            if (!fundSourceId && !mfoId) return;
+
+            const url = `/admin/get-paps?${fundSourceId ? 'fundSourceId=' + fundSourceId : ''}${mfoId ? '&mfoId=' + mfoId : ''}`;
+            updatePAPDropdown(url, '#pap', '#addBudgetCeilingModal');
+        }
+
+        function updatePAPDropdown(url, selector, modalSelector) {
+            const $papDropdown = $(selector).empty().append('<option value=""> -- Select Program, Activity, Projects -- </option>');
+            $.get(url, function(data) {
+                if (data.length) {
+                    data.forEach(pap => $papDropdown.append(`<option value="${pap.id}">${pap.name}</option>`));
+                    initializeSelect2($papDropdown, modalSelector);
+                } else {
+                    $papDropdown.append('<option value="">No PAPs found</option>');
+                }
+            });
+        }
+
+        function handlePAPSelection() {
+            const papId = $(this).val();
+            if (!papId) return;
+
+            $.get(`/admin/get-fundsource-and-mfo-by-paps/${papId}`, function(data) {
+                if (data.status === 'success') {
+                    $('#fund_source').val(data.fund_source_id);
+                    $('#mfo').val(data.mfo_id);
+                    toggleBudgetFields(getSelectedAbbreviation($('#fund_source')));
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
+        function toggleBudgetFields(abbreviation, modalContext = $(document)) {
+            const isGAAorTES = abbreviation === 'GAA' || abbreviation === 'TES';
+            modalContext.find('.ps, .mooe, .co').prop('disabled', !isGAAorTES).val(isGAAorTES ? undefined : '');
+            modalContext.find('.total').prop('disabled', isGAAorTES);
+        }
+
+        function initializeSelect2(selector, parentModal) {
+            $(selector).select2({
+                dropdownParent: $(parentModal),
+                theme: "bootstrap-5",
+                width: '100%',
+            });
+        }
+
+        function getSelectedAbbreviation(element) {
+            return element.find(':selected').data('abbreviation');
+        }
+
+        // Setup input listeners for PS, MOOE, CO, and Total fields
+        function setupInputListeners(modal) {
+            modal.find('.ps, .mooe, .co').on('input', function() {
+                formatInput($(this));
+                updateTotal(modal, ['.ps', '.mooe', '.co'], '.total');
+            });
+
+            // Use blur event for total to ensure formatting after focus is lost
+            modal.find('.total').on('blur', function() {
+                formatInput($(this));
+            });
+        }
+
+        // Format input with commas as user types
+        function formatInput(input) {
+            let value = input.val().replace(/,/g, '');  // Remove existing commas
+            // console.log("Formatting value: ", value);  // Debug: Check value before formatting
+            if (!isNaN(value) && value !== '') {
+                // Convert to a number and format with commas and two decimal places
+                value = parseFloat(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                value = '';
+            }
+            // console.log("Formatted value: ", value);  // Debug: Check value after formatting
+            input.val(value);  // Update the input field value
+        }
+
+        function updateTotal(modal, fieldSelectors, totalSelector) {
+            let total = 0;
+            fieldSelectors.forEach(selector => {
+                const value = modal.find(selector).val().replace(/,/g, '');
+                total += parseFloat(value) || 0;
+            });
+            modal.find(totalSelector).val(total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        }
+
+        function confirmDelete(element, papName) {
+            const deleteUrl = $(element).data('url');
+            Swal.fire({
+                html: `<div style="font-size: 18px;">Are you sure you want to delete budget ceiling for ${papName}?</div>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+                cancelButtonText: 'Cancel',
+                customClass: { confirmButton: 'btn btn-danger btn-sm mx-2', cancelButton: 'btn btn-secondary btn-sm mx-2' },
+                buttonsStyling: false,
+                background: '#f5f5f5',
+                padding: '20px',
+                iconColor: '#d9534f',
+            }).then(result => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: deleteUrl,
+                        method: 'DELETE',
+                        data: { _token: '{{ csrf_token() }}' },
+                        success: function() {
+                            Swal.fire('Deleted!', `The budget ceiling for "${papName}" has been deleted successfully.`, 'success');
+                            location.reload();
+                        },
+                        error: function() {
+                            Swal.fire('Error!', 'There was an issue deleting the record. Please try again later.', 'error');
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
+    {{-- <script>
+        $(document).ready(function() {
             $('.add-fund-source').on('change', function() {
                 // Get the selected option's data-abbreviation value
                 var abbreviation = $(this).find(':selected').data('abbreviation');
-                // console.log(abbreviation);
+                console.log(abbreviation);
                 // Check if the abbreviation is 'GAA'
                 if (abbreviation === 'GAA' || abbreviation === 'TES') {
                     // Enable the PS, MOOE, and CO input fields
@@ -535,5 +774,5 @@
                 }
             });
         }
-    </script>
+    </script> --}}
 @endpush

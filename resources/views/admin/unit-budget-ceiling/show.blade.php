@@ -26,7 +26,7 @@
       <div class="card info-card sales-card">
         <div class="card-body">
           <h5 class="card-title f-6 mb-0">Total Assigned Budget</h5>
-    
+
           <div class="d-flex align-items-center">
             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
               <i class="bi bi-wallet-fill"></i>
@@ -47,11 +47,11 @@
                 <span class="fs-5 fw-bolder">{{ '₱' . number_format($campusBudgetCeiling->total_amount,2) }}</span>
               </div>
               {{-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> --}}
-    
+
             </div>
           </div>
         </div>
-    
+
       </div>
     </div>
     <div class="col-12 co-md-4 col-lg-4">
@@ -78,7 +78,7 @@
               <div class="mb-0">
                 <span class="fs-5 fw-bold">{{ '₱' . number_format($budgetData['unitTotalAllocated'],2) }}</span>
               </div>
-    
+
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@
 
           <div class="d-flex align-items-center">
             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-              <i class="bi bi-currency-dollar"></i> 
+              <i class="bi bi-currency-dollar"></i>
             </div>
             <div class="ps-3 ms-auto text-end">
               @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "GAA" || $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation === "TES")
@@ -110,7 +110,7 @@
               <div class="mb-0">
                 <span class="fs-5 fw-bold">{{ '₱' . number_format($budgetData['unitTotalUnallocated'],2) }}</span>
               </div>
-    
+
             </div>
           </div>
 
@@ -168,7 +168,7 @@
                                     aria-describedby="helpId"
                                     value="{{ old('ps') }}"
                                     {{-- @if ($campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "GAA" && $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation !== "TES") disabled @endif --}}
-                                    
+
                                   />
                                 </div>
                               </div>
@@ -208,7 +208,7 @@
                                   />
                                 </div>
                               </div>
-                            </div>                           
+                            </div>
                           @endif
                           <div class="row mb-3">
                             <label for="" class="col-sm-4 col-form-label">Total Amount</label>
@@ -242,9 +242,9 @@
                       </form>
                     </div>
                   </div>
-                </div>   
-                </div>                   
-                <div class="card-body">                  
+                </div>
+                </div>
+                <div class="card-body">
                   <div class="table-responsive mt-4">
                     <table id="unitsDataTable" class="table table-hover text-nowrap display" style="width: 100%;">
                       <thead class="table-secondary">
@@ -279,12 +279,12 @@
                                    @endif
                                   <td class="text-end fw-bold" style="background-color: #e0f8e9;">{{ '₱' . number_format($unitBudgetCeiling->total_amount, 2) }}</td>
                                   <td class="text-center">{{ $unitBudgetCeiling->updated_at->format('F d, Y') }}</td>
-                                  <td class="text-center">                               
+                                  <td class="text-center">
                                     @if(!$unitBudgetCeiling->is_posted)
                                       @permission('update-unit-budget-ceiling')
                                         <a href="#" class="btn btn-outline-primary btn-sm rounded-circle shadow-sm manage-btn" data-bs-placement="top" title="Manage" data-bs-toggle="modal" data-bs-target="#editModal{{ $unitBudgetCeiling->id }}">
                                           <i class="bi bi-pencil"></i>
-                                        </a>                                    
+                                        </a>
                                         <!-- Modal Body -->
                                         <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
                                         <div
@@ -293,7 +293,7 @@
                                           tabindex="-1"
                                           data-bs-backdrop="static"
                                           data-bs-keyboard="false"
-                                          
+
                                           role="dialog"
                                           aria-labelledby="modalTitleId{{ $unitBudgetCeiling->id }}"
                                           aria-hidden="true"
@@ -446,7 +446,7 @@
                                                       <li>CO (Capital Outlay): ₱{{ number_format($unitBudgetCeiling->co, 2) }}</li>
                                                     </ul>
                                                   @endif
-                                                  <p>Total Budget Allocation: ₱{{ number_format($unitBudgetCeiling->total_amount, 2) }}</p>            
+                                                  <p>Total Budget Allocation: ₱{{ number_format($unitBudgetCeiling->total_amount, 2) }}</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                   <button type="submit" class="btn btn-primary">Post</button>
@@ -461,7 +461,7 @@
                                         <button type="submit" class="btn btn-outline-danger btn-sm rounded-circle shadow-sm" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $unitBudgetCeiling->id }}">
                                           <i class="bi bi-trash"></i>
                                         </button>
-                                        
+
                                         <div class="modal fade" id="modalDelete{{ $unitBudgetCeiling->id }}" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
                                           <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
                                             <div class="modal-content">
@@ -488,7 +488,7 @@
                                         <button class="btn btn-outline-danger btn-sm rounded-circle" title="Unpost" data-bs-toggle="modal"  data-bs-target="#modaUnpost{{ $unitBudgetCeiling->id }}">
                                           <i class="bi bi-x-circle"></i>
                                         </button>
-                                        
+
                                         <!-- Modal Body -->
                                         <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
                                         <div class="modal fade text-start" id="modaUnpost{{ $unitBudgetCeiling->id }}" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId"aria-hidden="true" style="text-wrap: wrap;">
@@ -511,7 +511,7 @@
                                                       <li>CO (Capital Outlay): ₱{{ number_format($unitBudgetCeiling->co, 2) }}</li>
                                                     </ul>
                                                   @endif
-                                                  <p>Total Budget Allocation: ₱{{ number_format($unitBudgetCeiling->total_amount, 2) }}</p>     
+                                                  <p>Total Budget Allocation: ₱{{ number_format($unitBudgetCeiling->total_amount, 2) }}</p>
                                                   <p>Unposting this budget will make it **editable** again and will remove its status as a final budget allocation. Please confirm if you want to proceed with this action.</p>
                                                 </div>
                                                 <div class="modal-footer">
@@ -522,7 +522,7 @@
                                             </div>
                                           </div>
                                         </div>
-                                        
+
                                         <!-- Optional: Place to the bottom of scripts -->
                                         <script>
                                           const myModal = new bootstrap.Modal(
@@ -530,7 +530,7 @@
                                             options,
                                           );
                                         </script>
-                                        
+
                                     @endif
                                   </td>
                               </tr>
@@ -606,7 +606,7 @@
     });
     $(modal).find('.total-input').val(formatCurrency(total));
   };
-  
+
   $(document).ready(function () {
     $('#unit').select2({
       theme: "bootstrap-5",
