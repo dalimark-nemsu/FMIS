@@ -38,6 +38,9 @@ Route::get('/dashboard', [UserHomeController::class, 'index'])->name('home');
 Route::get('proposals', function(){
     return Inertia::render('User/Proposal/Index');
 })->name('proposals')->middleware('auth');
+Route::get('proposals/edit', function(){
+    return Inertia::render('User/Proposal/Edit');
+})->name('proposals')->middleware('auth');
 Route::get('project-procurement-management-plan', function(){
     return Inertia::render('User/Ppmp/Index');
 })->name('ppmp')->middleware('auth');
