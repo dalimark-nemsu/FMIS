@@ -25,6 +25,9 @@
             default: 'form-control',
         },
     });
+
+    // defineEmits(['update:modelValue']);
+    const emit = defineEmits(['update:modelValue', 'input']);
 </script>
 <template>
         <input
@@ -33,6 +36,7 @@
             :placeholder="placeholder"
             :class="classes"
             :value="modelValue"
+           @input="$emit('update:modelValue', $event.target.value); $emit('input', $event)"
         />
         <label :for="id">{{ label }}</label>
 
