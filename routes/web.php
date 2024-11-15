@@ -11,9 +11,14 @@ use App\Http\Controllers\ObjectExpenditureController;
 use App\Http\Controllers\ProgramActivityProjectsController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\User\HomeController as UserHomeController;
+use App\Http\Controllers\User\ProposalController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FundSource;
 use App\Models\ProgramActivityProject;
+use App\Models\Unit;
+use App\Models\UnitBudgetCeiling;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -35,9 +40,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/dashboard', [UserHomeController::class, 'index'])->name('home');
-Route::get('proposals', function(){
-    return Inertia::render('User/Proposal/Index');
-})->name('proposals')->middleware('auth');
+Route::resource('proposals', ProposalController::class);
 Route::get('project-procurement-management-plan', function(){
     return Inertia::render('User/Ppmp/Index');
 })->name('ppmp')->middleware('auth');
@@ -158,4 +161,22 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
     Route::put('unit/budget-ceiling/unpost/{unitBudgetCeilingId}', [UnitBudgetCeilingController::class, 'unpost'])->name('admin.unit-budget-ceiling.unpost');
     Route::delete('unit/budget-ceiling/destroy/{unitBudgetCeilingId}', [UnitBudgetCeilingController::class, 'destroy'])->name('admin.unit-budget-ceiling.destroy');
 });
+
+Route::get('unit-budget-ceilings/{operating_unit?}', function($operating_unit){
+    return UnitBudgetCeiling::with([
+        'operatingUnit',
+         'campusBudgetCeiling', 
+         'campusBudgetCeiling.programActivityProject', 
+         'campusBudgetCeiling.programActivityProject.majorFinalOutput', 
+         'campusBudgetCeiling.programActivityProject.fundSource', 
+         'campusBudgetCeiling.budgetYear', 
+         'campusBudgetCeiling.processedBy', 
+    ])->where('operating_unit', $operating_unit)->isPosted()->get();
+})->name('unit.budget.ceiling.resource')->middleware('auth');
+
+Route::get('users', function (Request $request) {
+    $query = $request->query('query'); // Get the search query parameter
+    $users = User::where('name', 'like', '%' . $query . '%')->get();
+    return response()->json($users); // Return JSON response
+})->name('user.resource')->middleware('auth');
 

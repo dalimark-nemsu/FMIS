@@ -1,15 +1,21 @@
 <script setup>
-    import { reactive,ref } from 'vue';
+    import { reactive,ref, onMounted } from 'vue';
+    import { usePage } from '@inertiajs/vue3';
+    import axios from 'axios';
     import DropdownButton from '../Components/DropdownButton.vue';
     import DropdownItem from '../Components/DropdownItem.vue';
     import NavLink from '../Components/NavLink.vue';
     import OffCanvas from '../Components/OffCanvas.vue';
     import BaseInput from '../Components/BaseInput.vue';
     import ProposalCreate from '../Pages/User/Proposal/Create.vue';
+    import BaseButton from '../Components/BaseButton.vue';
+
+    const page = usePage();
+    const user = page.props.auth ? page.props.auth.user : null;
 
     const links = [
         { title: 'Dashboard', icon: 'grid', route: 'home' },
-        { title: 'Proposals', icon: 'file-post', route: 'proposals' },
+        { title: 'Proposals', icon: 'file-post', route: 'proposals.index' },
         { title: 'PPMP', icon: 'file-earmark-ruled', route: 'ppmp' },
         { title: 'Purchase Request', icon: 'file-earmark-spreadsheet', route: 'pr' },
     ];
@@ -29,6 +35,25 @@
         dropright: false,
         dropleft: false,
         icon: 'plus-circle',
+    });
+    
+    const unitBudgetData = ref(null);
+    // Function to fetch data when OffCanvas is opened
+    function fetchUnitBudgetData() {
+        axios
+            .get(`/unit-budget-ceilings/${user.unit_id}`)
+            .then(response => {
+                unitBudgetData.value = response.data;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    // Attach event listener when OffCanvas is opened
+    onMounted(() => {
+        const offcanvasElement = document.getElementById('offcanvasRight');
+        offcanvasElement.addEventListener('show.bs.offcanvas', fetchUnitBudgetData);
     });
 </script>
 <template>
@@ -51,6 +76,6 @@
     </aside>
 
     <OffCanvas id="offcanvasRight" title="Create Proposal" position="offcanvas-end" :backdrop="true">
-        <ProposalCreate/>
+        <ProposalCreate :unit-budget-ceilings="unitBudgetData"/>
     </OffCanvas>
 </template>
