@@ -17,7 +17,8 @@
             type: Array,
             default: ()=>([]),
         },
-    });
+    });   
+    
 
     const form = useForm({
         type: '',
@@ -141,11 +142,11 @@
                     <tbody v-else>
                         <tr v-for="(unitBudgetCeiling, index) in unitBudgetCeilings" :key="index" :class="{ 'active-row': selectedRow === unitBudgetCeiling.id }" @click="selectRow(unitBudgetCeiling.id)">
                             <td>
-                                <div class="title">{{ unitBudgetCeiling.campus_budget_ceiling.program_activity_project.name }}</div>
-                                <div class="subtitle">MFO: {{ unitBudgetCeiling.campus_budget_ceiling.program_activity_project.major_final_output.abbreviation }} | Fund Source: {{ unitBudgetCeiling.campus_budget_ceiling.program_activity_project.fund_source.abbreviation }}</div>
+                                <div class="title">{{ unitBudgetCeiling.program_name }}</div>
+                                <div class="subtitle">MFO: {{ unitBudgetCeiling.mfo_abbreviation }} | Fund Source: {{ unitBudgetCeiling.fund_source_abbreviation }}</div>
                             </td>
                             <td class="text-end">
-                                {{ unitBudgetCeiling.total_amount }}
+                                ₱{{ unitBudgetCeiling.total_amount }}
                             </td>
                         </tr>
                     </tbody>

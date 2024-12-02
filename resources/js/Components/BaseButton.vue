@@ -35,6 +35,6 @@
         :class="['btn', `btn-${variant}`, customClasses]"
         :type="type"
         :disabled="disabled">
-        <slot/>
+        <slot></slot>
     </button>
 </template>
