@@ -1,3 +1,30 @@
+<script setup>
+    import { defineProps, ref, watch } from 'vue';
+
+    const props = defineProps({
+        activity: Object,
+    });
+
+    // Local state for activity data (editable in the component)
+    const activityData = ref({
+        title: props.activity.title,
+        startDate: props.activity.startDate,
+        endDate: props.activity.endDate,
+        venue: props.activity.venue
+    });
+
+    const showBudgetary = ref(false);
+
+    function toggleBudgetary() {
+        showBudgetary.value = !showBudgetary.value;
+    }
+
+    // Watch for changes in props.activity and update local state
+    watch(props.activity, (newVal) => {
+        activityData.value = { ...newVal };
+    });
+</script>
+
 <template>
     <div class="activity-card">
       <!-- Edit and Delete Icons in Top-Right Corner -->
@@ -8,7 +35,7 @@
 
       <!-- Activity Fields -->
       <div class="activity-field">
-        <label for="title" class="field-label">Title:</label>
+        <label for="title" class="field-label">Title</label>
         <input
           type="text"
           id="title"
@@ -19,7 +46,7 @@
       </div>
 
       <div class="activity-field">
-        <label class="field-label">Schedule:</label>
+        <label class="field-label">Schedule</label>
         <div class="date-range">
           <input
             type="date"
@@ -38,7 +65,7 @@
       </div>
 
       <div class="activity-field">
-        <label for="venue" class="field-label">Venue:</label>
+        <label for="venue" class="field-label">Venue</label>
         <input
           type="text"
           id="venue"
@@ -86,30 +113,3 @@
       </div>
     </div>
 </template>
-
-<script setup>
-    import { defineProps, ref, watch } from 'vue';
-
-    const props = defineProps({
-        activity: Object,
-    });
-
-    // Local state for activity data (editable in the component)
-    const activityData = ref({
-        title: props.activity.title,
-        startDate: props.activity.startDate,
-        endDate: props.activity.endDate,
-        venue: props.activity.venue
-    });
-
-    const showBudgetary = ref(false);
-
-    function toggleBudgetary() {
-        showBudgetary.value = !showBudgetary.value;
-    }
-
-    // Watch for changes in props.activity and update local state
-    watch(props.activity, (newVal) => {
-        activityData.value = { ...newVal };
-    });
-</script>

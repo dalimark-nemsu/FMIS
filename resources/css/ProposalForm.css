@@ -24,40 +24,48 @@ Main container
 
 /* Proposal Header Card */
 .proposal-header-card {
-    padding: 20px;
+    padding: 24px;
     margin-bottom: 20px;
-    border-radius: 8px;
+    border-radius: 10px;
     background-color: #fff;
-    box-shadow: 0 1px 3px rgba(60, 64, 67, 0.15), 0 4px 8px rgba(60, 64, 67, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.05);
     position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .edit-button {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    padding: 6px 12px;
+    top: 16px;
+    right: 16px;
+    padding: 8px 16px;
     font-size: 14px;
-    color: #1a73e8;
-    background: #e8f0fe;
+    color: #ffffff;
+    background-color: #1a73e8;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 4px rgba(60, 64, 67, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.edit-button i {
+font-size: 14px;
 }
 
 .edit-button:hover {
-    background-color: #d2e3fc;
-    color: #174ea6;
+background-color: #174ea6;
 }
 
 .proposal-title {
-    font-size: 24px;
-    font-weight: 500;
-    color: #202124;
-    margin: 0;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #dadce0;
+    font-size: 26px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px;
 }
 
 .header-field {
@@ -67,61 +75,39 @@ Main container
 }
 
 .icon {
-    font-size: 16px;
-    color: #5f6368;
-    margin-right: 8px;
+    display: flex; /* Flexbox for consistent alignment */
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    width: 24px; /* Fixed width for all icons */
+    height: 24px; /* Fixed height for all icons */
+    font-size: 18px; /* Font size of the icon */
+    color: #6c757d; /* Icon color */
+    margin-right: 10px; /* Spacing between icon and label */
+    flex-shrink: 0; /* Prevent the icon from shrinking */
 }
 
 .label {
-    font-weight: 500;
-    color: #5f6368;
-    margin-right: 6px;
+    display: inline-block; /* Ensures consistent block-like behavior */
+    font-weight: 600; /* Bold font for better readability */
+    color: #495057; /* Professional dark gray color */
+    margin-right: 8px; /* Spacing between the label and content */
+    min-width: 120px; /* Set a fixed width for all labels */
+    text-align: left; /* Align the text to the right */
+    line-height: 24px; /* Vertically align the label with the icon */
 }
 
-.proposal-type-tag, .value, .fund-source-value {
-    padding: 4px 10px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #fff;
-    background-color: #1a73e8;
-    border-radius: 20px;
-    display: inline-block;
-}
 
-.inline-fields {
-    display: flex;
-    gap: 60px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-/* Availability Section and Progress Bar */
-.availability-section {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.availability-value {
-    font-size: 14px;
-    color: #202124;
-    font-weight: 500;
-}
-
-.progress-bar {
-    width: 100%;
-    max-width: 300px;
-    height: 8px;
-    background-color: #e0e0e0;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-bar-fill {
-    height: 100%;
-    background-color: #34a853;
-    transition: width 0.3s ease;
+.proposal-type-tag {
+    font-size: 14px; /* Slightly larger font for better readability */
+    font-weight: 600; /* Bold text for emphasis */
+    color: #1a73e8; /* Blue text color */
+    border: 2px solid #1a73e8; /* Blue border for highlight */
+    padding: 4px 12px; /* Balanced padding */
+    border-radius: 8px; /* Rounded corners for modern style */
+    background-color: transparent; /* No background */
+    display: inline-block; /* Keeps it inline with proper spacing */
+    line-height: 1.5; /* Improves vertical alignment */
+    transition: all 0.3s ease; /* Smooth hover and interaction effect */
 }
 
 /* Proposal Details Card */
@@ -136,25 +122,9 @@ Main container
     margin-bottom: 24px;
 }
 
-label {
-    display: block;
-    font-weight: 500;
-    color: #202124;
-    margin-bottom: 6px;
-}
-
-.quill-editor {
-    min-height: 120px;
-    border: 1px solid #dadce0;
-    border-radius: 8px;
-    padding: 12px;
-    background-color: #f1f3f4;
-    font-size: 14px;
-}
-
 .submit-button {
     position: fixed; /* Make the button float */
-    bottom: 20px; /* Distance from the bottom of the viewport */
+    top: 80px; /* Distance from the bottom of the viewport */
     right: 20px; /* Distance from the right side of the viewport */
     padding: 12px 24px;
     background-color: #1a73e8;
@@ -183,6 +153,31 @@ label {
         right: 10px;
         padding: 10px 20px;
     }
+}
+
+.activity-header-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Section Styling */
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 8px;
+}
+
+/* Title Styling */
+.activity-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333333;
+    margin: 0;
 }
 
 /* Main styling for the Activity Details Card container */
@@ -237,7 +232,7 @@ label {
     font-size: 20px;
     font-weight: 500;
     color: #1a73e8;
-    margin-bottom: 16px;
+    /* margin-bottom: 16px; */
     text-align: left;
 }
 
@@ -289,27 +284,34 @@ label {
     right: 16px;
     display: flex;
     gap: 12px;
+    z-index: 1;
 }
 
-.edit-icon, .delete-icon {
+.edit-icon, .delete-icon, .save-icon, .close-icon {
     font-size: 18px;
     cursor: pointer;
     color: #5f6368;
     transition: color 0.3s;
 }
 
+.save-icon:hover {
+    color: #1a73e8;
+}
+
 .edit-icon:hover {
     color: #1a73e8;
 }
 
-.delete-icon:hover {
+.delete-icon:hover, .close-icon:hover {
     color: #e53935;
 }
 
 /* Button Styling */
 .create-button {
-    align-self: flex-start;
     padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     background-color: #1a73e8;
     color: #ffffff;
     font-size: 14px;
@@ -319,6 +321,9 @@ label {
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
     box-shadow: 0 2px 4px rgba(60, 64, 67, 0.2);
+    max-width: 150px; /* Set the maximum width */
+    white-space: nowrap; /* Prevent text wrapping */
+    margin-left: auto;
 }
 
 .create-button:hover {
@@ -442,3 +447,25 @@ border-radius: 0 0 8px 8px;
 .action-button:hover {
     background-color: #174ea6;
 }
+
+/* Fullscreen Mode Styles */
+.note-editor.note-fullscreen {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1050; /* Higher than other elements */
+    background-color: #ffffff; /* Solid background to cover content */
+}
+
+/* Fullscreen editor area */
+.note-editable {
+    background-color: #ffffff; /* Ensure content area is visible */
+    overflow-y: auto; /* Allow scrolling if content exceeds height */
+    padding: 20px; /* Add padding for better usability */
+    border: none; /* Remove border for fullscreen mode */
+}
+
+
+

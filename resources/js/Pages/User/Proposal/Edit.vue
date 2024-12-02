@@ -1,96 +1,94 @@
-<template>
-    <AuthenticatedLayout page-title="Proposals and Regular Expenses">
-      <div class="proposal-form-container">
-        <div class="grid-layout">
-          <!-- First Column: Proposal Title and Proposal Details -->
-          <div class="proposal-form">
-            <ProposalHeader :proposal="proposal" @edit-header="editHeader" />
-            <ProposalDetails :proposal="proposal" />
-          </div>
-
-          <!-- Second Column: Activity Details -->
-          <div class="activity-details-card">
-            <ActivityDetails :activity="activity" @create-activity="createActivity" />
-            <ActivityCard :activity="activity" @edit-activity="editActivity" @delete-activity="deleteActivity" />
-          </div>
-
-          <!-- Submit Button positioned at the bottom, spanning both columns -->
-          <button @click="submitProposal" class="submit-button">Submit Proposal</button>
-        </div>
-      </div>
-    </AuthenticatedLayout>
-  </template>
-
-
-
-
 <script setup>
-import AuthenticatedLayout from '../../../Layouts/AuthenticatedLayout.vue';
-import { reactive, computed } from 'vue';
-import Quill from 'quill';
-import QuillBetterTable from 'quill-better-table';
-import { ref } from 'vue';
-import ProposalHeader from '../../../Components/ProposalForm/ProposalHeader.vue';
-import ProposalDetails from '../../../Components/ProposalForm/ProposalDetails.vue';
-import ActivityDetails from '../../../Components/ProposalForm/ActivityDetails.vue';
-import ActivityCard from '../../../Components/ProposalForm/ActivityCard.vue';
-// import 'assets/layouts/vendor/bootstrap/js/bootstrap.bundle.min.js';
-import '@/css/ProposalForm.css';
-
-// Register `quill-better-table` with Quill
-Quill.register({
-  'modules/better-table': QuillBetterTable,
-}, true);
+import { ref, reactive } from "vue";
+import AuthenticatedLayout from "../../../Layouts/AuthenticatedLayout.vue";
+import ProposalHeader from "../../../Components/ProposalForm/ProposalHeader.vue";
+import ProposalDetails from "../../../Components/ProposalForm/ProposalDetails.vue";
+import ActivityDetails from "../../../Components/ProposalForm/ActivityDetails.vue";
+import ActivityCard from "../../../Components/ProposalForm/ActivityCard.vue";
+import ActivityDefaultCard from "../../../Components/ProposalForm/ActivityDefaultCard.vue";
+import "@/css/ProposalForm.css";
 
 // Proposal data
 const proposal = reactive({
-  proposal_title: 'Sample Proposal Title',
-  proposal_type: 'Project',
-  unit_budget_ceiling_id: 'PAP12345',
-  mfo: 'Major Output Example',
+  proposal_title: "Sample Proposal Title",
+  proposal_type: "Project",
+  unit_budget_ceiling_id: "PAP12345",
+  mfo: "Major Output Example",
   available_funds: 80000,
   total_funds: 100000,
-  proposal_description: '',
-  proposal_purpose: '',
-  proposal_participants_beneficiaries: '',
-  proposal_expected_output: '',
 });
 
-// Computed value for fund percentage
-const fundPercentage = computed(() => {
-  return (proposal.available_funds / proposal.total_funds) * 100;
-});
+// Activities list
+const activities = ref([]);
 
-// Toggle edit state
-function editHeader() {
-  isEditingHeader.value = !isEditingHeader.value;
-}
-
-// Submit form
-function submitProposal() {
-  console.log(proposal);
-}
-
-// Define reactive `activity` object
-const activity = ref({
-    title: "",
-    schedule: "",
-    venue: ""
-});
-
-// Define methods for handling button actions
+// Methods for handling activities
 function createActivity() {
-    console.log("Activity Created:", activity.value);
+  activities.value.unshift({
+    id: Date.now(), // Unique ID for the activity
+    title: "",
+    startDate: "",
+    endDate: "",
+    venue: "",
+    isDefault: true, // Tracks whether the card is a default card
+  });
 }
 
-// Toggle state for Budgetary Requirements section
-const showBudgetary = ref(false);
+function editActivity(activityId, updatedData) {
+  const activity = activities.value.find((a) => a.id === activityId);
+  if (activity) {
+    Object.assign(activity, updatedData); // Update the activity with new data
+    activity.isDefault = false; // Transform into a full Activity Card
+  }
+}
 
-function toggleBudgetary() {
-    showBudgetary.value = !showBudgetary.value;
+function deleteActivity(activityId) {
+  activities.value = activities.value.filter((a) => a.id !== activityId);
+}
+
+function submitProposal() {
+  console.log("Submitting Proposal", proposal, activities.value);
 }
 </script>
 
+<template>
+  <AuthenticatedLayout page-title="Proposals and Regular Expenses">
+    <div class="proposal-form-container">
+      <div class="grid-layout">
+        <!-- First Column: Proposal Details -->
+        <div class="proposal-form">
+          <ProposalHeader :proposal="proposal" />
+          <ProposalDetails :proposal="proposal" />
+        </div>
 
-
-
+        <!-- Second Column: Activity Details -->
+        <div class="activity-details-card">
+          <ActivityDetails @create-activity="createActivity" />
+          <div v-for="activity in activities" :key="activity.id">
+            <template v-if="activity.isDefault">
+              <ActivityDefaultCard
+                :activity="activity"
+                @save-activity="(updatedData) => editActivity(activity.id, updatedData)"
+                @close-default="deleteActivity(activity.id)"
+              />
+            </template>
+            <template v-else>
+              <ActivityCard
+                :activity="activity"
+                @edit-activity="(updatedData) => editActivity(activity.id, updatedData)"
+                @delete-activity="deleteActivity(activity.id)"
+              />
+            </template>
+          </div>
+          <!-- New Activity Button -->
+          <button @click="createActivity" class="create-button">
+            <i class="fas fa-plus"></i> New Activity
+          </button>
+        </div>
+        <!-- Submit Button -->
+        <button @click="submitProposal" class="submit-button">
+            Submit Proposal
+        </button>
+      </div>
+    </div>
+  </AuthenticatedLayout>
+</template>
