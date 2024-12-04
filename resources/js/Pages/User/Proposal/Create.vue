@@ -1,5 +1,6 @@
 <script setup>
     import { ref, computed } from 'vue';
+    import { formatAmount } from '../../../Utils/numberUtils';
     import BaseInput from '../../../Components/BaseInput.vue';
     import BaseSelect from '../../../Components/BaseSelect.vue';
     import BaseButton from '../../../Components/BaseButton.vue';
@@ -145,7 +146,7 @@
                                 <div class="subtitle">MFO: {{ unitBudgetCeiling.campus_budget_ceiling.program_activity_project.major_final_output.abbreviation }} | Fund Source: {{ unitBudgetCeiling.campus_budget_ceiling.program_activity_project.fund_source.abbreviation }}</div>
                             </td>
                             <td class="text-end">
-                                {{ unitBudgetCeiling.total_amount }}
+                                ₱{{ formatAmount(unitBudgetCeiling.total_amount) }}
                             </td>
                         </tr>
                     </tbody>
@@ -208,5 +209,8 @@
     background-color: #f8f9fa; /* Adjust as needed */
     padding: 10px;
     border-top: 1px solid #dee2e6; /* Optional: top border */
+}
+.dropdown-item {
+    cursor: pointer;
 }
 </style>
