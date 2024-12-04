@@ -1,5 +1,6 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { reactive, ref } from "vue";
+import { usePage } from "@inertiajs/vue3";
 import AuthenticatedLayout from "../../../Layouts/AuthenticatedLayout.vue";
 import ProposalHeader from "../../../Components/ProposalForm/ProposalHeader.vue";
 import ProposalDetails from "../../../Components/ProposalForm/ProposalDetails.vue";
@@ -8,15 +9,11 @@ import ActivityCard from "../../../Components/ProposalForm/ActivityCard.vue";
 import ActivityDefaultCard from "../../../Components/ProposalForm/ActivityDefaultCard.vue";
 import "@/css/ProposalForm.css";
 
-// Proposal data
-const proposal = reactive({
-  proposal_title: "Sample Proposal Title",
-  proposal_type: "Project",
-  unit_budget_ceiling_id: "PAP12345",
-  mfo: "Major Output Example",
-  available_funds: 80000,
-  total_funds: 100000,
-});
+// Get proposal data from Inertia
+const { proposal: serverProposal } = usePage().props;
+
+// Make the proposal data reactive
+const proposal = reactive(serverProposal);
 
 // Activities list
 const activities = ref([]);

@@ -20,4 +20,9 @@ class Proposal extends Model
         'participants_beneficiaries',
         'expected_output',
     ];
+
+    public function unitBudgetCeiling()
+    {
+        return $this->belongsTo(UnitBudgetCeiling::class, 'unit_budget_ceiling_id');
+    }
 }
