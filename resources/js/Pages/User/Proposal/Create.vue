@@ -26,7 +26,7 @@
         proponent_id: '',
         unit_budget_ceiling_id: '',
     });
-    
+
     function submit(){
         form.post(route('proposals.store'))
     }
@@ -40,7 +40,7 @@
     function selectRow(id) {
         form.unit_budget_ceiling_id = id;
         selectedRow.value = id;
-    }   
+    }
 
     async function searchProponents() {
         if (!searchQuery.value) {
@@ -54,7 +54,7 @@
                 params: { query: searchQuery.value }
             });
             searchResults.value = response.data;
-            
+
         } catch (error) {
             console.error('Error fetching proponents:', error);
         } finally {
@@ -80,13 +80,13 @@
                 <BaseInput id="floatingInput" type="text" v-model="form.title" label="Proposal Title" classes="form-control fw-bold"/>
             </div>
             <div class="form-floating mb-3">
-                <BaseInput 
-                    id="floatingInput" 
-                    type="search" 
-                    v-model="searchQuery" 
-                    label="Proponent" 
+                <BaseInput
+                    id="floatingInput"
+                    type="search"
+                    v-model="searchQuery"
+                    label="Proponent"
                     classes="form-control fw-bold"
-                    @input="searchProponents" 
+                    @input="searchProponents"
                 />
                 <ul v-if="searching" class="dropdown-menu show w-100">
                     <li class="dropdown-item">
@@ -94,7 +94,7 @@
                         Searching...
                     </li>
                 </ul>
-        
+
                 <ul v-if="searchResults.length" class="dropdown-menu show w-100">
                     <li v-for="proponent in searchResults" :key="proponent.id" @click="selectProponent(proponent)" class="dropdown-item">
                         {{ proponent.name }}

@@ -1,5 +1,7 @@
 <script setup>
-import { defineProps, defineEmits, watch, ref } from "vue";
+import { ref, defineProps, defineEmits, watch } from "vue";
+import 'flatpickr/dist/flatpickr.css';
+import Flatpickr from "vue-flatpickr-component";
 
 const props = defineProps({
   activity: Object,
@@ -7,7 +9,7 @@ const props = defineProps({
 
 const emit = defineEmits(["save-activity", "close-default"]);
 
-// Local state for activity data (editable in the component)
+// Local state for activity data
 const activityData = ref({ ...props.activity });
 
 // Watch for changes in props.activity and update local state
@@ -19,24 +21,26 @@ watch(
   { immediate: true }
 );
 
+// Emit the updated activity
 function saveActivity() {
-  emit("save-activity", activityData.value); // Emit updated data to the parent
+  emit("save-activity", activityData.value);
 }
 
+// Emit to close the default card
 function closeDefaultCard() {
-  emit("close-default"); // Notify parent to delete the card
+  emit("close-default");
 }
 </script>
 
 <template>
   <div class="activity-card">
-    <!-- Add Icon Above Title -->
+    <!-- Action Icons -->
     <div class="action-icons">
       <i class="fas fa-save save-icon" @click="saveActivity"></i>
       <i class="fas fa-times close-icon" @click="closeDefaultCard"></i>
     </div>
 
-    <!-- Activity Fields -->
+    <!-- Activity Title -->
     <div class="activity-field">
       <label for="title" class="field-label">Title</label>
       <input
@@ -48,25 +52,20 @@ function closeDefaultCard() {
       />
     </div>
 
+    <!-- Date Range Picker -->
     <div class="activity-field">
       <label class="field-label">Schedule</label>
-      <div class="date-range">
-        <input
-          type="date"
-          v-model="activityData.startDate"
-          class="input-field date-input"
-          placeholder="Start Date"
-        />
-        <span class="date-separator">to</span>
-        <input
-          type="date"
-          v-model="activityData.endDate"
-          class="input-field date-input"
-          placeholder="End Date"
-        />
-      </div>
+      <Flatpickr
+        v-model="activityData.dateRange"
+        :config="{
+          mode: 'range',
+          dateFormat: 'm/d/Y',
+        }"
+        class="input-field"
+      />
     </div>
 
+    <!-- Activity Venue -->
     <div class="activity-field">
       <label for="venue" class="field-label">Venue</label>
       <input

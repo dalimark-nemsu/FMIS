@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('proposal_id');
-            $table->integer('sequence');
-            $table->string('date_schedule');
-            $table->string('venue');
+            $table->integer('activity_sequence');
+            $table->string('activity_title')->nullable();
+            $table->string('activity_date_schedule')->nullable();
+            $table->string('activity_venue')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

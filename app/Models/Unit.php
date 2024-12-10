@@ -19,6 +19,11 @@ class Unit extends Model
         'campus_id',
     ];
 
+    public function proposal()
+    {
+        return $this->hasMany(Proposal::class, 'operating_unit');
+    }
+
     public function campus()
     {
         return $this->belongsTo(Campus::class, 'campus_id');
@@ -28,7 +33,7 @@ class Unit extends Model
     {
         return $this->belongsToMany(MajorFinalOutput::class, 'major_final_output_unit');
     }
-    
+
     public function unitBudgetCeilings()
     {
         return $this->hasMany(UnitBudgetCeiling::class, 'operating_unit');

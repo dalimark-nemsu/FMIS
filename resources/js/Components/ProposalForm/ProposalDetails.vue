@@ -1,8 +1,8 @@
 <script setup>
 import { defineProps, onMounted, onBeforeUnmount, ref, nextTick, watch } from 'vue';
-import { debounce } from 'lodash'; // Install lodash if not already installed
+import { debounce } from 'lodash';
 import $ from 'jquery';
-import axios from 'axios'; // Make sure Axios is set up in your project
+import axios from 'axios';
 
 window.$ = $;
 window.jQuery = $;
@@ -23,10 +23,10 @@ const editors = ref({
 // Debounced function to save updates
 const saveUpdate = debounce(async (field, content) => {
   try {
-    await axios.post(`/proposals/${props.proposal.id}/update-field`, {
-      field,
-      content,
-    });
+        await axios.post(`/proposals/${props.proposal.id}/update-field`, {
+            field,
+            content,
+        });
   } catch (error) {
     console.error('Error saving update:', error);
   }
@@ -49,54 +49,53 @@ function initializeEditor(field) {
   const selector = `#editor-${field.id}`;
   const $editor = $(selector);
 
-  if (!$editor.length) {
-    console.error(`Editor reference ${selector} not found.`);
-    return;
-  }
+    if (!$editor.length) {
+        console.error(`Editor reference ${selector} not found.`);
+        return;
+    }
 
-  $editor.summernote({
-    height: 200,
-    placeholder: field.placeholder,
-    toolbar: [
-      ['style', ['style']],
-      ['font', ['bold', 'italic', 'underline', 'clear']],
-      ['fontname', ['fontname']],
-      ['color', ['color']],
-      ['para', ['ul', 'ol', 'paragraph']],
-      ['table', ['table']],
-      ['insert', ['link']],
-      ['view', ['fullscreen', 'help']],
-    ],
-    callbacks: {
-      onInit: () => {
-        // Set initial content when the editor initializes
-        const initialValue = props.proposal[field.id] || '';
-        $editor.summernote('code', initialValue);
-      },
-      onChange: (contents) => {
-        props.proposal[field.id] = contents; // Update local state
-        saveUpdate(field.id, contents); // Save update to server
-      },
-    },
-  });
+    $editor.summernote({
+        height: 200,
+        placeholder: field.placeholder,
+        toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        ['fontname', ['fontname']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link']],
+        ['view', ['fullscreen', 'help']],
+        ],
+        callbacks: {
+        onInit: () => {
+            // Set initial content when the editor initializes
+            const initialValue = props.proposal[field.id] || '';
+            $editor.summernote('code', initialValue);
+        },
+        onChange: (contents) => {
+            props.proposal[field.id] = contents; // Update local state
+            saveUpdate(field.id, contents); // Save update to server
+        },
+        },
+    });
 
-  editors.value[field.id] = $editor;
+    editors.value[field.id] = $editor;
 
-  // Watch for changes to the proposal and update the editor dynamically
-  watch(
-    () => props.proposal[field.id],
-    (newContent) => {
-      if ($editor.summernote) {
-        const currentContent = $editor.summernote('code');
-        if (currentContent !== newContent) {
-          $editor.summernote('code', newContent || '');
+    // Watch for changes to the proposal and update the editor dynamically
+    watch(
+        () => props.proposal[field.id],
+        (newContent) => {
+        if ($editor.summernote) {
+            const currentContent = $editor.summernote('code');
+            if (currentContent !== newContent) {
+            $editor.summernote('code', newContent || '');
+            }
         }
-      }
-    },
-    { immediate: true }
-  );
+        },
+        { immediate: true }
+    );
 }
-
 
 onBeforeUnmount(() => {
   Object.values(editors.value).forEach((editor) => {

@@ -45,7 +45,7 @@
           <span class="icon"><i class="fas fa-coins"></i></span>
           <span class="label">Availability</span>
           <span class="proposal-type-tag">
-            ₱ {{ props.proposal.amount.toLocaleString() }}
+            <!-- ₱ {{ props.proposal.amount.toLocaleString() }} -->
             <!-- ₱ {{ proposal.available_funds.toLocaleString() }} / ₱ {{ proposal.total_funds.toLocaleString() }} -->
           </span>
         </div>
