@@ -52,6 +52,10 @@ class PermissionTableSeeder extends Seeder
                 'display_name' => 'Delete Unit Budget Ceiling',
                 'description'  => 'Permission to delete Unit Budget Ceiling records',
             ],
+            [
+                'display_name' => 'Post Unit Budget Ceiling',
+                'description'  => 'Permission to post Unit Budget Ceiling records',
+            ],
 
             // PAP Permissions
             [

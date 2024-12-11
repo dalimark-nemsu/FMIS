@@ -15,15 +15,17 @@ return new class extends Migration
     {
         Schema::create('proposals', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('unit_budget_ceiling_id');
-            $table->bigInteger('proponent_id');
+            // $table->bigInteger('unit_budget_ceiling_id');
+            $table->bigInteger('operating_unit'); //unit_id
+            $table->bigInteger('budget_year_id');
+            $table->enum('proposal_type', ['project', 'activity']);
+            $table->string('proposal_title');
+            $table->bigInteger('proposal_proponent_id');
+            $table->longText('proposal_description')->nullable();
+            $table->longText('proposal_purpose')->nullable();
+            $table->longText('proposal_participants_beneficiaries')->nullable();
+            $table->longText('proposal_expected_output')->nullable();
             $table->bigInteger('created_by');
-            $table->string('type');
-            $table->string('title');
-            $table->longText('description')->nullable();
-            $table->longText('purpose')->nullable();
-            $table->longText('participants_beneficiaries')->nullable();
-            $table->longText('expected_output')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

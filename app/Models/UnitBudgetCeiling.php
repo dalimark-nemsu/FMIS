@@ -26,6 +26,11 @@ class UnitBudgetCeiling extends Model
         'is_posted' => 'boolean'
     ];
 
+    public function proposals()
+    {
+        return $this->hasMany(Proposal::class, 'unit_budget_ceiling_id');
+    }
+
     public function campusBudgetCeiling()
     {
         return $this->belongsTo(CampusBudgetCeiling::class, 'campus_budget_ceiling_id');

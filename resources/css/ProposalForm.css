@@ -18,7 +18,7 @@ Main container
 
 /* First column spans 7 out of 12 columns */
 .proposal-form {
-    grid-column: span 6;
+    grid-column: span 5;
     color: #202124;
 }
 
@@ -182,7 +182,7 @@ background-color: #174ea6;
 
 /* Main styling for the Activity Details Card container */
 .activity-details-card {
-    grid-column: span 6;
+    grid-column: span 7;
     padding: 0; /* Remove padding around the container */
     border-radius: 12px;
     /* background-color: #ffffff;
@@ -370,10 +370,6 @@ border-radius: 0 0 8px 8px;
 
 
 /* Budgetary Requirements Table Styling */
-.budgetary-requirements {
-    margin-top: 16px;
-}
-
 .budgetary-requirements h4 {
     font-size: 18px;
     color: #202124;
@@ -384,11 +380,11 @@ border-radius: 0 0 8px 8px;
 .budget-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .budget-table th, .budget-table td {
-    padding: 10px;
+    padding: 5px;
     border: 1px solid #d1d9e6;
     text-align: left;
 }
@@ -397,6 +393,8 @@ border-radius: 0 0 8px 8px;
     background-color: #f1f3f4;
     font-weight: 500;
     color: #5f6368;
+    font-size: 14px;
+    text-align: center;
 }
 
 .table-input {
@@ -404,11 +402,11 @@ border-radius: 0 0 8px 8px;
     padding: 8px;
     border: 1px solid #d1d9e6;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 /* Budgetary Requirements Table Styling */
-.budget-table {
+/* .budget-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
@@ -432,7 +430,7 @@ border-radius: 0 0 8px 8px;
     border: 1px solid #d1d9e6;
     border-radius: 4px;
     font-size: 14px;
-}
+} */
 
 .action-button {
     padding: 6px 12px;
@@ -466,6 +464,83 @@ border-radius: 0 0 8px 8px;
     padding: 20px; /* Add padding for better usability */
     border: none; /* Remove border for fullscreen mode */
 }
+
+.activity-card-wrapper {
+    margin-bottom: 16px;
+}
+
+.table-textarea,
+.table-input {
+  width: 100%; /* Same width for both */
+  padding: 8px; /* Ensure padding matches */
+  font-size: 12px; /* Match the font size */
+  line-height: 1.5; /* Match the line height */
+  border: 1px solid #d1d9e6; /* Same border */
+  border-radius: 4px; /* Same border radius */
+  box-sizing: border-box; /* Ensure padding and border are included in the height */
+  height: 38px; /* Match the input height */
+  resize: none; /* Disable manual resizing */
+  overflow: hidden; /* Prevent scrollbars */
+}
+
+.table-textarea:focus,
+.table-input:focus {
+  border-color: #1a73e8; /* Same focus effect */
+  outline: none; /* Remove focus outline */
+}
+
+.table-textarea {
+  display: flex; /* Ensure alignment with other elements */
+  align-items: center; /* Align content vertically */
+}
+
+.budget-table {
+    width: 100%; /* Table spans the full width */
+    border-collapse: collapse; /* Remove gaps between cells */
+    table-layout: fixed; /* Enforce fixed column widths */
+  }
+
+  .budget-table th,
+  .budget-table td {
+    padding: 8px; /* Add padding for readability */
+    border: 1px solid #d1d9e6; /* Add borders */
+  }
+
+  .budget-table th.description-column,
+  .budget-table td.description-column {
+    width: 25%; /* Description column: 30% */
+  }
+
+  .budget-table th.uom-column,
+  .budget-table td.uom-column {
+    width: 15%; /* Unit of Measure column: 10% */
+  }
+
+  .budget-table th.quantity-column,
+  .budget-table td.quantity-column {
+    width: 10%; /* Quantity column: 10% */
+  }
+
+  .budget-table th.unit-cost-column,
+  .budget-table td.unit-cost-column {
+    width: 10%; /* Unit Cost column: 10% */
+  }
+
+  .budget-table th.procurement-mode-column,
+  .budget-table td.procurement-mode-column {
+    width: 15%; /* Procurement Mode column: 20% */
+  }
+
+  .budget-table th.action-column,
+  .budget-table td.action-column {
+    text-align: center; /* Center content horizontally */
+    vertical-align: middle; /* Center content vertically */
+    width: 15%; /* Action column: 20% */
+  }
+
+
+
+
 
 
 

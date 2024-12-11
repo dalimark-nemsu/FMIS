@@ -49,6 +49,10 @@ Auth::routes();
 
 Route::get('/dashboard', [UserHomeController::class, 'index'])->name('home');
 Route::resource('proposals', ProposalController::class);
+Route::post('/proposals/{proposal}/update-field', [ProposalController::class, 'updateProposalDetails']);
+Route::post('/proposals/{proposal}/activities', [ProposalController::class, 'createActivity']);
+Route::put('/proposals/{proposal}/activities/{activity}', [ProposalController::class, 'updateActivity']);
+Route::delete('/proposals/{proposal}/activities/{activity}', [ProposalController::class, 'deleteActivity']);
 Route::get('project-procurement-management-plan', function(){
     return Inertia::render('User/Ppmp/Index');
 })->name('ppmp')->middleware('auth');
@@ -247,12 +251,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
 Route::get('unit-budget-ceilings/{operating_unit?}', function($operating_unit){
     return UnitBudgetCeiling::with([
         'operatingUnit',
-         'campusBudgetCeiling', 
-         'campusBudgetCeiling.programActivityProject', 
-         'campusBudgetCeiling.programActivityProject.majorFinalOutput', 
-         'campusBudgetCeiling.programActivityProject.fundSource', 
-         'campusBudgetCeiling.budgetYear', 
-         'campusBudgetCeiling.processedBy', 
+         'campusBudgetCeiling',
+         'campusBudgetCeiling.programActivityProject',
+         'campusBudgetCeiling.programActivityProject.majorFinalOutput',
+         'campusBudgetCeiling.programActivityProject.fundSource',
+         'campusBudgetCeiling.budgetYear',
+         'campusBudgetCeiling.processedBy',
     ])->where('operating_unit', $operating_unit)->isPosted()->get();
 })->name('unit.budget.ceiling.resource')->middleware('auth');
 
