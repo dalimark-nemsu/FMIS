@@ -24,8 +24,8 @@ return new class extends Migration
             $table->decimal('mooe', 15, 2); // maintenance and other operating expenses amount
             $table->decimal('co', 15, 2); // capital outlay amount
             $table->decimal('total_amount', 15, 2); // total amount
-            $table->bigInteger('processed_by');//user_id budget officer II
             $table->boolean('is_posted')->default(0);
+            $table->bigInteger('processed_by');//user_id budget officer II
             $table->timestamps();
             $table->softDeletes();
         });

@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('product_code')->nullable();
             $table->string('photo')->nullable();
             $table->string('product_description');
-            $table->string('product_specification')->nullable();
-            $table->string('attachment')->nullable();
             $table->string('uom'); //unit of measure
             $table->decimal('price', 10,2);
+            $table->string('product_specification')->nullable();
+            $table->string('attachment')->nullable();
             $table->string('remarks')->nullable();
             $table->boolean('is_available')->default(0);
             $table->enum('source', ['dbm', 'local']);
