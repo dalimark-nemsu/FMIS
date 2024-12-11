@@ -533,6 +533,8 @@ border-radius: 0 0 8px 8px;
 
   .budget-table th.action-column,
   .budget-table td.action-column {
+    text-align: center; /* Center content horizontally */
+    vertical-align: middle; /* Center content vertically */
     width: 15%; /* Action column: 20% */
   }
 
