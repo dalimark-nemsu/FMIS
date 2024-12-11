@@ -28,6 +28,14 @@ class Unit extends Model
     {
         return $this->belongsToMany(MajorFinalOutput::class, 'major_final_output_unit');
     }
+
+
+    public function paps()
+    {
+        return $this->belongsToMany(ProgramActivityProject::class, 'pap_unit', 'unit_id', 'pap_id')
+            ->withTimestamps();
+    }
+
     
     public function unitBudgetCeilings()
     {

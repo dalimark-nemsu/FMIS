@@ -47,10 +47,10 @@ class FundSourceController extends Controller
     public function store(FundSourceStoreRequest $request)
     {
         FundSource::create([
-            'abbreviation'      =>      $request->abbrev,
+            'abbreviation'      =>      $request->abbreviation,
             'name'              =>      $request->name,
         ]);
-        return redirect()->route('allotment-classes.index')->with('success','Allotment Class added successfully');
+        return redirect()->route('fund-sources.index')->with('success','Fund Source added successfully');
     }
 
     /**
@@ -85,7 +85,7 @@ class FundSourceController extends Controller
     public function update(FundSourceUpdateRequest $request, FundSource $fundSource)
     {
         $fundSource->update([
-            'abbreviation'      =>      $request->abbrev,
+            'abbreviation'      =>      $request->abbreviation,
             'name'              =>      $request->name,
         ]);
         return redirect()->route('fund-sources.index')->with('success','Fund Source updated successfully');

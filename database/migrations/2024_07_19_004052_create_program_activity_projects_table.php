@@ -15,9 +15,20 @@ return new class extends Migration
     {
         Schema::create('program_activity_projects', function (Blueprint $table) {
             $table->id();
+            
+
             $table->string('code')->nullable();
-            $table->bigInteger('fund_source_id');
             $table->bigInteger('mfo_id');//major final output
+
+            
+
+            $table->bigInteger('fund_source_id');
+            $table->bigInteger('budget_type_id')->nullable();
+            $table->bigInteger('sub_fund_id')->nullable();
+            $table->bigInteger('school_fee_classification_id')->nullable();
+            $table->bigInteger('pap_type_id');
+            $table->bigInteger('parent_id')->nullable();
+            $table->integer('sequence')->nullable();
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();

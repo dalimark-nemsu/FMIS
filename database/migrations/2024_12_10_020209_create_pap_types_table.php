@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('major_final_output_unit', function (Blueprint $table) {
+        Schema::create('pap_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('major_final_output_id')->constrained('major_final_outputs');
-            $table->foreignId('unit_id')->constrained('units');
+            $table->string('abbreviation')->nullable();
+            $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('major_final_output_unit');
+        Schema::dropIfExists('pap_types');
     }
 };
