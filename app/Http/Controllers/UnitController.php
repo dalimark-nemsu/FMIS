@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UnitStoreRequest;
 use App\Http\Requests\UnitUpdateRequest;
 use App\Models\Campus;
-use App\Models\MajorFinalOutput;
+use App\Models\ProgramActivityProject;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,9 +33,9 @@ class UnitController extends Controller
             $units = Unit::get();
         }
     
-        $mfos = MajorFinalOutput::all(); // Fetch all MFOS (no need to filter unless necessary)
+        $paps = ProgramActivityProject::all(); // Fetch all PAPs (no need to filter unless necessary)
     
-        return view('units.index', compact('campuses', 'units', 'mfos'));
+        return view('units.index', compact('campuses', 'units', 'paps'));
     }
     
 
@@ -117,20 +117,20 @@ class UnitController extends Controller
         return redirect()->route('units.index')->with('success', "{$name} deleted successfully");
     }
 
-    public function assignMfo(Request $request, $id)
+    public function assignPap(Request $request, $id)
     {
         $unit = Unit::findOrFail($id);
 
-        // Validate that at least one MFO is selected
+        // Validate that at least one PAP is selected
         $request->validate([
-            'mfos' => 'required|array',
+            'paps' => 'required|array',
         ]);
 
 
-        // Sync the selected MFOs with the unit
-        $unit->majorFinalOutputs()->sync($request->mfos);
+        // Sync the selected PAPs with the unit
+        $unit->paps()->sync($request->paps);
 
-        return redirect()->back()->with('success', 'MFOs assigned successfully!');
+        return redirect()->back()->with('success', 'PAPs assigned successfully!');
     }
 
 

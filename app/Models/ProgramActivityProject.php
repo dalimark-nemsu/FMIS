@@ -7,13 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProgramActivityProject extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'code',
-        'fund_source_id',
         'mfo_id',
-        'name',
+
+        'fund_source_id',
+        'budget_type_id',
+        'sub_fund_id',
+        'school_fee_classification_id',
+        'pap_type_id',
+        'parent_id',
+        'name'
     ];
 
     public function campusBugetCeilings()
@@ -35,4 +39,30 @@ class ProgramActivityProject extends Model
     {
         return $this->belongsTo(FundSource::class, 'fund_source_id');
     }
+
+    public function budgetType()
+    {
+        return $this->belongsTo(BudgetType::class, 'budget_type_id');
+    }
+
+    public function subFund()
+    {
+        return $this->belongsTo(SubFund::class, 'sub_fund_id');
+    }
+
+    public function schoolFeeClassification()
+    {
+        return $this->belongsTo(SchoolFeeClassification::class, 'school_fee_classification_id');
+    }
+
+    public function papType()
+    {
+        return $this->belongsTo(PapType::class, 'pap_type_id');
+    }
+
+    public function units()
+    {
+        return $this->belongsToMany(Unit::class, 'pap_unit');
+    }
+
 }

@@ -16,6 +16,21 @@ class FundSource extends Model
         'name',
     ];
 
+    public function budgetTypes()
+    {
+        return $this->hasMany(BudgetType::class);
+    }
+
+    public function subFunds()
+    {
+        return $this->hasMany(SubFund::class);
+    }
+
+    public function schoolFeeClassifications()
+    {
+        return $this->hasMany(SchoolFeeClassification::class);
+    }
+    
     public function programActivityProjects()
     {
         return $this->hasMany(ProgramActivityProject::class);

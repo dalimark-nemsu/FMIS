@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PapType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,13 +23,17 @@ class DatabaseSeeder extends Seeder
             PermissionTableSeeder::class,
             RoleTableSeeder::class,
             UserTableSeeder::class,
-            // CategoryTableSeeder::class,
             BudgetYearTableSeeder::class,
             FundSourceTableSeeder::class,
+            BudgetTypeSeeder::class,
+            SubFundSeeder::class,
+            SchoolFeeClassificationSeeder::class,
+            PapTypeSeeder::class,
             MajorFinalOutputTableSeeder::class,
             ProgramActivityProjectTableSeeder::class,
             AllotmentClassSeeder::class,
-            ObjectExpenditureSeeder::class
+            ObjectExpenditureSeeder::class,
+            ProductCategoriesTableSeeder::class
         ]);
     }
 }

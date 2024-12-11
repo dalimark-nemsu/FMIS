@@ -49,7 +49,7 @@
                             <th>Abbrev.</th>
                             <th>Name</th>
                             <th>Campus</th>
-                            <th>MFO</th>
+                            <th>PAP</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -61,8 +61,8 @@
                                     <td>{{ $unit->name }}</td>
                                     <td>{{ $unit->campus?->name }}</td>
                                     <td>
-                                        @foreach ($unit->majorFinalOutputs as $mfo)
-                                            {{ $mfo->abbreviation }}<br>
+                                        @foreach ($unit->paps as $pap)
+                                            {{ $pap->name }}<br>
                                         @endforeach
                                     </td>
                                     <td>
@@ -74,11 +74,11 @@
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        <!-- Assign MFO Button -->
-                                        <a href="#assignMfoModal-{{$unit->id}}"
+                                        <!-- Assign PAP Button -->
+                                        <a href="#assignPapModal-{{$unit->id}}"
                                         class="btn btn-outline-success btn-sm rounded-circle shadow-sm"
                                         data-bs-toggle="modal"
-                                        title="Assign MFO">
+                                        title="Assign PAP">
                                             <i class="bi bi-check-circle"></i>
                                         </a>
 
@@ -227,17 +227,17 @@
 </div>
 @endforeach
 
-<!-- Assign MFO Modal -->
+<!-- Assign PAP Modal -->
 @foreach ($units as $unit)
-<div class="modal fade" id="assignMfoModal-{{$unit->id}}" tabindex="-1"
-    aria-labelledby="assignMfoModalLabel" aria-hidden="true">
+<div class="modal fade" id="assignPapModal-{{$unit->id}}" tabindex="-1"
+    aria-labelledby="assignPapModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="assignMfoModalLabel">Assign MFOs to {{ $unit->name }}</h5>
+                <h5 class="modal-title" id="assignPapModalLabel">Assign PAPs to {{ $unit->name }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('units.assignMfo', $unit->id) }}" method="POST">
+            <form action="{{ route('units.assignPap', $unit->id) }}" method="POST">
 
                 @csrf
                 @method('PUT')
@@ -245,14 +245,14 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="mfo" class="col-form-label">MFO:</label>
+                        <label for="pap" class="col-form-label">PAP:</label>
 
                         <!-- Since each modal has a unique ID (such as multiple-select-field-{{ $unit->id }}), you'll need to ensure that the select2 initialization is correctly applied to each individual field. -->
-                        <select class="form-select" id="multiple-select-field-{{$unit->id}}" name="mfos[]" data-placeholder="Choose MFO" multiple>
-                            @foreach($mfos as $mfo)
-                                <option value="{{ $mfo->id }}"
-                                    @if($unit->majorFinalOutputs->contains($mfo->id)) selected @endif>
-                                    {{ $mfo->abbreviation }} - {{ $mfo->name }}
+                        <select class="form-select" id="multiple-select-field-{{$unit->id}}" name="paps[]" data-placeholder="Choose PAP" multiple>
+                            @foreach($paps as $pap)
+                                <option value="{{ $pap->id }}"
+                                    @if($unit->paps->contains($pap->id)) selected @endif>
+                                    {{ $pap->abbreviation }} - {{ $pap->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -284,7 +284,7 @@
             $('select[id^="multiple-select-field-"]').select2({
                 theme: "bootstrap-5",
                 width: '100%',  // Adjust width as needed
-                placeholder: 'Choose MFO',
+                placeholder: 'Choose PAP',
                 closeOnSelect: false
             });
         });

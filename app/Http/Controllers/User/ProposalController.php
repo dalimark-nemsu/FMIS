@@ -167,7 +167,6 @@ class ProposalController extends Controller
             'activity_date_schedule' => $validated['dateRange'], // This can be null
             'activity_venue' => $validated['venue'], // This can be null
         ]);
-
         return response()->json(['activity' => $activity, 'message' => 'Activity created successfully.']);
     }
 
