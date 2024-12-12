@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Enums\UnitOfMeasurement;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Proposal;
@@ -100,6 +101,8 @@ class ProposalController extends Controller
                 'show_budgetary' => $activity->activity_title && $activity->activity_date_schedule && $activity->activity_venue,
             ];
         });
+
+        $unitOfMeasurements = UnitOfMeasurement::cases();
 
         return Inertia::render('User/Proposal/Edit', [
             'proposal' => $proposalData,
