@@ -15,18 +15,15 @@ class FundSourceTableSeeder extends Seeder
      */
     public function run()
     {
-        $fundSources=[
-            ['name'=>'STF'],
-            ['name'=>'GAA'],
-            ['name'=>'IGP'],
-            ['name'=>'TF'],
-            ['name'=> 'TES'],
+        $fundSources = [
+            ['abbreviation' => 'GAA', 'name' => 'General Appropriations Act'],
+            ['abbreviation' => 'STF', 'name' => 'Special Trust Fund'],
+            ['abbreviation' => 'IGP', 'name' => 'Income Generating Projects'],
         ];
 
-        foreach ($fundSources as $key => $fundSource) {
-            FundSource::create([
-                'abbreviation'  =>  $fundSource['name'],
-            ]);
+        foreach ($fundSources as $source) {
+            FundSource::create($source);
         }
+        
     }
 }

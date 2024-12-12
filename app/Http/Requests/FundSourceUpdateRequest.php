@@ -24,7 +24,7 @@ class FundSourceUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'abbrev'            =>          'required',
+            'abbreviation'            =>          'required',
             'name'              =>          'required|string|max:255',
         ];
     }

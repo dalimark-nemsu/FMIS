@@ -1,26 +1,21 @@
 @extends('layouts.app')
 
-@section('page-title', 'Fund Sources')
+@section('page-title', 'Product Categories')
 
 @section('content')
 <div id="app-content">
-    <!-- Container fluid -->
     <div class="app-content-area">
         <div class="container-fluid">
             @include('message.success')
             @include('message.error')
 
-            <!-- Row -->
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header d-md-flex border-bottom-0">
-                            <h5>Fund Sources</h5>
+                            <h5>Product Categories</h5>
                             <div class="ms-auto">
-                                <a href="#addFundSourceModal"
-                                   class="btn btn-outline-primary shadow-sm btn-sm"
-                                   data-bs-toggle="modal"
-                                   title="Create New Fund Source">
+                                <a href="#addProductCategoryModal" class="btn btn-outline-primary shadow-sm btn-sm" data-bs-toggle="modal" title="Create New Product Category">
                                     <i class="bi bi-plus-lg"></i>
                                 </a>
                             </div>
@@ -31,31 +26,20 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>No.</th>
-                                            <th>Abbrev.</th>
                                             <th>Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($fundSources as $fundSource)
+                                        @foreach ($productCategories as $category)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $fundSource->abbreviation }}</td>
-                                            <td>{{ $fundSource->name }}</td>
+                                            <td>{{ $category->name }}</td>
                                             <td>
-                                                <!-- Edit Button -->
-                                                <a href="#editFundSourceModal-{{ $fundSource->id }}"
-                                                   class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
-                                                   data-bs-toggle="modal"
-                                                   title="Edit">
+                                                <a href="#editProductCategoryModal-{{ $category->id }}" class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" data-bs-toggle="modal" title="Edit">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-
-                                                <!-- Delete Button -->
-                                                <a href="#deleteFundSourceModal-{{ $fundSource->id }}"
-                                                   class="btn btn-outline-danger btn-sm rounded-circle shadow-sm"
-                                                   data-bs-toggle="modal"
-                                                   title="Delete">
+                                                <a href="#deleteProductCategoryModal-{{ $category->id }}" class="btn btn-outline-danger btn-sm rounded-circle shadow-sm" data-bs-toggle="modal" title="Delete">
                                                     <i class="bi bi-trash"></i>
                                                 </a>
                                             </td>
@@ -72,24 +56,20 @@
     </div>
 </div>
 
-<!-- Add Fund Source Modal -->
-<div class="modal fade" id="addFundSourceModal" tabindex="-1" aria-labelledby="addFundSourceModalLabel" aria-hidden="true">
+<!-- Add Product Category Modal -->
+<div class="modal fade" id="addProductCategoryModal" tabindex="-1" aria-labelledby="addProductCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('fund-sources.store') }}" method="POST">
+            <form action="{{ route('product-categories.store') }}" method="POST">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addFundSourceModalLabel">Add New Fund Source</h5>
+                    <h5 class="modal-title" id="addProductCategoryModalLabel">Add New Product Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="abbreviation" class="form-label">Abbreviation:</label>
-                        <input type="text" class="form-control" id="abbreviation" name="abbreviation" placeholder="Enter fund source abbreviation" required>
-                    </div>
-                    <div class="mb-3">
                         <label for="name" class="form-label">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter fund source name" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter product category name" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -101,26 +81,22 @@
     </div>
 </div>
 
-<!-- Edit Fund Source Modal -->
-@foreach ($fundSources as $fundSource)
-<div class="modal fade" id="editFundSourceModal-{{ $fundSource->id }}" tabindex="-1" aria-labelledby="editFundSourceModalLabel" aria-hidden="true">
+<!-- Edit Product Category Modal -->
+@foreach ($productCategories as $category)
+<div class="modal fade" id="editProductCategoryModal-{{ $category->id }}" tabindex="-1" aria-labelledby="editProductCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('fund-sources.update', $fundSource->id) }}" method="POST">
+            <form action="{{ route('product-categories.update', $category->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editFundSourceModalLabel">Edit Fund Source</h5>
+                    <h5 class="modal-title" id="editProductCategoryModalLabel">Edit Product Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="abbreviation" class="form-label">Abbreviation:</label>
-                        <input type="text" class="form-control" id="abbreviation" name="abbreviation" value="{{ $fundSource->abbreviation }}" required>
-                    </div>
-                    <div class="mb-3">
                         <label for="name" class="form-label">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ $fundSource->name }}" required>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ $category->name }}" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -133,20 +109,20 @@
 </div>
 @endforeach
 
-<!-- Delete Fund Source Modal -->
-@foreach ($fundSources as $fundSource)
-<div class="modal fade" id="deleteFundSourceModal-{{ $fundSource->id }}" tabindex="-1" aria-labelledby="deleteFundSourceModalLabel" aria-hidden="true">
+<!-- Delete Product Category Modal -->
+@foreach ($productCategories as $category)
+<div class="modal fade" id="deleteProductCategoryModal-{{ $category->id }}" tabindex="-1" aria-labelledby="deleteProductCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('fund-sources.delete', $fundSource->id) }}" method="POST">
+            <form action="{{ route('product-categories.delete', $category->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteFundSourceModalLabel">Delete Confirmation</h5>
+                    <h5 class="modal-title" id="deleteProductCategoryModalLabel">Delete Confirmation</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete Fund Source: <strong>{{ $fundSource->abbreviation }}</strong>?
+                    Are you sure you want to delete Product Category: <strong>{{ $category->name }}</strong>?
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger">Confirm</button>

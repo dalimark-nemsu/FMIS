@@ -1,110 +1,158 @@
 <aside id="sidebar" class="sidebar">
   <ul class="sidebar-nav" id="sidebar-nav">
 
-        <li class="nav-item">
-          <a class="nav-link {{(request()->is('admin/home')) ? '' : 'collapsed' }}" href="{{ route('admin.home') }}">
-            <i class="bi bi-grid"></i>
-            <span>Dashboard</span>
-          </a>
-        </li>
-        <!-- End Dashboard Nav -->
-      @if(auth()->user()->hasRole(['budget-officer-iii', 'super-admin']))
-        <!-- Budget Officer III: Access to Budget Ceiling -->
-        <li class="nav-item">
-            <a class="nav-link {{ request()->is('budget-ceiling') ? '' : 'collapsed' }}" href="{{ route('budget-ceilings.index') }}">
-                <i class="bi bi-menu-button-wide"></i>
-                <span>Budget Ceiling</span>
-            </a>
-        </li>
-      @elseif(auth()->user()->hasRole('budget-officer-ii'))
-        <!-- Budget Officer II: Access to Unit Budget Ceiling -->
-        <li class="nav-item">
-            <a class="nav-link {{ request()->is('unit/budget-ceiling') ? '' : 'collapsed' }}" href="{{ route('admin.unit-budget-ceiling.index') }}">
-              <i class="bi bi-menu-button-wide"></i>
-                <span>Budget Ceiling</span>
-            </a>
-        </li>
-      @endif
-
-        <!-- End Profile Page Nav -->
-
-
-    <li class="nav-heading">Maintenance</li>
-
+    <!-- Dashboard -->
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('paps')) ? '' : 'collapsed' }}" href="{{ route('paps.index') }}">
-        <i class="bi bi-list-check"></i>
-        <span>PAPs</span>
+      <a class="nav-link {{ request()->is('admin/home') ? '' : 'collapsed' }}" href="{{ route('admin.home') }}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
       </a>
     </li>
 
+    <!-- Budget Ceiling -->
+    @if(auth()->user()->hasRole(['budget-officer-iii', 'super-admin']))
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('mfos')) ? '' : 'collapsed' }}" href="{{ route('mfos.index') }}">
+      <a class="nav-link {{ request()->is('admin/budget-ceiling') ? '' : 'collapsed' }}" href="{{ route('budget-ceilings.index') }}">
+        <i class="bi bi-menu-button-wide"></i>
+        <span>Budget Ceiling</span>
+      </a>
+    </li>
+    @elseif(auth()->user()->hasRole('budget-officer-ii'))
+    <li class="nav-item">
+      <a class="nav-link {{ request()->is('admin/unit/budget-ceiling') ? '' : 'collapsed' }}" href="{{ route('admin.unit-budget-ceiling.index') }}">
+        <i class="bi bi-menu-button-wide"></i>
+        <span>Budget Ceiling</span>
+      </a>
+    </li>
+    @endif
+
+    <!-- Maintenance Section -->
+    <li class="nav-heading">Maintenance</li>
+
+        <!-- MFOs -->
+    <li class="nav-item">
+      <a class="nav-link {{ request()->is('admin/mfos') ? '' : 'collapsed' }}" href="{{ route('mfos.index') }}">
         <i class="bi bi-diagram-3"></i>
         <span>MFOs</span>
       </a>
     </li>
 
+    <!-- PAP Settings -->
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('fund-sources')) ? '' : 'collapsed' }}" href="{{ route('fund-sources.index') }}">
-        <i class="bi bi-cash"></i>
-        <span>Fund Sources</span>
+      <a class="nav-link {{ request()->is('admin/pap-settings*') ? '' : 'collapsed' }}" data-bs-target="#papSettingsNav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-gear"></i>
+        <span>PAP Settings</span>
+        <i class="bi bi-chevron-down ms-auto"></i>
       </a>
+      <ul id="papSettingsNav" class="nav-content collapse {{ request()->is('admin/pap-settings*') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="{{ route('paps.index') }}" class="{{ request()->is('admin/pap-settings/paps') ? 'active' : '' }}">
+            <i class="bi bi-circle"></i><span>PAPs</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('pap-types.index') }}" class="{{ request()->is('admin/pap-settings/pap-types') ? 'active' : '' }}">
+            <i class="bi bi-circle"></i><span>PAP Types</span>
+          </a>
+        </li>
+       
+      </ul>
     </li>
 
+
+
+    <!-- Fund Settings -->
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('units')) ? '' : 'collapsed' }}" href="{{ route('units.index') }}">
+      <a class="nav-link {{ request()->is('admin/fund-sources') || request()->is('admin/fund-sources/*') ? '' : 'collapsed' }}" data-bs-target="#fundSourcesNav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-cash"></i>
+        <span>Fund Settings</span>
+        <i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="fundSourcesNav" class="nav-content collapse {{ request()->is('admin/fund-sources') || request()->is('admin/fund-sources/*') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="{{ route('fund-sources.index') }}" class="{{ request()->is('admin/fund-sources') ? 'active' : '' }}">
+            <i class="bi bi-circle"></i><span>Fund Sources</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('budget-types.index') }}" class="{{ request()->is('admin/budget-types') ? 'active' : '' }}">
+            <i class="bi bi-circle"></i><span>Budget Types</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('sub-funds.index') }}" class="{{ request()->is('admin/sub-funds') ? 'active' : '' }}">
+            <i class="bi bi-circle"></i><span>Sub Funds</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('school-fee-classifications.index') }}" class="{{ request()->is('admin/school-fee-classifications') ? 'active' : '' }}">
+            <i class="bi bi-circle"></i><span>School Fee Classifications</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Units -->
+    <li class="nav-item">
+      <a class="nav-link {{ request()->is('admin/units') ? '' : 'collapsed' }}" href="{{ route('units.index') }}">
         <i class="bi bi-building"></i>
         <span>Units</span>
       </a>
     </li>
 
+    <!-- Campus -->
     @permission('read-campus')
-      <li class="nav-item">
-        <a class="nav-link {{(request()->is('campus')) ? '' : 'collapsed' }}" href="{{ route('campuses.index') }}">
-          <i class="bi bi-geo-alt"></i>
-          <span>Campus</span>
-        </a>
-      </li>
+    <li class="nav-item">
+      <a class="nav-link {{ request()->is('admin/campuses') ? '' : 'collapsed' }}" href="{{ route('campuses.index') }}">
+        <i class="bi bi-geo-alt"></i>
+        <span>Campus</span>
+      </a>
+    </li>
     @endpermission
 
+    <!-- Budget Year -->
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('budget-year')) ? '' : 'collapsed' }}" href="{{ route('budget-year.index') }}">
+      <a class="nav-link {{ request()->is('admin/budget-year') ? '' : 'collapsed' }}" href="{{ route('budget-year.index') }}">
         <i class="bi bi-calendar"></i>
         <span>Budget Year</span>
       </a>
     </li>
 
-
-    <!-- Allotment Classes Nav -->
+    <!-- Allotment Classes -->
     <li class="nav-item">
-      <a class="nav-link {{(request()->is('allotment-classes')) ? '' : 'collapsed' }}" href="{{ route('allotment-classes.index') }}">
-            <i class="bi bi-box-seam"></i>
-            <span>Allotment Classes</span>
-          </a>
+      <a class="nav-link {{ request()->is('admin/allotment-classes') ? '' : 'collapsed' }}" href="{{ route('allotment-classes.index') }}">
+        <i class="bi bi-box-seam"></i>
+        <span>Allotment Classes</span>
+      </a>
     </li>
 
-    <!-- Object Expenditures Nav -->
+    <!-- Object Expenditures -->
     <li class="nav-item">
-    <a class="nav-link {{(request()->is('object-expenditures')) ? '' : 'collapsed' }}" href="{{ route('object-expenditures.index') }}">
+      <a class="nav-link {{ request()->is('admin/object-expenditures') ? '' : 'collapsed' }}" href="{{ route('object-expenditures.index') }}">
         <i class="bi bi-receipt"></i>
         <span>Object Expenditures</span>
       </a>
     </li>
 
-
-
-
-
-  
-    {{-- <li class="nav-item">
-      <a class="nav-link {{(request()->is('positions')) ? '' : 'collapsed' }}" href="#">
-        <i class="bi bi-person-badge"></i>
-        <span>Positions</span>
+  <li class="nav-item">
+      <a class="nav-link {{ request()->is('admin/products*') || request()->is('admin/product-categories*') ? '' : 'collapsed' }}" data-bs-target="#productSettingsNav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-box"></i>
+          <span>Product Settings</span>
+          <i class="bi bi-chevron-down ms-auto"></i>
       </a>
-    </li> --}}
-    <!-- End Positions Nav -->
+      <ul id="productSettingsNav" class="nav-content collapse {{ request()->is('admin/products*') || request()->is('admin/product-categories*') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+          <li>
+              <a href="{{ route('products.index') }}" class="{{ request()->is('admin/products') ? 'active' : '' }}">
+                  <i class="bi bi-circle"></i><span>Products</span>
+              </a>
+          </li>
+          <li>
+              <a href="{{ route('product-categories.index') }}" class="{{ request()->is('admin/product-categories') ? 'active' : '' }}">
+                  <i class="bi bi-circle"></i><span>Product Categories</span>
+              </a>
+          </li>
+      </ul>
+  </li>
 
-  
   </ul>
 </aside>
