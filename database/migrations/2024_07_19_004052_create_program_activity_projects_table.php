@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             
 
-            $table->string('code')->nullable();
-            $table->bigInteger('mfo_id');//major final output
+            //$table->string('code')->nullable();
+            //$table->bigInteger('mfo_id')->nullable(); //major final output //remove in version2
 
             
 
