@@ -29,7 +29,7 @@
             <span class="proposal-type-tag">{{ props.proposal.program_name }}</span>
           </div>
         </div>
-        <div class="header-field-group">
+        <!-- <div class="header-field-group">
           <div class="header-field">
             <span class="icon"><i class="fas fa-chart-line"></i></span>
             <span class="label">MFO</span>
@@ -40,15 +40,13 @@
             <span class="label">Fund Source</span>
             <span class="proposal-type-tag">{{ props.proposal.fund_source_abbreviation }}</span>
           </div>
-        </div>
-        <div class="header-field">
+        </div> -->
+        <!-- <div class="header-field">
           <span class="icon"><i class="fas fa-coins"></i></span>
           <span class="label">Availability</span>
           <span class="proposal-type-tag">
-            <!-- ₱ {{ props.proposal.amount.toLocaleString() }} -->
-            <!-- ₱ {{ proposal.available_funds.toLocaleString() }} / ₱ {{ proposal.total_funds.toLocaleString() }} -->
           </span>
-        </div>
+        </div> -->
       </div>
     </div>
 </template>

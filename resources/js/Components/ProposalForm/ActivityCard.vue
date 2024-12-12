@@ -1,74 +1,64 @@
 <script setup>
-import { defineProps, ref, watch, computed } from "vue";
-import axios from "axios"; // Import Axios for API requests
-import debounce from "lodash/debounce"; // Import debounce for optimized API calls
+import { defineProps, ref, watch, computed, onMounted } from "vue";
+import axios from "axios";
+import debounce from "lodash/debounce";
+import Swal from "sweetalert2";
 import "flatpickr/dist/flatpickr.css";
-import Swal from "sweetalert2"; // Import SweetAlert2
 import Flatpickr from "vue-flatpickr-component";
 
+// Props and Emits
 const props = defineProps({
-  activity: Object, // Activity data from the parent
-  proposalId: Number, // The associated proposal ID
+  activity: Object,
+  proposalId: Number,
 });
+const emit = defineEmits(["delete-activity"]);
 
-const emit = defineEmits(["delete-activity"]); // Use emit for event handling
-
+// Reactive Data
 const activityData = ref({
   title: props.activity.activity_title,
   dateRange: props.activity.activity_date_schedule,
   venue: props.activity.activity_venue,
 });
-
 const showBudgetary = ref(false);
+const budgetaryRequirements = ref([
+  {
+    general_description: "",
+    uom: "",
+    quantity: null,
+    unit_cost: null,
+    procurement_mode_id: "",
+    editable: true,
+  },
+]);
+const openDropdownIndex = ref(null);
 
-function toggleBudgetary() {
-  showBudgetary.value = !showBudgetary.value;
-}
-
-// Watch for changes in props.activity and update local state
-watch(props.activity, (newVal) => {
-  activityData.value = { ...newVal };
-});
-
-// Computed property to check if the Budgetary Requirements button should be shown
+// Computed Properties
 const shouldShowBudgetaryButton = computed(() => {
-  return (
-    activityData.value.title !== null &&
-    activityData.value.dateRange !== null &&
-    activityData.value.venue !== null
-  );
+  const { title, dateRange, venue } = activityData.value;
+  return title && dateRange && venue;
 });
 
-// Debounced function to save a single field to the server
-const saveField = debounce((field, value) => {
-  axios
-    .put(`/proposals/${props.proposalId}/activities/${props.activity.id}`, { [field]: value })
-    .catch((error) => {
-      console.error(`Error updating ${field}:`, error);
+const selectedItems = computed(() =>
+  budgetaryRequirements.value.filter((item, index) => index !== 0 && item.selected)
+);
+
+// Functions
+const toggleBudgetary = () => (showBudgetary.value = !showBudgetary.value);
+
+const saveField = debounce(async (field, value) => {
+  try {
+    await axios.put(`/proposals/${props.proposalId}/activities/${props.activity.id}`, {
+      [field]: value,
     });
-}, 500); // Adjust debounce delay as needed
+  } catch (error) {
+    console.error(`Error updating ${field}:`, error);
+  }
+}, 500);
 
-// Watch for changes in each field and save updates to the server
-watch(
-  () => activityData.value.title,
-  (newTitle) => saveField("title", newTitle)
-);
-
-watch(
-  () => activityData.value.dateRange,
-  (newDateRange) => saveField("dateRange", newDateRange)
-);
-
-watch(
-  () => activityData.value.venue,
-  (newVenue) => saveField("venue", newVenue)
-);
-
-// Function to confirm deletion
-function confirmDelete() {
+const confirmDeleteActivity = () => {
   Swal.fire({
     title: "Are you sure?",
-    text: `Do you really want to delete the activity "${activityData._rawValue.title}"?`,
+    text: `Do you really want to delete the activity "${activityData.value.title}"?`,
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#d33",
@@ -76,33 +66,121 @@ function confirmDelete() {
     confirmButtonText: "Yes, delete it!",
   }).then((result) => {
     if (result.isConfirmed) {
-      // Emit the delete event to the parent
       emit("delete-activity", props.activity.id);
-
-      // Display success message
-      Swal.fire({
-        title: "Deleted!",
-        text: `The activity "${activityData._rawValue.title}" has been deleted.`,
-        icon: "success",
-        timer: 1500,
-        showConfirmButton: false,
-      });
+      Swal.fire("Deleted!", `The activity has been deleted.`, "success");
     }
   });
-}
+};
 
-function autoResize(event) {
-  const textarea = event.target;
-  textarea.style.height = 'auto'; // Reset height
-  textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height based on content
-}
+const loadBudgetaryRequirements = async () => {
+  try {
+    const response = await axios.get(`/activities/${props.activity.id}/budgetary-requirements`);
+    budgetaryRequirements.value = [
+      budgetaryRequirements.value[0],
+      ...response.data.budgetaryRequirements.map((item) => ({
+        ...item,
+        editable: false,
+        selected: false,
+      })),
+    ];
+  } catch (error) {
+    console.error("Error fetching budgetary requirements:", error);
+    Swal.fire("Error", "Failed to load budgetary requirements.", "error");
+  }
+};
+
+const toggleEdit = (index) => {
+  budgetaryRequirements.value[index].editable = !budgetaryRequirements.value[index].editable;
+  openDropdownIndex.value = null;
+};
+
+const saveRow = async (index) => {
+  const row = budgetaryRequirements.value[index];
+  if (!row.general_description || !row.uom || !row.quantity || !row.unit_cost) {
+    Swal.fire("Error", "All fields are required.", "error");
+    return;
+  }
+
+  try {
+    const endpoint = `/activities/${props.activity.id}/budgetary-requirements`;
+    const response = await axios.post(endpoint, {
+      id: row.id || null,
+      general_description: row.general_description,
+      uom: row.uom,
+      quantity: row.quantity,
+      unit_cost: row.unit_cost,
+    });
+
+    if (index === 0) {
+      budgetaryRequirements.value.push({
+        ...response.data.budgetaryRequirement,
+        editable: false,
+        selected: false,
+      });
+      budgetaryRequirements.value[0] = {
+        general_description: "",
+        uom: "",
+        quantity: null,
+        unit_cost: null,
+        procurement_mode_id: "",
+        editable: true,
+      };
+    } else {
+      budgetaryRequirements.value[index] = {
+        ...response.data.budgetaryRequirement,
+        editable: false,
+      };
+    }
+    Swal.fire("Success", response.data.message, "success");
+  } catch (error) {
+    console.error("Error saving row:", error);
+    Swal.fire("Error", "Failed to save. Please try again.", "error");
+  }
+};
+
+const confirmDeleteRow = (index) => {
+  const row = budgetaryRequirements.value[index];
+  Swal.fire({
+    title: "Are you sure?",
+    text: `Do you want to delete "${row.general_description}"?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteRow(index);
+    }
+  });
+};
+
+const deleteRow = async (index) => {
+  const row = budgetaryRequirements.value[index];
+  try {
+    await axios.delete(`/activities/${props.activity.id}/budgetary-requirements/${row.id}`);
+    budgetaryRequirements.value.splice(index, 1);
+    Swal.fire("Deleted!", `"${row.general_description}" has been deleted.`, "success");
+  } catch (error) {
+    console.error("Error deleting row:", error);
+    Swal.fire("Error", "Failed to delete. Please try again.", "error");
+  }
+};
+
+// Watchers
+watch(() => activityData.value.title, (newValue) => saveField("title", newValue));
+watch(() => activityData.value.dateRange, (newValue) => saveField("dateRange", newValue));
+watch(() => activityData.value.venue, (newValue) => saveField("venue", newValue));
+
+// Lifecycle Hooks
+onMounted(loadBudgetaryRequirements);
 </script>
 
 <template>
   <div class="activity-card">
     <div class="action-icons">
         <!-- <i class="fas fa-trash delete-icon" @click="$emit('delete-activity')"></i> -->
-        <i class="fas fa-trash delete-icon" @click="confirmDelete"></i>
+        <i class="fas fa-trash delete-icon" @click="confirmDeleteActivity"></i>
     </div>
     <!-- Activity Fields -->
     <div class="activity-field">
@@ -159,29 +237,182 @@ function autoResize(event) {
 
     <!-- Accordion Content -->
     <div v-if="showBudgetary" class="accordion-content" id="budgetary-content">
-        <table class="budget-table">
+      <table class="budget-table">
         <thead>
-            <tr>
+          <tr>
+            <th class="checkbox-column">
+                <input
+                    type="checkbox"
+                />
+            </th>
             <th class="description-column">Description</th>
             <th class="uom-column">Unit of Measure</th>
             <th class="quantity-column">Quantity</th>
             <th class="unit-cost-column">Unit Cost</th>
             <th class="procurement-mode-column">Procurement Mode</th>
             <th class="action-column">Action</th>
-            </tr>
+          </tr>
         </thead>
         <tbody>
-            <tr>
-            <td><textarea placeholder="Enter Description" class="table-textarea" rows="1" @input="autoResize"></textarea></td>
-            <td><input type="text" placeholder="Enter Unit" class="table-input" /></td>
-            <td><input type="number" placeholder="Qty" class="table-input" /></td>
-            <td><input type="number" placeholder="Cost" class="table-input" /></td>
-            <td><input type="text" placeholder="Enter Mode" class="table-input" /></td>
-            <td><button class="action-button"><i class="fas fa-plus"></i></button></td>
-            </tr>
+          <!-- Default Input Field -->
+          <tr>
+            <td ></td>
+            <td class="description-column">
+              <textarea
+                v-model="budgetaryRequirements[0].general_description"
+                placeholder="Enter Description"
+                class="table-textarea"
+              ></textarea>
+            </td>
+            <td class="uom-column">
+              <input
+                type="text"
+                v-model="budgetaryRequirements[0].uom"
+                placeholder="Enter Unit"
+                class="table-input"
+              />
+            </td>
+            <td class="quantity-column">
+              <input
+                type="number"
+                v-model="budgetaryRequirements[0].quantity"
+                placeholder="Qty"
+                class="table-input"
+              />
+            </td>
+            <td class="unit-cost-column">
+              <input
+                type="number"
+                v-model="budgetaryRequirements[0].unit_cost"
+                placeholder="Cost"
+                class="table-input"
+              />
+            </td>
+            <td class="procurement-mode-column">
+              <input
+                type="text"
+                v-model="budgetaryRequirements[0].procurement_mode_id"
+                placeholder="Mode"
+                class="table-input"
+              />
+            </td>
+            <td class="action-column text-center">
+              <button class="action-button" @click="saveRow(0)">
+                <i class="fas fa-plus"></i>
+              </button>
+            </td>
+          </tr>
+
+          <!-- Existing Rows -->
+          <tr v-for="(budget, index) in budgetaryRequirements.slice(1)" :key="budget.id || index">
+            <td class="checkbox-column">
+                <input
+                    type="checkbox"
+                    v-model="budget.selected"
+                    :id="'checkbox-' + (budget.id || index)"
+                />
+            </td>
+            <td class="description-column non-editable-cell">
+              <template v-if="budget.editable">
+                <textarea v-model="budget.general_description" class="table-textarea"></textarea>
+              </template>
+              <template v-else>
+                {{ budget.general_description }}
+              </template>
+            </td>
+            <td class="uom-column non-editable-cell">
+              <template v-if="budget.editable">
+                <input type="text" v-model="budget.uom" class="table-input" />
+              </template>
+              <template v-else>
+                {{ budget.uom }}
+              </template>
+            </td>
+            <td class="quantity-column non-editable-cell">
+              <template v-if="budget.editable">
+                <input type="number" v-model="budget.quantity" class="table-input" />
+              </template>
+              <template v-else>
+                {{ budget.quantity }}
+              </template>
+            </td>
+            <td class="unit-cost-column non-editable-cell">
+              <template v-if="budget.editable">
+                <input type="number" v-model="budget.unit_cost" class="table-input" />
+              </template>
+              <template v-else>
+                {{ budget.unit_cost }}
+              </template>
+            </td>
+            <td class="procurement-mode-column non-editable-cell">
+              <template v-if="budget.editable">
+                <input type="text" v-model="budget.procurement_mode_id" class="table-input" />
+              </template>
+              <template v-else>
+                {{ budget.procurement_mode_id }}
+              </template>
+            </td>
+            <td class="action-column text-center">
+                <div v-if="!budget.editable">
+                    <!-- Ellipsis Button (when not editing) -->
+                    <div class="dropdown">
+                    <button
+                        class="btn"
+                        type="button"
+                        id="dropdownMenuButton"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        ⋮
+                    </button>
+                    <ul
+                        class="dropdown-menu dropdown-menu-end shadow"
+                        aria-labelledby="dropdownMenuButton"
+                        style="min-width: 150px; max-width: 200px;"
+                    >
+                        <li>
+                        <button
+                            class="dropdown-item d-flex align-items-center gap-2"
+                            @click="toggleEdit(index + 1)"
+                        >
+                            <i class="fas fa-edit text-secondary"></i> Edit
+                        </button>
+                        </li>
+                        <li>
+                        <button
+                            class="dropdown-item d-flex align-items-center gap-2"
+                            @click="scheduleRow(index + 1)"
+                        >
+                            <i class="fas fa-calendar-alt text-secondary"></i> Schedule
+                        </button>
+                        </li>
+                        <li>
+                        <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                        <button
+                            class="dropdown-item d-flex align-items-center gap-2"
+                            @click="confirmDeleteRow(index + 1)"
+                        >
+                            <i class="fas fa-trash text-secondary"></i> Delete
+                        </button>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+
+                <div v-else>
+                    <!-- Save Button (when editing) -->
+                    <button class="action-button save-button" @click="saveRow(index + 1)">
+                    <i class="fas fa-save"></i>
+                    </button>
+                </div>
+            </td>
+          </tr>
         </tbody>
-        </table>
+      </table>
     </div>
+
 
   </div>
 </template>

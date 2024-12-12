@@ -45,6 +45,9 @@ Route::post('/proposals/{proposal}/update-field', [ProposalController::class, 'u
 Route::post('/proposals/{proposal}/activities', [ProposalController::class, 'createActivity']);
 Route::put('/proposals/{proposal}/activities/{activity}', [ProposalController::class, 'updateActivity']);
 Route::delete('/proposals/{proposal}/activities/{activity}', [ProposalController::class, 'deleteActivity']);
+Route::post('/activities/{activityId}/budgetary-requirements', [ProposalController::class, 'saveBudgetaryRequirement']);
+Route::get('/activities/{activityId}/budgetary-requirements', [ProposalController::class, 'getBudgetaryRequirements']);
+Route::delete('/activities/{activity}/budgetary-requirements/{id}', [ProposalController::class, 'deleteBudgetaryRequirement']);
 Route::get('project-procurement-management-plan', function(){
     return Inertia::render('User/Ppmp/Index');
 })->name('ppmp')->middleware('auth');

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\Proposal;
 use App\Models\UnitBudgetCeiling;
 use function PHPSTORM_META\type;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -210,8 +211,95 @@ class ProposalController extends Controller
     {
         $activity = $proposal->activities()->findOrFail($activityId);
         $activity->delete();
-        return response()->json(['message' => 'Activity deleted successfully.']);
+        return response()->json(['message' => 'Activity and associated budgetary requirements deleted successfully.']);
     }
+
+    public function deleteBudgetaryRequirement($activityId, $id)
+    {
+        $activity = Activity::findOrFail($activityId);
+        $budgetaryRequirement = $activity->budgetaryRequirements()->find($id);
+
+        if ($budgetaryRequirement) {
+            $budgetaryRequirement->delete();
+
+            return response()->json(['message' => 'Budgetary requirement deleted successfully.']);
+        }
+
+        return response()->json(['message' => 'Budgetary requirement not found.'], 404);
+    }
+
+
+    // public function addBudgetaryRequirement(Request $request, $activityId)
+    // {
+    //     return $request;
+    //     $validated = $request->validate([
+    //         'general_description' => 'required|string|max:255',
+    //         'uom' => 'required|string|max:50',
+    //         'quantity' => 'required|integer|min:1',
+    //         'unit_cost' => 'required|numeric|min:0',
+    //         'procurement_mode_id' => 'nullable|integer|exists:procurement_modes,id', // Adjust as per your DB schema
+    //     ]);
+
+    //     $activity = Activity::findOrFail($activityId);
+
+    //     $budgetaryRequirement = $activity->budgetaryRequirements()->create($validated);
+
+    //     return response()->json(['budgetaryRequirement' => $budgetaryRequirement, 'message' => 'Budgetary requirement added successfully.']);
+    // }
+
+    public function saveBudgetaryRequirement(Request $request, $activityId)
+    {
+        $validated = $request->validate([
+            'general_description' => 'required|string|max:255',
+            'uom' => 'required|string|max:50',
+            'quantity' => 'required|integer|min:1',
+            'unit_cost' => 'required|numeric|min:0',
+        ]);
+
+        $activity = Activity::findOrFail($activityId);
+
+        // Check if `id` exists for update
+        if ($request->has('id') && $request->id) {
+            // Find the existing record
+            $budgetaryRequirement = $activity->budgetaryRequirements()->find($request->id);
+
+            if ($budgetaryRequirement) {
+                // Update the existing record
+                $budgetaryRequirement->update($validated);
+
+                return response()->json([
+                    'budgetaryRequirement' => $budgetaryRequirement,
+                    'message' => 'Budgetary requirement updated successfully.',
+                ]);
+            } else {
+                // Handle the case where the `id` does not exist in the database
+                return response()->json([
+                    'message' => 'Budgetary requirement not found for updating.',
+                ], 404);
+            }
+        }
+
+        // Create a new record if no valid `id` is provided
+        $budgetaryRequirement = $activity->budgetaryRequirements()->create($validated);
+
+        return response()->json([
+            'budgetaryRequirement' => $budgetaryRequirement,
+            'message' => 'Budgetary requirement created successfully.',
+        ]);
+    }
+
+
+    public function getBudgetaryRequirements($activityId)
+    {
+        $activity = Activity::findOrFail($activityId);
+
+        $budgetaryRequirements = $activity->budgetaryRequirements()
+            ->get(['id', 'general_description', 'uom', 'quantity', 'unit_cost', 'procurement_mode_id']);
+
+        return response()->json(['budgetaryRequirements' => $budgetaryRequirements]);
+    }
+
+
 
     /**
      * Remove the specified resource from storage.

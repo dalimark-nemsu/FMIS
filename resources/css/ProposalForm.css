@@ -433,7 +433,6 @@ border-radius: 0 0 8px 8px;
 } */
 
 .action-button {
-    padding: 6px 12px;
     background-color: #1a73e8;
     color: #ffffff;
     border: none;
@@ -508,7 +507,7 @@ border-radius: 0 0 8px 8px;
 
   .budget-table th.description-column,
   .budget-table td.description-column {
-    width: 25%; /* Description column: 30% */
+    width: 30%; /* Description column: 30% */
   }
 
   .budget-table th.uom-column,
@@ -533,12 +532,17 @@ border-radius: 0 0 8px 8px;
 
   .budget-table th.action-column,
   .budget-table td.action-column {
-    text-align: center; /* Center content horizontally */
-    vertical-align: middle; /* Center content vertically */
-    width: 15%; /* Action column: 20% */
+    width: 8%; /* Action column: 20% */
   }
 
+  .budget-table th.checkbox-column,
+  .budget-table td.checkbox-column {
+    width: 4%; /* Action column: 20% */
+  }
 
+  .non-editable-cell {
+    font-size: 12px;
+  }
 
 
 
