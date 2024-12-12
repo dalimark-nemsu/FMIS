@@ -49,7 +49,7 @@ function deleteActivity(activityId) {
 
 
 <template>
-  <AuthenticatedLayout page-title="Proposals and Regular Expenses">
+  <AuthenticatedLayout page-title="Proposal">
     <div class="proposal-form-container">
       <div class="grid-layout">
         <!-- First Column: Proposal Details -->

@@ -28,4 +28,11 @@ class Activity extends Model
     {
         return $this->morphMany(BudgetaryRequirement::class, 'itemable');
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($activity) {
+            $activity->budgetaryRequirements()->delete();
+        });
+    }
 }
