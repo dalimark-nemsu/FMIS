@@ -13,13 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('object_expenditures', function (Blueprint $table) {
+        Schema::create('identified_expenses', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('allotment_class_id'); // Links to allotment_classes
-            $table->string('uacs_code');
-            $table->string('short_description');
-            $table->boolean('is_applicable_to_regular_operating_exp')->default(false);
-            $table->boolean('is_active')->default(true);
+            $table->string('name')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('object_expenditures');
+        Schema::dropIfExists('identified_expenses');
     }
 };

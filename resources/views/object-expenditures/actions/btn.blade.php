@@ -39,7 +39,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="uacs_code" class="form-label">UACS Code:</label>
-                        <input type="text" class="form-control" id="uacs_code" name="uacs_code" placeholder="Enter UACS code" value="{{ $objectExpenditure->uacs_code }}" required>
+                        <input type="text" class="form-control" id="uacs_code" name="uacs_code" value="{{ old('uacs_code', $objectExpenditure->uacs_code) }}" required>
                     </div>
 
                     <div class="mb-3">
@@ -47,7 +47,7 @@
                         <select class="form-select" name="allotment_class_id" id="allotment_class_id" required>
                             <option value=""> -- Select Allotment Class -- </option>
                             @foreach($allotmentClasses as $allotmentClass)
-                                <option value="{{ $allotmentClass->id }}" @if ($objectExpenditure->allotment_class_id == $allotmentClass->id) selected @endif>
+                                <option value="{{ $allotmentClass->id }}" {{ old('allotment_class_id', $objectExpenditure->allotment_class_id) == $allotmentClass->id ? 'selected' : '' }}>
                                     {{ $allotmentClass->abbreviation }}
                                 </option>
                             @endforeach
@@ -56,11 +56,18 @@
 
                     <div class="mb-3">
                         <label for="short_description" class="form-label">Short Description:</label>
-                        <input type="text" class="form-control" id="short_description" name="short_description" placeholder="Enter short description" value="{{ $objectExpenditure->short_description }}" required>
+                        <input type="text" class="form-control" id="short_description" name="short_description" value="{{ old('short_description', $objectExpenditure->short_description) }}" required>
                     </div>
 
                     <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active" @if($objectExpenditure->is_active) checked @endif>
+                        <input type="checkbox" class="form-check-input" id="is_applicable_to_regular_operating_exp" name="is_applicable_to_regular_operating_exp" value="1" 
+                        {{ old('is_applicable_to_regular_operating_exp', $objectExpenditure->is_applicable_to_regular_operating_exp) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="is_applicable_to_regular_operating_exp">Applicable to Regular Operating Expenses</label>
+                    </div>
+
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1" {{ old('is_active', $objectExpenditure->is_active) ? 'checked' : '' }}>
                         <label class="form-check-label" for="is_active">Active</label>
                     </div>
                 </div>
@@ -73,6 +80,7 @@
         </div>
     </div>
 </div>
+
 
 
 <!-- Delete Object Expenditure Modal -->
