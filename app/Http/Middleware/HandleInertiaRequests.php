@@ -2,11 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Traits\DataRetrievalTrait;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
+    use DataRetrievalTrait;
     /**
      * The root template that's loaded on the first page visit.
      *
@@ -36,10 +38,15 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = $request->user();
+        $budgetYears = $this->getAllYears();
+        $activeYear = $this->getActiveYear();
+        
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $user ? $user->only('id', 'name', 'email', 'unit_id') : null,
                 'roles' => $user ? $user->getRoles() : [],
+                'budgetYears' => $budgetYears ? $budgetYears : [],
+                'activeYear' => $activeYear,
             ],
         ]);
     }

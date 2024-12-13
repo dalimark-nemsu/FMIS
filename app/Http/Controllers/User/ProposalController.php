@@ -5,8 +5,11 @@ namespace App\Http\Controllers\User;
 use App\Enums\UnitOfMeasurement;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\BudgetYear;
 use App\Models\Proposal;
 use App\Models\UnitBudgetCeiling;
+use App\Traits\DataRetrievalTrait;
+
 use function PHPSTORM_META\type;
 use Illuminate\Http\Request;
 
@@ -49,10 +52,11 @@ class ProposalController extends Controller
     public function store(Request $request)
     {
         $proposal = Proposal::create([
+            'operating_unit'                     =>      Auth::user()->unit_id,
             'proposal_type'                      =>      $request->type,
             'proposal_title'                     =>      $request->title,
             'proposal_proponent_id'              =>      $request->proponent_id,
-            'unit_budget_ceiling_id'             =>      $request->unit_budget_ceiling_id,
+            'budget_year_id'                    =>      $request->budget_year_id,
             'created_by'                         =>      Auth::id(),
         ]);
 

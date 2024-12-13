@@ -75,7 +75,7 @@
         </ul>
     </aside>
 
-    <OffCanvas id="offcanvasRight" title="Create Proposal" position="offcanvas-end" :backdrop="true">
+    <OffCanvas id="offcanvasRight" title="Create Proposal" position="offcanvas-end" :backdrop="false">
         <ProposalCreate :unit-budget-ceilings="unitBudgetData"/>
     </OffCanvas>
 </template>
