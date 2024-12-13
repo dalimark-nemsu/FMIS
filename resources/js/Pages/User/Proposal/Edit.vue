@@ -1,57 +1,55 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { reactive, ref } from "vue";
+import { usePage } from "@inertiajs/vue3";
 import AuthenticatedLayout from "../../../Layouts/AuthenticatedLayout.vue";
 import ProposalHeader from "../../../Components/ProposalForm/ProposalHeader.vue";
 import ProposalDetails from "../../../Components/ProposalForm/ProposalDetails.vue";
 import ActivityDetails from "../../../Components/ProposalForm/ActivityDetails.vue";
 import ActivityCard from "../../../Components/ProposalForm/ActivityCard.vue";
-import ActivityDefaultCard from "../../../Components/ProposalForm/ActivityDefaultCard.vue";
+import axios from "axios";
 import "@/css/ProposalForm.css";
 
-// Proposal data
-const proposal = reactive({
-  proposal_title: "Sample Proposal Title",
-  proposal_type: "Project",
-  unit_budget_ceiling_id: "PAP12345",
-  mfo: "Major Output Example",
-  available_funds: 80000,
-  total_funds: 100000,
-});
+const { proposal: serverProposal, activities: serverActivities = [] } = usePage().props;
 
-// Activities list
-const activities = ref([]);
+const proposal = reactive(serverProposal);
+const activities = ref(serverActivities);
 
-// Methods for handling activities
+// Create a new activity
 function createActivity() {
-  activities.value.unshift({
-    id: Date.now(), // Unique ID for the activity
-    title: "",
-    startDate: "",
-    endDate: "",
-    venue: "",
-    isDefault: true, // Tracks whether the card is a default card
-  });
+  axios
+    .post(`/proposals/${proposal.id}/activities`, {
+      title: null,
+      dateRange: null,
+      venue: null,
+    })
+    .then((response) => {
+      const newActivity = response.data?.activity;
+      if (newActivity) {
+        activities.value.push(newActivity);
+      }
+    })
+    .catch((error) => {
+      console.error("Error creating activity:", error);
+    });
 }
 
-function editActivity(activityId, updatedData) {
-  const activity = activities.value.find((a) => a.id === activityId);
-  if (activity) {
-    Object.assign(activity, updatedData); // Update the activity with new data
-    activity.isDefault = false; // Transform into a full Activity Card
-  }
-}
-
+// Delete activity data
 function deleteActivity(activityId) {
-  activities.value = activities.value.filter((a) => a.id !== activityId);
-}
-
-function submitProposal() {
-  console.log("Submitting Proposal", proposal, activities.value);
+  axios
+    .delete(`/proposals/${proposal.id}/activities/${activityId}`)
+    .then(() => {
+      // Remove the activity from the list
+      activities.value = activities.value.filter((activity) => activity.id !== activityId);
+    })
+    .catch((error) => {
+      console.error("Error deleting activity:", error);
+    });
 }
 </script>
 
+
 <template>
-  <AuthenticatedLayout page-title="Proposals and Regular Expenses">
+  <AuthenticatedLayout page-title="Proposal">
     <div class="proposal-form-container">
       <div class="grid-layout">
         <!-- First Column: Proposal Details -->
@@ -63,30 +61,27 @@ function submitProposal() {
         <!-- Second Column: Activity Details -->
         <div class="activity-details-card">
           <ActivityDetails @create-activity="createActivity" />
-          <div v-for="activity in activities" :key="activity.id">
-            <template v-if="activity.isDefault">
-              <ActivityDefaultCard
-                :activity="activity"
-                @save-activity="(updatedData) => editActivity(activity.id, updatedData)"
-                @close-default="deleteActivity(activity.id)"
-              />
-            </template>
-            <template v-else>
+
+          <!-- Display Activities -->
+          <div v-if="activities.length > 0">
+            <div v-for="(activity, index) in activities" :key="activity.id || index" class="activity-card-wrapper">
               <ActivityCard
                 :activity="activity"
-                @edit-activity="(updatedData) => editActivity(activity.id, updatedData)"
-                @delete-activity="deleteActivity(activity.id)"
+                :proposal-id="proposal.id"
+                @delete-activity="deleteActivity"
               />
-            </template>
+            </div>
           </div>
+
           <!-- New Activity Button -->
           <button @click="createActivity" class="create-button">
             <i class="fas fa-plus"></i> New Activity
           </button>
         </div>
+
         <!-- Submit Button -->
         <button @click="submitProposal" class="submit-button">
-            Submit Proposal
+          Submit Proposal
         </button>
       </div>
     </div>

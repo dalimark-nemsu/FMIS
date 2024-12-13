@@ -20,5 +20,5 @@
 
 
 
-@include('paps.modals.edit-paps', ['fundSources' => $fundSources, 'mfos' => $mfos])
+{{-- @include('paps.modals.edit-paps', ['fundSources' => $fundSources, 'mfos' => $mfos]) --}}
 @include('paps.modals.delete-paps')

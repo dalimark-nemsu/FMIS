@@ -30,10 +30,10 @@ class DatabaseSeeder extends Seeder
             SchoolFeeClassificationSeeder::class,
             PapTypeSeeder::class,
             MajorFinalOutputTableSeeder::class,
-            ProgramActivityProjectTableSeeder::class,
             AllotmentClassSeeder::class,
             ObjectExpenditureSeeder::class,
-            ProductCategoriesTableSeeder::class
+            ProductCategoriesTableSeeder::class,
+            ProgramActivityProjectTableSeeder::class
         ]);
     }
 }

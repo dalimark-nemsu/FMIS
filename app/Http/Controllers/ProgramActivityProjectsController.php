@@ -21,14 +21,40 @@ class ProgramActivityProjectsController extends Controller
      */
     public function index(Request $request)
     {
-        $paps = ProgramActivityProject::with('campusBugetCeilings', 'majorFinalOutput', 'fundSource')->orderBy('created_at', 'desc')->get();
+        $paps = ProgramActivityProject::with([
+            'programActivityProjects' => function ($query) {
+                $query->with('programActivityProjects'); // Recursively load children
+            },
+            'campusBugetCeilings',
+            'majorFinalOutput',
+            'fundSource'
+        ])
+        ->whereNull('parent_id') // Start with top-level parents
+        ->orderBy('created_at', 'desc');
+
+        $gaa = $paps->whereHas('fundSource', function ($query) {
+            $query->where('abbreviation', 'GAA'); // Filter by Fund Source name "GAA"
+        })->get()->groupBy([
+            fn($pap) => $pap->budgetType->name ?? 'budgetType', // Group by Fund Source name
+            fn($pap) => $pap->subFund->name ?? 'No Sub Fund',       // Group by Sub Fund name
+            fn($pap) => $pap->papType->name ?? 'No PAP Type',       // Group by PAP Type name
+        ]);
+
+        $stf = $paps->whereHas('fundSource', function ($query) {
+            $query->where('abbreviation', 'STF'); // Filter by Fund Source name "GAA"
+        })->get()->groupBy([
+            fn($pap) => $pap->budgetType->name ?? 'budgetType', // Group by Fund Source name
+            fn($pap) => $pap->subFund->name ?? 'No Sub Fund',       // Group by Sub Fund name
+            fn($pap) => $pap->papType->name ?? 'No PAP Type',       // Group by PAP Type name
+        ]);
+
         $fundSources = $this->getAllFundSources();
         $mfos = $this->getAllMFOs();
 
         if ($request->ajax()) {
-            return $this->renderDataTables($paps, $fundSources, $mfos);
+            // return $this->renderDataTables($paps, $fundSources, $mfos);
         }
-        return view('paps.index', compact('paps','fundSources','mfos'));
+        return view('paps.index', compact('paps','fundSources','mfos', 'gaa', 'stf'));
     }
 
     public function renderDataTables($paps, $fundSources, $mfos)
@@ -45,14 +71,28 @@ class ProgramActivityProjectsController extends Controller
                 return $paps->fundSource?->abbreviation;
             })
             ->addColumn('mfos_abbrev', function ($paps) {
-                return $paps->majorFinalOutput?->abbreviation;
+                // return $paps->majorFinalOutput?->abbreviation;
             })
             ->editColumn('name', function($paps) {
-                return $paps->name;
+                $getAllChildren = function ($program, $level = 0) use (&$getAllChildren) {
+                    // Format current item's name with indentation
+                    $output = str_repeat('&nbsp;&nbsp;', $level * 2) . $program->id . $program->name . '<br>';
+                    
+                    // Iterate over children and recursively call the function
+                    foreach ($program->programActivityProjects as $child) {
+                        $output .= $getAllChildren($child, $level + 1);
+                    }
+            
+                    return $output;
+                };
+            
+                // Start with the parent
+                return $getAllChildren($paps);
             })
             ->addColumn('action', function ($paps) use ($fundSources, $mfos) {
                 return view('paps.actions.btn', compact('paps', 'fundSources', 'mfos'));
             })
+            ->rawColumns(['name'])
             ->toJson();
     }
 

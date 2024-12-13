@@ -1,5 +1,6 @@
 <script setup>
     import { ref, computed } from 'vue';
+    import { formatAmount } from '../../../Utils/numberUtils';
     import BaseInput from '../../../Components/BaseInput.vue';
     import BaseSelect from '../../../Components/BaseSelect.vue';
     import BaseButton from '../../../Components/BaseButton.vue';
@@ -25,7 +26,7 @@
         proponent_id: '',
         unit_budget_ceiling_id: '',
     });
-    
+
     function submit(){
         form.post(route('proposals.store'))
     }
@@ -39,7 +40,7 @@
     function selectRow(id) {
         form.unit_budget_ceiling_id = id;
         selectedRow.value = id;
-    }   
+    }
 
     async function searchProponents() {
         if (!searchQuery.value) {
@@ -53,7 +54,7 @@
                 params: { query: searchQuery.value }
             });
             searchResults.value = response.data;
-            
+
         } catch (error) {
             console.error('Error fetching proponents:', error);
         } finally {
@@ -79,13 +80,13 @@
                 <BaseInput id="floatingInput" type="text" v-model="form.title" label="Proposal Title" classes="form-control fw-bold"/>
             </div>
             <div class="form-floating mb-3">
-                <BaseInput 
-                    id="floatingInput" 
-                    type="search" 
-                    v-model="searchQuery" 
-                    label="Proponent" 
+                <BaseInput
+                    id="floatingInput"
+                    type="search"
+                    v-model="searchQuery"
+                    label="Proponent"
                     classes="form-control fw-bold"
-                    @input="searchProponents" 
+                    @input="searchProponents"
                 />
                 <ul v-if="searching" class="dropdown-menu show w-100">
                     <li class="dropdown-item">
@@ -93,7 +94,7 @@
                         Searching...
                     </li>
                 </ul>
-        
+
                 <ul v-if="searchResults.length" class="dropdown-menu show w-100">
                     <li v-for="proponent in searchResults" :key="proponent.id" @click="selectProponent(proponent)" class="dropdown-item">
                         {{ proponent.name }}
@@ -145,7 +146,7 @@
                                 <div class="subtitle">MFO: {{ unitBudgetCeiling.campus_budget_ceiling.program_activity_project.major_final_output.abbreviation }} | Fund Source: {{ unitBudgetCeiling.campus_budget_ceiling.program_activity_project.fund_source.abbreviation }}</div>
                             </td>
                             <td class="text-end">
-                                {{ unitBudgetCeiling.total_amount }}
+                                ₱{{ formatAmount(unitBudgetCeiling.total_amount) }}
                             </td>
                         </tr>
                     </tbody>
@@ -208,5 +209,8 @@
     background-color: #f8f9fa; /* Adjust as needed */
     padding: 10px;
     border-top: 1px solid #dee2e6; /* Optional: top border */
+}
+.dropdown-item {
+    cursor: pointer;
 }
 </style>
