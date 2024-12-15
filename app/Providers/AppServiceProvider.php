@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('admin.unit-budget-ceiling.index', function ($view) {
+        View::composer(['admin.unit-budget-ceiling.index', 'admin.unit-budget-ceiling.show'], function ($view) {
             $fundSources = FundSource::all();
             $majorFinalOutputs = MajorFinalOutput::all();
             $budgetYears = BudgetYear::all();  // Assuming you fetch all budget years

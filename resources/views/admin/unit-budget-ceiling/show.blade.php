@@ -6,7 +6,7 @@
   {{ $campusBudgetCeiling->programActivityProject?->name }}
 </a>
 <div class="fs-6 mt-1">
-    MFO: {{ $campusBudgetCeiling->programActivityProject?->majorFinalOutput?->abbreviation }} | Fund Source: {{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation }} | Campus: {{ $campusBudgetCeiling->campus?->name }}
+    PAP Type: {{ $campusBudgetCeiling->programActivityProject?->papType?->name }} | Fund Source: {{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation }} | Campus: {{ $campusBudgetCeiling->campus?->name }}
 </div>
 @endsection
 
@@ -278,7 +278,7 @@
                                     <td class="text-end @if($unitBudgetCeiling->co == 0) text-danger @endif" style="background-color: #cfe2ff;">{{ '₱' . number_format($unitBudgetCeiling->co, 2) }}</td>
                                    @endif
                                   <td class="text-end fw-bold" style="background-color: #e0f8e9;">{{ '₱' . number_format($unitBudgetCeiling->total_amount, 2) }}</td>
-                                  <td class="text-center">{{ $unitBudgetCeiling->updated_at->format('F d, Y') }}</td>
+                                  <td class="text-center">{{ $unitBudgetCeiling->updated_at?->format('F d, Y') }}</td>
                                   <td class="text-center">
                                     @if(!$unitBudgetCeiling->is_posted)
                                       @permission('update-unit-budget-ceiling')
@@ -323,11 +323,11 @@
                                                     <div class="col-sm-8">
                                                       <select name="unit" id="editUnitInput{{ $unitBudgetCeiling->id }}" class="form-control unit-select border-dark text-dark" data-placeholder="Choose Unit">
                                                         <option value=""></option>
-                                                        @foreach ($units as $unit)
+                                                        {{-- @foreach ($units as $unit)
                                                           <option value="{{ $unit->id }}" @if ($unitBudgetCeiling->operating_unit === $unit->id)
                                                             selected
                                                           @endif>{{ $unit->name }}</option>
-                                                        @endforeach
+                                                        @endforeach --}}
                                                       </select>
                                                     </div>
                                                   </div>

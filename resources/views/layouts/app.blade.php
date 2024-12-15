@@ -7,10 +7,12 @@
     <title>@yield('page-title') | {{ config('app.name') }}</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicons -->
     <link href="{{ asset('assets/layouts/welcome/img/favicon.png') }}" rel="icon">
     <link href="{{ asset('assets/layouts/welcome/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css" integrity="sha512-UiKdzM5DL+I+2YFxK+7TDedVyVm7HMp/bN85NeWMJNYortoll+Nd6PU9ZDrZiaOsdarOyk9egQm6LOJZi36L2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- <link href="assets/img/favicon.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
@@ -43,6 +45,7 @@
      {{-- <link href="{{ asset('assets/datatables5/css/bootstrap.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('assets/datatables5/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.dataTables.min.css">
 
     @stack('page-style')
 
@@ -98,10 +101,13 @@
     <!-- jQuery (required for Summernote) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     {{-- <script src="{{ asset('assets/datatables5/js/jquery-3.5.1.js')}}"></script> --}}
+    {{-- <script src="https://cdn.datatables.net/2.1.0/js/jquery.dataTables.min.js"></script> --}}
     <script src="{{ asset('assets/datatables5/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{ asset('assets/datatables5/js/dataTables.bootstrap5.min.js')}}"></script>
     <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.bootstrap5.js"></script>
+    {{-- <script src="https://cdn.datatables.net/fixedcolumns/5.0.3/js/dataTables.fixedColumns.js"></script> --}}
+    <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
     // {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 
 // {{-- <!-- jQuery -->
@@ -124,6 +130,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js" integrity="sha512-79j1YQOJuI8mLseq9icSQKT6bLlLtWknKwj1OpJZMdPt2pFBry3vQTt+NZuJw7NSd1pHhZlu0s12Ngqfa371EA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
 

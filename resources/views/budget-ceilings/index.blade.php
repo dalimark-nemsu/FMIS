@@ -37,11 +37,11 @@
         }
 
         /* Hover effect on table rows */
-        .hoverable-row:hover {
+        /* .hoverable-row:hover {
             background-color: #f1f5f9;
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
-        }
+        } */
 
         /* Button styles */
         .btn {
@@ -58,15 +58,19 @@
         }
 
         /* Apply hover effect on entire rows */
-        table tbody tr:hover {
-            font-size: 1.1em;   /* Slightly increase font size for the whole row */
-            font-weight: bold;  /* Make all text in the row bold */
-            transition: all 0.2s ease-in-out; /* Smooth transition effect */
-        }
+        /* table tbody tr:hover {
+            font-size: 1.1em;  
+            font-weight: bold;
+            transition: all 0.2s ease-in-out; 
+        } */
         /* Resize buttons when the row is hovered */
         table tbody tr:hover .btn {
             transform: scale(1.1);  /* Increase the button size by 10% */
             transition: transform 0.2s ease-in-out; /* Smooth transition effect for the button */
+        }
+
+        .amount-input{
+            background-color: transparent;
         }
     </style>
 @endpush
@@ -159,7 +163,7 @@
                                     </div>
 
                                     <!-- Units Card -->
-                                    <a href="{{ route('admin.unit-budget-ceiling.index', ['campus_id' => $campus->id, 'active_year_id' => $activeYear->id]) }}"
+                                    <a href="{{ route('admin.unit-budget-ceiling.index', ['campus_id' => $campus->id, 'budget_year_id' => $activeYear->id]) }}"
                                         class="text-decoration-none me-3">
                                         <div class="card border-0 rounded-4 d-flex align-items-center justify-content-center"
                                             style="min-width: 140px; height: 80px; background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
@@ -188,76 +192,98 @@
                         </div>
 
                         <!-- Budget Ceilings Table for Each Fund Source -->
-                        @if($groupedBudgetCeilings->isNotEmpty())
-                            @foreach ($groupedBudgetCeilings as $fundSource => $budgetCeilings)
-                                <div class="card shadow-lg mt-4 border-0 rounded-4">
-                                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 px-4">
-                                        <h4 class="mb-0" style="font-weight: 600; color: #36454F;">{{ $fundSource }}</h4>
-                                        <div class="text-end">
-                                            <strong class="text-muted">Subtotal: </strong>
-                                            <span class="fs-4 fw-bold text-dark">&#8369 {{ number_format($budgetCeilings->sum('total_amount'), 2) }}</span>
-                                        </div>
-                                    </div>
+                        <div class="card shadow-lg mt-4 border-0 rounded-4">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 px-4">
+                                <nav class="nav nav-pills">
+                                    @foreach ($fundSources as $fundSource)
+                                        <a class="nav-link {{ request('fundSource', 'GAA') === $fundSource->abbreviation ? 'active' : '' }}" aria-current="page" href="{{ route('show-campus', [$campus->id, $budgetYearId, 'fundSource' => $fundSource->abbreviation]) }}">{{ $fundSource->abbreviation }}</a> 
+                                    @endforeach
+                                </nav>
+                                {{-- <h4 class="mb-0" style="font-weight: 600; color: #36454F;">{{ $fundSource }}</h4> --}}
+                                {{-- <div class="text-end">
+                                    <strong class="text-muted">Subtotal: </strong>
+                                    <span class="fs-4 fw-bold text-dark">&#8369 {{ number_format($budgetCeilings->sum('total_amount'), 2) }}</span>
+                                </div> --}}
+                            </div>
 
-                                    <div class="table-responsive p-4">
-                                        <table id="example" class="table text-nowrap table-centered mt-0" style="width: 100%;">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th>PAPs</th>
-                                                    <th>Fund Source</th>
-                                                    <th>MFOs</th>
-                                                    <th style="background-color: #cfe2ff; color: #1565c0;">PS</th>
-                                                    <th style="background-color: #cfe2ff; color: #1565c0;">MOOE</th>
-                                                    <th style="background-color: #cfe2ff; color: #1565c0;">CO</th>
-                                                    <th style="background-color: #e0f8e9; color: #018d3b; font-weight: bold;">Total</th>
-                                                    @if($activeYear && $activeYear->id == $budgetYearId)
-                                                        <th>Action</th>
-                                                    @endif
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($budgetCeilings as $budgetCeiling)
-                                                    <tr class="hoverable-row">
-                                                        <td>{{ $budgetCeiling->programActivityProject?->name }}</td>
-                                                        <td>{{ $budgetCeiling->programActivityProject->fundSource?->abbreviation }}</td>
-                                                        <td>{{ $budgetCeiling->programActivityProject->majorFinalOutput?->abbreviation }}</td>
-                                                        <td style="background-color: #cfe2ff; color: #1565c0;">
-                                                            &#8369 {{ number_format($budgetCeiling->ps, 2) }}
-                                                        </td>
-                                                        <td style="background-color: #cfe2ff; color: #1565c0;">
-                                                            &#8369 {{ number_format($budgetCeiling->mooe, 2) }}
-                                                        </td>
-                                                        <td style="background-color: #cfe2ff; color: #1565c0;">
-                                                            &#8369 {{ number_format($budgetCeiling->co, 2) }}
-                                                        </td>
-                                                        <td style="background-color: #e0f8e9; color: #018d3b; font-weight: bold;">
-                                                            &#8369 {{ number_format($budgetCeiling->total_amount, 2) }}
-                                                        </td>
-                                                        @if($activeYear && $activeYear->id == $budgetYearId)
-                                                            <td>
-                                                                <a href="#editBudgetCeilingModal-{{$budgetCeiling->id}}"
-                                                                   class="btn btn-outline-primary btn-sm rounded-circle shadow-sm me-2"
-                                                                   data-bs-toggle="modal" title="Edit">
-                                                                    <i class="bi bi-pencil"></i>
-                                                                </a>
-                                                                <a href="javascript:void(0);"
-                                                                   class="btn btn-outline-danger btn-sm rounded-circle shadow-sm"
-                                                                   data-url="{{ route('budget-ceilings.delete', $budgetCeiling->id) }}"
-                                                                   onclick="confirmDelete(this, '{{ $budgetCeiling->programActivityProject?->name }}')"
-                                                                   title="Delete">
-                                                                    <i class="bi bi-trash"></i>
-                                                                </a>
-                                                            </td>
+                            <div class="card-body">
+                                <table id="campusBudgetCeiling" class="table text-nowrap table-centered mt-0" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th class="bg-light">PAPs</th>
+                                            <th class="bg-light">Fund Source</th>
+                                            {{-- <th>MFOs</th> --}}
+                                            @if (request('fundSource', 'GAA') === 'GAA')
+                                                <th class="text-end" style="background-color: #cfe2ff; color: #1565c0;">PS</th>
+                                                <th class="text-end" style="background-color: #cfe2ff; color: #1565c0;">MOOE</th>
+                                                <th class="text-end" style="background-color: #cfe2ff; color: #1565c0;">CO</th>
+                                            @endif
+                                            <th class="text-end" style="background-color: #e0f8e9; color: #018d3b; font-weight: bold;">
+                                                @if (request('fundSource', 'GAA') === 'GAA')
+                                                    Total
+                                                @else
+                                                    Amount
+                                                @endif
+                                            </th>
+                                            {{-- @if($activeYear && $activeYear->id == $budgetYearId)
+                                                <th>Action</th>
+                                            @endif --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($campusBudgetCeilings as $budgetCeiling)
+                                            <tr class="hoverable-row" data-id="{{ $budgetCeiling->id }}">
+                                                <td>
+                                                    <div class="fw-bold">{{ $budgetCeiling->programActivityProject?->name }}</div>
+                                                    <small>
+                                                        {{-- {{ $budgetCeiling->programActivityProject?->fundSource?->abbreviation }}/ --}}
+                                                        {{ $budgetCeiling->programActivityProject?->budgetType?->name }}/
+                                                        @if (request('fundSource', 'GAA') === 'GAA')
+                                                            {{ $budgetCeiling->programActivityProject?->subFund?->name }}/
+                                                        @elseif (request('fundSource', 'GAA') === 'STF')
+                                                            {{ $budgetCeiling->programActivityProject?->schoolFeeClassification?->name }}/
                                                         @endif
-                                                    </tr>
-                                                    @include('budget-ceilings.modals.edit-budget-ceiling', ['budgetCeiling' => $budgetCeiling])
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                                        {{ $budgetCeiling->programActivityProject?->papType?->name }}
+                                                    </small>
+                                                </td>
+                                                <td class="text-center">{{ $budgetCeiling->programActivityProject?->fundSource?->abbreviation }}</td>
+                                                @if (request('fundSource', 'GAA') === 'GAA')
+                                                    <td style="background-color: #cfe2ff; color: #1565c0;">
+                                                        &#8369
+                                                        {{-- <input type="text" class="amount-input text-end border-0" value="{{ number_format($budgetCeiling->ps, 2) }}" oninput="formatToMoney(this)" data-type="ps"> --}}
+                                                        <input type="text" class="amount-input text-end border-0" value="{{ number_format($budgetCeiling->ps, 2) }}" data-type="ps">
+                                                    </td>
+                                                    <td style="background-color: #cfe2ff; color: #1565c0;">
+                                                        &#8369
+                                                        {{-- <input type="text" class="amount-input text-end border-0" value="{{ number_format($budgetCeiling->mooe, 2) }}" oninput="formatToMoney(this)" data-type="mooe"> --}}
+                                                        <input type="text" class="amount-input text-end border-0" value="{{ number_format($budgetCeiling->mooe, 2) }}" data-type="mooe">
+                                                    </td>
+                                                    <td style="background-color: #cfe2ff; color: #1565c0;">
+                                                        &#8369
+                                                        {{-- <input type="text" class="amount-input text-end border-0" value="{{ number_format($budgetCeiling->co, 2) }}" oninput="formatToMoney(this)" data-type="co"> --}}
+                                                        <input type="text" class="amount-input text-end border-0" value="{{ number_format($budgetCeiling->co, 2) }}" data-type="co">
+                                                    </td>
+                                                @endif
+                                                <td class="fw-bold text-end" data-total-cell style="background-color: #e0f8e9; font-weight: bold;">
+                                                    @if (request('fundSource', 'GAA') === 'GAA')
+                                                        &#8369 {{ number_format($budgetCeiling->total_amount, 2) }}
+                                                    @else
+                                                        &#8369
+                                                        <input type="text" class="amount-input text-end border-0" value="{{ number_format($budgetCeiling->total_amount, 2) }}" data-type="amount">
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- @if($groupedBudgetCeilings->isNotEmpty())
+                            @foreach ($groupedBudgetCeilings as $fundSource => $budgetCeilings)
+
                             @endforeach
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
             </div>
@@ -385,6 +411,22 @@
                     toggleBudgetFields(getSelectedAbbreviation($(this)), editModal);
                 }).trigger('change');
             });
+
+            let table = $('#campusBudgetCeiling').DataTable({
+                columnDefs: [
+                    {
+                        targets: 0, // Index of the column to disable ordering (first column)
+                        orderable: false, // Disable ordering for the first column
+                    },
+                ],
+                order: [], // Disable initial sorting (preserve original order)
+                paging: false, // Disable pagination
+                fixedColumns: {
+                    start: 2
+                },
+                scrollCollapse: true,
+                scrollX: true,
+            })
         });
 
         // =================== Helper Functions ===================
@@ -509,6 +551,207 @@
                 }
             });
         }
+
+
+
+        function formatToMoney(input) {
+            const formatNumber = (value) => {
+                const parts = value.split('.');
+                const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add commas
+                const decimalPart = parts[1] !== undefined ? '.' + parts[1] : ''; // Retain decimals if present
+                return integerPart + decimalPart;
+            };
+
+            const parseRawValue = (value) => {
+                const cleanedValue = value.replace(/[^0-9.]/g, '');
+                const parts = cleanedValue.split('.');
+                if (parts.length > 2) {
+                    return parts[0] + '.' + parts.slice(1).join(''); // Merge extra decimals
+                }
+                return cleanedValue;
+            };
+
+            const initializeRawValues = (row) => {
+                const inputs = row.querySelectorAll('input[data-type]');
+                inputs.forEach((input) => {
+                    if (!input.dataset.rawValue) {
+                        input.dataset.rawValue = parseRawValue(input.value) || '0';
+                    }
+                });
+            };
+
+            const applyFormatting = (input) => {
+                const rawValue = parseRawValue(input.value); // Clean the raw value
+                input.dataset.rawValue = rawValue; // Store raw value
+                input.value = formatNumber(rawValue); // Apply formatting
+            };
+
+            return {
+                applyFormatting,
+                parseRawValue,
+                initializeRawValues,
+            };
+        }
+
+        function attachInputListeners(input) {
+            let fundSource = "{{ request('fundSource', 'GAA') }}";
+            const { applyFormatting, initializeRawValues } = formatToMoney(input);
+
+            // Store the original value on page load for comparison
+            input.dataset.originalValue = input.dataset.rawValue || '0';
+
+            // On input: Real-time formatting
+            input.addEventListener('input', () => {
+                const cursorPosition = input.selectionStart;
+                applyFormatting(input);
+                input.setSelectionRange(cursorPosition, cursorPosition); // Restore cursor position
+
+                // Update the row's total in real-time                
+                if (fundSource === 'GAA') {
+                    const row = input.closest('tr');
+                    if (row) {
+                        updateTotal(row);
+                    }
+                }
+            });
+
+            // On blur: Finalize formatting and send update request if value has changed
+            input.addEventListener('blur', () => {
+                const rawValue = input.dataset.rawValue || '0';
+                const formattedValue = new Intl.NumberFormat('en-PH', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                }).format(parseFloat(rawValue || 0));
+                input.value = formattedValue; // Finalize formatting
+
+                // Check if the value has changed
+                if (rawValue !== input.dataset.originalValue) {
+                    const row = input.closest('tr');
+                    if (row) {
+                        sendUpdateRequest(row, fundSource); // Only send the request if the value has changed
+                        input.dataset.originalValue = rawValue; // Update the original value
+                    }
+                }
+            });
+
+            // On focus: Show raw value for editing
+            input.addEventListener('focus', () => {
+                input.value = input.dataset.rawValue || '';
+            });
+        }
+
+        function updateTotal(row) {
+            const getRawValue = (input) => {
+                return parseFloat(input.dataset.rawValue || formatToMoney().parseRawValue(input.value) || '0') || 0;
+            };
+
+            const psInput = row.querySelector('input[data-type="ps"]');
+            const mooeInput = row.querySelector('input[data-type="mooe"]');
+            const coInput = row.querySelector('input[data-type="co"]');
+
+            const ps = getRawValue(psInput);
+            const mooe = getRawValue(mooeInput);
+            const co = getRawValue(coInput);
+
+            const total = ps + mooe + co;
+
+            const totalCell = row.querySelector('[data-total-cell]');
+            if (totalCell) {
+                totalCell.innerHTML = `&#8369 ${new Intl.NumberFormat('en-PH', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                }).format(total)}`;
+            }
+        }
+
+        function sendUpdateRequest(row, fundSource) {
+            const initializeRawValues = formatToMoney().initializeRawValues;
+            initializeRawValues(row); // Ensure all raw values are initialized before sending
+
+            const budgetCeilingId = row.dataset.id; // Assuming `data-id` is set on the row with the budget ceiling ID
+
+            // Retrieve raw values
+            const psInput = row.querySelector('input[data-type="ps"]');
+            const mooeInput = row.querySelector('input[data-type="mooe"]');
+            const coInput = row.querySelector('input[data-type="co"]');
+            const amountInput = row.querySelector('input[data-type="amount"]');
+
+            const ps = psInput ? psInput.dataset.rawValue || '0' : '0';
+            const mooe = mooeInput ? mooeInput.dataset.rawValue || '0' : '0';
+            const co = coInput ? coInput.dataset.rawValue || '0' : '0';
+            const totalAmount = amountInput ? amountInput.dataset.rawValue || '0' : '0';
+
+            let payload;
+
+            // Prepare payload based on the fund source
+            if (fundSource === 'GAA') {
+                payload = {
+                    _method: "PUT",
+                    ps: parseFloat(ps),
+                    mooe: parseFloat(mooe),
+                    co: parseFloat(co),
+                };
+            } else {
+                payload = {
+                    _method: "PUT",
+                    total_amount: parseFloat(totalAmount),
+                };
+            }
+
+            // Send the fetch request
+            fetch(`/admin/budget-ceilings/${budgetCeilingId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify(payload),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        Toastify({
+                            text: "Saved!",
+                            duration: 2000,
+                            close: true,
+                            gravity: "top", // Position
+                            position: "right", // Alignment
+                            backgroundColor: "green", // Success color
+                        }).showToast();
+                    } else {
+                        Toastify({
+                            text: "Failed to update budget ceiling. Please try again.",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "red", // Error color
+                        }).showToast();
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    Toastify({
+                        text: "An error occurred while updating. Please try again.",
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "red",
+                    }).showToast();
+                });
+        }
+
+        // Initialize raw values and attach listeners to all inputs on page load
+        document.querySelectorAll('input[data-type="ps"], input[data-type="mooe"], input[data-type="co"], input[data-type="amount"]').forEach((input) => {
+            const row = input.closest('tr');
+            if (row) {
+                const initializeRawValues = formatToMoney().initializeRawValues;
+                initializeRawValues(row); // Ensure all raw values are initialized
+            }
+            attachInputListeners(input); // Attach event listeners
+        });
+
     </script>
 
     {{-- <script>

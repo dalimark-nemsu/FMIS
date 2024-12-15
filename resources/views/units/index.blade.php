@@ -248,14 +248,39 @@
                         <label for="pap" class="col-form-label">PAP:</label>
 
                         <!-- Since each modal has a unique ID (such as multiple-select-field-{{ $unit->id }}), you'll need to ensure that the select2 initialization is correctly applied to each individual field. -->
-                        <select class="form-select" id="multiple-select-field-{{$unit->id}}" name="paps[]" data-placeholder="Choose PAP" multiple>
+                        {{-- <select class="form-select" id="multiple-select-field-{{$unit->id}}" name="paps[]" data-placeholder="Choose PAP" multiple>
                             @foreach($paps as $pap)
                                 <option value="{{ $pap->id }}"
                                     @if($unit->paps->contains($pap->id)) selected @endif>
                                     {{ $pap->abbreviation }} - {{ $pap->name }}
                                 </option>
                             @endforeach
+                        </select> --}}
+                        <select class="form-select" id="multiple-select-field-{{ $unit->id }}" name="paps[]" data-placeholder="Choose PAP" multiple>
+                            @foreach ($paps as $fundSource => $budgetTypes)
+                                <optgroup label="{{ $fundSource }}">
+                                    @foreach ($budgetTypes as $budgetType => $subFunds)
+                                        <optgroup label="-- {{ $budgetType }}">
+                                            @foreach ($subFunds as $subFund => $papTypes)
+                                                <optgroup label="---- {{ $subFund }}">
+                                                    @foreach ($papTypes as $papType => $projects)
+                                                        <optgroup label="------ {{ $papType }}">
+                                                            @foreach ($projects as $pap)
+                                                                <option value="{{ $pap->id }}"
+                                                                    @if ($unit->paps->contains($pap->id)) selected @endif>
+                                                                    {{ $pap->abbreviation ?? '' }} - {{ $pap->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </optgroup>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
                         </select>
+                        
                     </div>
 
                 </div>

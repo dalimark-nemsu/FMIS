@@ -3,14 +3,14 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addBudgetCeilingModalLabel">Add New Budget Ceiling ({{ $campus->name }} Campus)</h5>
+                <h5 class="modal-title" id="addBudgetCeilingModalLabel">New Budget Ceiling ({{ $campus->name }} Campus)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ route('budget-ceilings.store',['campus_id' => $campus->id, 'year_id' => $activeYear->id]) }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row g-3">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label for="fundSource" class="form-label text-muted">Fund Source</label>
                             <select class="form-select add-fund-source" name="fundSource" id="fund_source">
                                 <option value="" disabled selected > -- Fund Source -- </option>
@@ -20,7 +20,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <label for="mfo" class="form-label text-muted">MFO</label>
                             <select class="form-select add-mfo" name="mfo" id="mfo">
                                 <option value="" disabled selected> -- Select Major Final Outputs -- </option>
@@ -62,14 +62,14 @@
                                 <span class="input-group-text">&#8369</span>
                                 <input type="text" class="form-control co" id="co" name="co" disabled placeholder="0.00">
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     {{-- <!-- Horizontal line to separate inputs from total -->
                     <hr class="my-4"> --}}
 
                     <!-- Total display -->
-                    <div class="row mt-4">
+                    {{-- <div class="row mt-4">
                         <div class="col-md-12 text-end d-flex justify-content-end align-items-center">
                             <label for="total" class="form-label fs-5 fw-bold me-2 mb-0" style="line-height: 1;">Total</label>
                             <div class="input-group" style="max-width: 245px;">
@@ -77,11 +77,11 @@
                                 <input type="text" id="total" name="total" class="form-control fs-5 fw-bold total" disabled placeholder="0.00">
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>

@@ -62,11 +62,15 @@ class ProgramActivityProject extends Model
 
     public function units()
     {
-        return $this->belongsToMany(Unit::class, 'pap_unit');
+        return $this->belongsToMany(Unit::class, 'pap_unit', 'pap_id', 'unit_id');
     }
 
     public function programActivityProjects() {
         return $this->hasMany(ProgramActivityProject::class, 'parent_id')
             ->orderBy('sequence', 'ASC');
+    }
+
+    public function parentProgramActivityProject() {
+        return $this->belongsTo(ProgramActivityProject::class, 'parent_id');
     }
 }
