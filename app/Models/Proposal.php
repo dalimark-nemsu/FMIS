@@ -32,4 +32,19 @@ class Proposal extends Model
     {
         return $this->hasMany(Activity::class, 'proposal_id');
     }
+
+    public function budgetYear()
+    {
+        return $this->belongsTo(BudgetYear::class);
+    }
+
+    // Accessor to calculate total cost
+    public function getTotalCostAttribute()
+    {
+        return $this->activities->flatMap(function ($activity) {
+            return $activity->budgetaryRequirements;
+        })->sum(function ($budgetaryRequirement) {
+            return $budgetaryRequirement->quantity * $budgetaryRequirement->unit_cost;
+        });
+    }
 }

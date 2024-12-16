@@ -30,9 +30,20 @@ class ProposalController extends Controller
      */
     public function index()
     {
-        // Fetch all proposals where the user belongs to the same unit
-        $proposals = Proposal::where('operating_unit', Auth::user()->unit_id)->get();
-        // return $unitBudgetCeilings = UnitBudgetCeiling::where('operating_unit', Auth::user()->unit_id)->get();
+         // Fetch all proposals with the related activities and budgetary requirements
+        $proposals = Proposal::with(['activities.budgetaryRequirements'])
+        ->where('operating_unit', Auth::user()->unit_id)
+        ->get()
+        ->map(function ($proposal) {
+            return [
+                'id' => $proposal->id,
+                'title' => $proposal->proposal_title,
+                'budget_year' => $proposal->budgetYear->year,
+                'created_at' => $proposal->created_at->format('Y-m-d'),
+                'total_cost' => $proposal->total_cost, // Use the accessor
+            ];
+        });
+
         return Inertia::render('User/Proposal/Index', ['proposals' => $proposals]);
     }
 

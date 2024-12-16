@@ -43,13 +43,22 @@ const handleDelete = (item) => {
         <div class="col-md-4 mb-4" v-for="proposal in props.proposals" :key="proposal.id">
           <div class="card shadow-sm">
             <div class="card-body">
-              <h5 class="card-title">{{ proposal.proposal_title }}</h5>
+              <h5 class="card-title">{{ proposal.title }}</h5>
               <p class="card-text">
-                //fund-source
-                //budget_year
-                //total
-                <strong>Created:</strong> {{ new Date(proposal.created_at).toLocaleDateString() }}
-              </p>
+                <!-- <span class="d-block mb-1 text-muted">
+                    <strong>Fund Source:</strong> {{ proposal.fund_source || 'N/A' }}
+                </span> -->
+                <!-- <span class="d-block mb-1 text-muted">
+                    <strong>Budget Year:</strong> {{ proposal.budget_year || 'N/A' }}
+                </span> -->
+                <span class="d-block mb-1 text-primary fw-bold">
+                    <strong>Total Cost:</strong> ₱{{ proposal.total_cost.toLocaleString() }}
+                </span>
+                <span class="d-block text-secondary">
+                    <strong>Created On:</strong> {{ new Date(proposal.created_at).toLocaleDateString() }}
+                </span>
+            </p>
+
               <div class="d-flex justify-content-end gap-2">
                 <Link :href="route('proposals.edit',proposal.id)" class="btn btn-sm btn-outline-secondary">
                   <i class="fas fa-edit"></i> Edit
