@@ -18,10 +18,10 @@ return new class extends Migration
             $table->bigInteger('campus_id');
             $table->bigInteger('budget_year_id');
             $table->bigInteger('pap_id');
-            $table->decimal('ps', 15, 2); // personnel services amount
-            $table->decimal('mooe', 15, 2); // maintenance and other operating expenses amount
-            $table->decimal('co', 15, 2); // capital outlay amount
-            $table->decimal('total_amount', 15, 2); // total amount
+            $table->decimal('ps', 15, 2)->default(0); // personnel services amount
+            $table->decimal('mooe', 15, 2)->default(0); // maintenance and other operating expenses amount
+            $table->decimal('co', 15, 2)->default(0); // capital outlay amount
+            $table->decimal('total_amount', 15, 2)->default(0); // total amount
             $table->boolean('is_posted')->default(0);
             $table->bigInteger('processed_by');//user_id budget officer III
             $table->timestamps();

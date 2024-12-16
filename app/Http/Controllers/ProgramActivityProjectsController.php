@@ -21,7 +21,7 @@ class ProgramActivityProjectsController extends Controller
      */
     public function index(Request $request)
     {
-        $paps = ProgramActivityProject::with([
+        $gaa = ProgramActivityProject::with([
             'programActivityProjects' => function ($query) {
                 $query->with('programActivityProjects'); // Recursively load children
             },
@@ -30,9 +30,7 @@ class ProgramActivityProjectsController extends Controller
             'fundSource'
         ])
         ->whereNull('parent_id') // Start with top-level parents
-        ->orderBy('created_at', 'desc');
-
-        $gaa = $paps->whereHas('fundSource', function ($query) {
+        ->orderBy('created_at', 'desc')->whereHas('fundSource', function ($query) {
             $query->where('abbreviation', 'GAA'); // Filter by Fund Source name "GAA"
         })->get()->groupBy([
             fn($pap) => $pap->budgetType->name ?? 'budgetType', // Group by Fund Source name
@@ -40,11 +38,20 @@ class ProgramActivityProjectsController extends Controller
             fn($pap) => $pap->papType->name ?? 'No PAP Type',       // Group by PAP Type name
         ]);
 
-        $stf = $paps->whereHas('fundSource', function ($query) {
-            $query->where('abbreviation', 'STF'); // Filter by Fund Source name "GAA"
+        $stf = ProgramActivityProject::with([
+            'programActivityProjects' => function ($query) {
+                $query->with('programActivityProjects'); // Recursively load children
+            },
+            'campusBugetCeilings',
+            'majorFinalOutput',
+            'fundSource'
+        ])
+        // ->whereNull('parent_id') // Start with top-level parents
+        ->orderBy('created_at', 'desc')->whereHas('fundSource', function ($query) {
+            $query->where('abbreviation', 'STF'); // Filter by Fund Source name "STF"
         })->get()->groupBy([
             fn($pap) => $pap->budgetType->name ?? 'budgetType', // Group by Fund Source name
-            fn($pap) => $pap->subFund->name ?? 'No Sub Fund',       // Group by Sub Fund name
+            fn($pap) => $pap->schoolFeeClassification->name ?? 'No School Fee',       // Group by Sub Fund name
             fn($pap) => $pap->papType->name ?? 'No PAP Type',       // Group by PAP Type name
         ]);
 
@@ -54,7 +61,7 @@ class ProgramActivityProjectsController extends Controller
         if ($request->ajax()) {
             // return $this->renderDataTables($paps, $fundSources, $mfos);
         }
-        return view('paps.index', compact('paps','fundSources','mfos', 'gaa', 'stf'));
+        return view('paps.index', compact('fundSources','mfos', 'gaa', 'stf'));
     }
 
     public function renderDataTables($paps, $fundSources, $mfos)

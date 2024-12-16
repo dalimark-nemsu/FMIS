@@ -19,7 +19,7 @@ class ObjectExpenditureController extends Controller
 
         $objectExpenditures = ObjectExpenditure::with('allotmentClass')->orderBy('created_at', 'desc')->get();
         $allotmentClasses = AllotmentClass::get(); 
-    
+        dd($objectExpenditures->toJson());
         if ($request->ajax()) {
             return $this->renderDataTables($objectExpenditures, $allotmentClasses);
         }
@@ -29,6 +29,7 @@ class ObjectExpenditureController extends Controller
 
     public function renderDataTables($objectExpenditures, $allotmentClasses)
     {
+     
         return DataTables::of($objectExpenditures)
             ->addIndexColumn()
             ->editColumn('code', function($objectExpenditure) {
@@ -40,6 +41,9 @@ class ObjectExpenditureController extends Controller
             ->editColumn('name', function($objectExpenditure) {
                 return $objectExpenditure->short_description;
             })
+            ->addColumn('is_applicable_to_regular_operating_exp', function ($objectExpenditure) {
+                return $objectExpenditure->is_applicable_to_regular_operating_exp ? 'Yes' : 'No';
+            })
             ->addColumn('status', function($objectExpenditure) {
                 return $objectExpenditure->is_active ? 'Active' : 'Inactive'; 
             })
@@ -47,7 +51,10 @@ class ObjectExpenditureController extends Controller
                 return view('object-expenditures.actions.btn', compact('objectExpenditure', 'allotmentClasses'));
             })
             
-            ->toJson();
+        ->toJson();
+
+        
+           
     }
    
 
@@ -69,25 +76,26 @@ class ObjectExpenditureController extends Controller
      */
     public function store(Request $request)
     {
-         // Validate incoming request data
-         $validatedData = $request->validate([
+        // Normalize the `is_active` checkbox value
+        $request->merge([
+            'is_applicable_to_regular_operating_exp' => $request->has('is_applicable_to_regular_operating_exp'),
+            'is_active' => $request->has('is_active'),
+        ]);
+    
+        // Validate incoming request data
+        $validatedData = $request->validate([
             'uacs_code' => 'required|string|max:255',
             'allotment_class_id' => 'required|exists:allotment_classes,id',
             'short_description' => 'required|string|max:255',
-            'is_active' => 'boolean',
+            'is_applicable_to_regular_operating_exp' => 'boolean',
+            'is_active' => 'boolean', // Validates as true/false
         ]);
-
-        // Create new Object Expenditure
-        ObjectExpenditure::create([
-            'uacs_code' => $validatedData['uacs_code'],
-            'allotment_class_id' => $validatedData['allotment_class_id'],
-            'short_description' => $validatedData['short_description'],
-            'is_active' => $request->has('is_active') ? true : false, // Check if active
-        ]);
-
-        // Return a response (you can adjust this based on your application's needs)
+    
+        // Create the Object Expenditure
+        ObjectExpenditure::create($validatedData);
+    
+        // Redirect with success message
         return redirect()->route('object-expenditures.index')->with('success', 'Object Expenditure added successfully.');
-
     }
 
     /**
@@ -119,11 +127,31 @@ class ObjectExpenditureController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
+     public function update(Request $request, ObjectExpenditure $objectExpenditure)
+     {
+         // Normalize the `is_active` checkbox value
+         $request->merge([
+             'is_applicable_to_regular_operating_exp' => $request->has('is_applicable_to_regular_operating_exp'),
+             'is_active' => $request->has('is_active'),
+         ]);
+     
+         // Validate the incoming request data
+         $validatedData = $request->validate([
+             'uacs_code' => 'required|string|max:255',
+             'allotment_class_id' => 'required|exists:allotment_classes,id',
+             'short_description' => 'required|string|max:255',
+             'is_applicable_to_regular_operating_exp' => 'boolean',
+             'is_active' => 'boolean',
+         ]);
+     
+         // Update the Object Expenditure
+         $objectExpenditure->update($validatedData);
+     
+         // Redirect back with a success message
+         return redirect()->route('object-expenditures.index')->with('success', 'Object Expenditure updated successfully.');
+     }
+     
     /**
      * Remove the specified resource from storage.
      *

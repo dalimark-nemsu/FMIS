@@ -24,7 +24,7 @@
                     <div class="flex-grow-1">
                     </div>
                         <div class="mt-3 mt-md-0">
-                            <a href="#addProgramActivityProjectsModal"
+                            <a href="#addObjectExpenditureModal"
                                 class="btn btn-outline-primary shadow-sm btn-sm"
                                 data-bs-toggle="modal"
                                 data-bs-toggle="tooltip"
@@ -39,14 +39,16 @@
                       <table id="objectExpenditure-table" class="table text-nowrap table-centered mt-0" style="width: 100%">
                         <thead class="table-light">
                             <tr>
-                            <th class="text-center">No.</th>
-                            <th class="text-center">UACS Code</th>
-                            <th class="text-center">Allotment Class</th>
-                            <th class="text-left">Short Description</th> 
-                            <th class="text-center">Status</th> 
-                            <th class="text-center">Action</th>
-                          </tr>
+                                <th class="text-center">No.</th>
+                                <th class="text-center">UACS Code</th>
+                                <th class="text-center">Allotment Class</th>
+                                <th class="text-left">Short Description</th>
+                                <th class="text-center">Applicable to Regular Operating Expenses</th> <!-- Add this -->
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
                         </thead>
+
                         <tbody>
                         </tbody>
                       </table>
@@ -66,11 +68,11 @@
 
 
 <!-- Add Object Expenditure Modal -->
-<div class="modal fade" id="addProgramActivityProjectsModal" tabindex="-1" aria-labelledby="addProgramActivityProjectsModalLabel" aria-hidden="true">
+<div class="modal fade" id="addObjectExpenditureModal" tabindex="-1" aria-labelledby="addObjectExpenditureModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addProgramActivityProjectsModalLabel">Add New Program, Activity, Projects</h5>
+                <h5 class="modal-title" id="addObjectExpenditureModalLabel">Add New Object of Expenditure</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ route('object-expenditures.store') }}" method="POST">
@@ -78,7 +80,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="uacs_code" class="form-label">UACS Code:</label>
-                        <input type="text" class="form-control" id="uacs_code" name="uacs_code" placeholder="Enter uacs code" required>
+                        <input type="text" class="form-control" id="uacs_code" name="uacs_code" placeholder="Enter UACS code" required>
                     </div>
 
                     <div class="mb-3">
@@ -97,6 +99,12 @@
                     </div>
 
                     <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_applicable_to_regular_operating_exp" name="is_applicable_to_regular_operating_exp">
+                        <label class="form-check-label" for="is_applicable_to_regular_operating_exp">Applicable to Regular Operating Expenses</label>
+                    </div>
+
+
+                    <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="is_active" name="is_active" checked>
                         <label class="form-check-label" for="is_active">Active</label>
                     </div>
@@ -110,6 +118,7 @@
         </div>
     </div>
 </div>
+
 
 
 
@@ -142,6 +151,13 @@
                 { data: 'code', name: 'code' },
                 { data: 'allotment_class_abbrev', name: 'allotment_class_abbrev' },
                 { data: 'name', name: 'name' },  // This will display the description without centering
+               { 
+                    data: 'is_applicable_to_regular_operating_exp', 
+                    name: 'is_applicable_to_regular_operating_exp', 
+                    render: function(data) {
+                        return data === true ? '<span class="badge bg-info">Yes</span>' : '<span class="badge bg-secondary">No</span>';
+                    }
+                },
                 { data: 'status', name: 'status', render: function(data, type, row) {
                     // Use conditional classes based on the status text
                     return `<span class="badge ${data == 'Active' ? 'bg-success' : 'bg-danger'}">${data}</span>`;

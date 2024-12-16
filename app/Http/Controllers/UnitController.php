@@ -33,8 +33,24 @@ class UnitController extends Controller
             $units = Unit::get();
         }
     
-        $paps = ProgramActivityProject::all(); // Fetch all PAPs (no need to filter unless necessary)
-    
+        // $paps = ProgramActivityProject::get()->groupBy([
+        //         fn($pap) => $pap->fundSource->abbreviation ?? 'No Fund Source', // Group by Fund Source abbreviation
+        // ]);
+        $paps = ProgramActivityProject::with([
+            'programActivityProjects' => function ($query) {
+                $query->with('programActivityProjects'); // Recursively load children
+            },
+            'campusBugetCeilings',
+            'majorFinalOutput',
+            'fundSource'
+        ])
+        ->whereNull('parent_id') // Start with top-level parents
+        ->orderBy('created_at', 'desc')->get()->groupBy([
+            fn($pap) => $pap->fundSource->abbreviation ?? 'No Fund Source', // Group by Fund Source abbreviation
+            fn($pap) => $pap->budgetType->name ?? 'budgetType', // Group by Fund Source name
+            fn($pap) => $pap->subFund->name ?? 'No Sub Fund',       // Group by Sub Fund name
+            fn($pap) => $pap->papType->name ?? 'No PAP Type',       // Group by PAP Type name
+        ]);
         return view('units.index', compact('campuses', 'units', 'paps'));
     }
     

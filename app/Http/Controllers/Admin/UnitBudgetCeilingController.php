@@ -55,7 +55,9 @@ class UnitBudgetCeilingController extends Controller
         $campusBudgetCeiling = $unitBudgetCeilingService['campusBudgetCeiling'];
         $budgetData = $unitBudgetCeilingService['budgetData'];
         $unitBudgetCeilings = $campusBudgetCeiling->unitBudgetCeilings;
-        $units = $campusBudgetCeiling->programActivityProject->majorFinalOutput->units;
+        // $units
+
+       $units = $campusBudgetCeiling->programActivityProject->units;
 
         return view('admin.unit-budget-ceiling.show', [
             'unitBudgetCeilings' => $unitBudgetCeilings,

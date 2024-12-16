@@ -138,7 +138,7 @@
                   </div>
                   <div class="card-body p-0">
                     <div class="accordion" id="stfAccordion">
-                        @foreach ($stf as $budgetType => $subFunds)
+                        @foreach ($stf as $budgetType => $schoolFeeClassifications)
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading-{{ Str::slug($budgetType) }}">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#stfcollapse-{{ Str::slug($budgetType) }}" aria-expanded="false" aria-controls="stfcollapse-{{ Str::slug($budgetType) }}">
@@ -147,15 +147,15 @@
                                 </h2>
                                 <div id="stfcollapse-{{ Str::slug($budgetType) }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ Str::slug($budgetType) }}" data-bs-parent="#stfAccordion">
                                     <div class="accordion-body">
-                                        @foreach ($subFunds as $subFund => $papTypes)
-                                            <div class="accordion" id="subFundAccordion-{{ Str::slug($subFund) }}">
+                                        @foreach ($schoolFeeClassifications as $schoolFeeClassification => $papTypes)
+                                            <div class="accordion" id="subFundAccordion-{{ Str::slug($schoolFeeClassification) }}">
                                                 <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="subFund-heading-{{ Str::slug($subFund) }}">
-                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#stfsubFund-collapse-{{ Str::slug($subFund) }}" aria-expanded="false" aria-controls="stfsubFund-collapse-{{ Str::slug($subFund) }}">
-                                                            {{ $subFund }}
+                                                    <h2 class="accordion-header" id="subFund-heading-{{ Str::slug($schoolFeeClassification) }}">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#stfsubFund-collapse-{{ Str::slug($schoolFeeClassification) }}" aria-expanded="false" aria-controls="stfsubFund-collapse-{{ Str::slug($schoolFeeClassification) }}">
+                                                            {{ $schoolFeeClassification }}
                                                         </button>
                                                     </h2>
-                                                    <div id="stfsubFund-collapse-{{ Str::slug($subFund) }}" class="accordion-collapse collapse" aria-labelledby="subFund-heading-{{ Str::slug($subFund) }}" data-bs-parent="#subFundAccordion-{{ Str::slug($subFund) }}">
+                                                    <div id="stfsubFund-collapse-{{ Str::slug($schoolFeeClassification) }}" class="accordion-collapse collapse" aria-labelledby="subFund-heading-{{ Str::slug($schoolFeeClassification) }}" data-bs-parent="#subFundAccordion-{{ Str::slug($schoolFeeClassification) }}">
                                                         <div class="accordion-body">
                                                             @foreach ($papTypes as $papType => $programs)
                                                                 <div class="accordion" id="papTypeAccordion-{{ Str::slug($papType) }}">

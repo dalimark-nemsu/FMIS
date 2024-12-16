@@ -114,25 +114,39 @@
     <li class="nav-item">
       <a class="nav-link {{ request()->is('admin/budget-year') ? '' : 'collapsed' }}" href="{{ route('budget-year.index') }}">
         <i class="bi bi-calendar"></i>
-        <span>Budget Year</span>
+        <span>Budget Years</span>
       </a>
     </li>
 
-    <!-- Allotment Classes -->
+
+
+<!-- Procurement Settings -->
     <li class="nav-item">
-      <a class="nav-link {{ request()->is('admin/allotment-classes') ? '' : 'collapsed' }}" href="{{ route('allotment-classes.index') }}">
-        <i class="bi bi-box-seam"></i>
-        <span>Allotment Classes</span>
+      <a class="nav-link {{ request()->is('admin/procurement-settings*') ? '' : 'collapsed' }}" data-bs-target="#procurementSettingsNav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-clipboard-data"></i>
+        <span>Procurement Settings</span>
+        <i class="bi bi-chevron-down ms-auto"></i>
       </a>
+      <ul id="procurementSettingsNav" class="nav-content collapse {{ request()->is('admin/procurement-settings*') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="{{ route('allotment-classes.index') }}" class="{{ request()->is('admin/allotment-classes') ? 'active' : '' }}">
+            <i class="bi bi-circle"></i><span>Allotment Classes</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('object-expenditures.index') }}" class="{{ request()->is('admin/object-expenditures') ? 'active' : '' }}">
+            <i class="bi bi-circle"></i><span>Object Expenditures</span>
+          </a>
+        </li>
+        <li>
+            <a href="{{ route('identified-expenses.index') }}" class="{{ request()->is('admin/identified-expenses') ? 'active' : '' }}">
+            <i class="bi bi-circle"></i><span>Identified Expenses</span>
+          </a>
+        </li>
+      </ul>
     </li>
 
-    <!-- Object Expenditures -->
-    <li class="nav-item">
-      <a class="nav-link {{ request()->is('admin/object-expenditures') ? '' : 'collapsed' }}" href="{{ route('object-expenditures.index') }}">
-        <i class="bi bi-receipt"></i>
-        <span>Object Expenditures</span>
-      </a>
-    </li>
+
 
   <li class="nav-item">
       <a class="nav-link {{ request()->is('admin/products*') || request()->is('admin/product-categories*') ? '' : 'collapsed' }}" data-bs-target="#productSettingsNav" data-bs-toggle="collapse" href="#">

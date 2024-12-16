@@ -11,6 +11,8 @@ class Proposal extends Model
 
     protected $fillable = [
         // 'unit_budget_ceiling_id',
+        'operating_unit',
+        'budget_year_id',
         'proposal_type',
         'proposal_title',
         'proposal_proponent_id',

@@ -60,8 +60,8 @@ class UnitBudgetCeilingService
     {
         $campusBudgetCeiling = CampusBudgetCeiling::with([
             'programActivityProject', 
-            'programActivityProject.majorFinalOutput', 
-            'programActivityProject.majorFinalOutput.units', 
+            'programActivityProject.papType', 
+            'programActivityProject.units', 
             'unitBudgetCeilings'
         ])->isPosted()->findOrFail($budgetCeilingId);
 

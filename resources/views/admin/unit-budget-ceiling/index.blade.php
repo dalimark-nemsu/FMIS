@@ -13,12 +13,12 @@ Unit Budget Ceiling {{ (!is_null($selectedCampus->name)) ? ' - ' . $selectedCamp
 
 @prepend('page-style')
   <style>
-    th:nth-child(7), td:nth-child(7){
+    th:nth-child(6), td:nth-child(6){
       background-color: #e0f8e9;
     }
+  th:nth-child(3), td:nth-child(3),
   th:nth-child(4), td:nth-child(4),
-  th:nth-child(5), td:nth-child(5),
-  th:nth-child(6), td:nth-child(6) {
+  th:nth-child(5), td:nth-child(5) {
     background-color: #cfe2ff;
   }
   </style>
@@ -95,6 +95,11 @@ Unit Budget Ceiling {{ (!is_null($selectedCampus->name)) ? ' - ' . $selectedCamp
         <div class="card">
           <div class="card-header d-md-flex border-bottom-0">
             <div class="flex-grow-1">
+              {{-- <nav class="nav nav-pills">
+                @foreach ($fundSources as $fundSource)
+                    <a class="nav-link {{ request('fundSource', 'GAA') === $fundSource->abbreviation ? 'active' : '' }}" aria-current="page" href="{{ request()->fullUrlWithQuery(['fundSource' => $fundSource->abbreviation]) }}">{{ $fundSource->abbreviation }}</a> 
+                @endforeach
+            </nav> --}}
             </div>
           </div>
           <div class="card-body">
@@ -111,12 +116,12 @@ Unit Budget Ceiling {{ (!is_null($selectedCampus->name)) ? ' - ' . $selectedCamp
                       <option value="{{ $fundSource->abbreviation }}">{{ $fundSource->abbreviation }}</option>
                     @endforeach
                   </select>
-                  <select name="mfo" id="mfo" class="form-select border-secondary">
+                  {{-- <select name="mfo" id="mfo" class="form-select border-secondary">
                     <option value="" selected>MFOs</option>
                     @foreach ($majorFinalOutputs as $majorFinalOutput)
                       <option value="{{ $majorFinalOutput->abbreviation }}">{{ $majorFinalOutput->abbreviation }}</option>
                     @endforeach
-                  </select>
+                  </select> --}}
               </div>
               <div class="col-3 ms-auto">
                   <div class="input-group">
@@ -128,13 +133,13 @@ Unit Budget Ceiling {{ (!is_null($selectedCampus->name)) ? ' - ' . $selectedCamp
               </div>
             </div>
           
-            <div class="table-responsive table-card">
+            {{-- <div class="table-responsive table-card"> --}}
               <table id="papsDataTable" class="table table-hover text-nowrap mt-0" style="width: 100%">
                 <thead class="table-secondary">
                   <tr>
-                    <th>PAPs</th>
-                    <th class="text-center">Fund Source</th>
-                    <th class="text-center">MFOs</th>
+                    <th class="bg-light">PAPs</th>
+                    <th class="text-center bg-light">Fund Source</th>
+                    {{-- <th class="text-center">MFOs</th> --}}
                     <th class="text-end">PS</th>
                     <th class="text-end">MOOE</th>
                     <th class="text-end">CO</th>
@@ -145,9 +150,22 @@ Unit Budget Ceiling {{ (!is_null($selectedCampus->name)) ? ' - ' . $selectedCamp
                 <tbody>
                     @foreach ($campusBudgetCeilings as $campusBudgetCeiling)
                         <tr>
-                            <td class="fw-bold">{{ $campusBudgetCeiling->programActivityProject?->name }}</td>
+                            <td>
+                              {{-- {{ $campusBudgetCeiling->programActivityProject?->name }} --}}
+                              <div class="fw-bold">{{ $campusBudgetCeiling->programActivityProject?->name }}</div>
+                              <small>
+                                  {{-- {{ $budgetCeiling->programActivityProject?->fundSource?->abbreviation }}/ --}}
+                                  {{ $campusBudgetCeiling->programActivityProject?->budgetType?->name }}/
+                                  @if (request('fundSource', 'GAA') === 'GAA')
+                                      {{ $campusBudgetCeiling->programActivityProject?->subFund?->name }}/
+                                  @elseif (request('fundSource', 'GAA') === 'STF')
+                                      {{ $campusBudgetCeiling->programActivityProject?->schoolFeeClassification?->name }}/
+                                  @endif
+                                  {{ $campusBudgetCeiling->programActivityProject?->papType?->name }}
+                              </small>
+                            </td>
                             <td class="text-center">{{ $campusBudgetCeiling->programActivityProject?->fundSource?->abbreviation }}</td>
-                            <td class="text-center">{{ $campusBudgetCeiling->programActivityProject?->majorFinalOutput?->abbreviation }}</td>
+                            {{-- <td class="text-center">{{ $campusBudgetCeiling->programActivityProject?->majorFinalOutput?->abbreviation }}</td> --}}
                             <td class="text-end">{{ '₱' . number_format($campusBudgetCeiling->ps, 2) }}</td>
                             <td class="text-end">{{ '₱' . number_format($campusBudgetCeiling->mooe, 2) }}</td>
                             <td class="text-end">{{ '₱' . number_format($campusBudgetCeiling->co, 2) }}</td>
@@ -161,7 +179,7 @@ Unit Budget Ceiling {{ (!is_null($selectedCampus->name)) ? ' - ' . $selectedCamp
                     @endforeach
                 </tbody>
               </table>
-            </div>
+            {{-- </div> --}}
           </div>
         </div>
       </div>
@@ -175,7 +193,16 @@ Unit Budget Ceiling {{ (!is_null($selectedCampus->name)) ? ' - ' . $selectedCamp
 <script>
 $(document).ready(function() {
   let table = $('#papsDataTable').DataTable({
-    "dom": '<"top">rt<"bottom"p><"clear">'
+    "dom": '<"top">rt<"bottom"p><"clear">',
+    order: [], // Disable initial sorting (preserve original order)
+    fixedColumns: {
+        start: 2
+    },
+    scrollCollapse: true,
+    scrollX: true,
+    //  paging: false, // Disable pagination
+    // fixedHeader: true,
+    // scrollY: 900,  // Set vertical scroll
   })
 
   // Custom search functionality

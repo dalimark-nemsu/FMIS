@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Budget Types')
+@section('page-title', 'Identified Expenses')
 
 @section('content')
 <div id="app-content">
@@ -13,12 +13,12 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header d-md-flex border-bottom-0">
-                            <h5>Budget Types</h5>
+                            <h5>Identified Expenses</h5>
                             <div class="ms-auto">
-                                <a href="#addBudgetTypeModal"
+                                <a href="#addIdentifiedExpenseModal"
                                    class="btn btn-outline-primary shadow-sm btn-sm"
                                    data-bs-toggle="modal"
-                                   title="Create New Budget Type">
+                                   title="Create New Identified Expense">
                                     <i class="bi bi-plus-lg"></i>
                                 </a>
                             </div>
@@ -29,20 +29,18 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>No.</th>
-                                            <th>Fund Source</th>
                                             <th>Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($budgetTypes as $budgetType)
+                                        @foreach ($identifiedExpenses as $expense)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $budgetType->fundSource->abbreviation }}</td>
-                                            <td>{{ $budgetType->name }}</td>
+                                            <td>{{ $expense->name }}</td>
                                             <td>
                                                 <!-- Edit Button -->
-                                                <a href="#editBudgetTypeModal-{{ $budgetType->id }}"
+                                                <a href="#editIdentifiedExpenseModal-{{ $expense->id }}"
                                                    class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
                                                    data-bs-toggle="modal"
                                                    title="Edit">
@@ -50,7 +48,7 @@
                                                 </a>
 
                                                 <!-- Delete Button -->
-                                                <a href="#deleteBudgetTypeModal-{{ $budgetType->id }}"
+                                                <a href="#deleteIdentifiedExpenseModal-{{ $expense->id }}"
                                                    class="btn btn-outline-danger btn-sm rounded-circle shadow-sm"
                                                    data-bs-toggle="modal"
                                                    title="Delete">
@@ -70,29 +68,20 @@
     </div>
 </div>
 
-<!-- Add Budget Type Modal -->
-<div class="modal fade" id="addBudgetTypeModal" tabindex="-1" aria-labelledby="addBudgetTypeModalLabel" aria-hidden="true">
+<!-- Add Identified Expense Modal -->
+<div class="modal fade" id="addIdentifiedExpenseModal" tabindex="-1" aria-labelledby="addIdentifiedExpenseModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('budget-types.store') }}" method="POST">
+            <form action="{{ route('identified-expenses.store') }}" method="POST">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addBudgetTypeModalLabel">Add New Budget Type</h5>
+                    <h5 class="modal-title" id="addIdentifiedExpenseModalLabel">Add New Identified Expense</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="fund_source_id" class="form-label">Fund Source:</label>
-                        <select class="form-control" id="fund_source_id" name="fund_source_id" required>
-                            <option value="" selected disabled>Select Fund Source</option>
-                            @foreach ($fundSources as $fundSource)
-                                <option value="{{ $fundSource->id }}">{{ $fundSource->abbreviation }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
                         <label for="name" class="form-label">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Budget Type Name" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Identified Expense Name" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -104,32 +93,22 @@
     </div>
 </div>
 
-<!-- Edit Budget Type Modal -->
-@foreach ($budgetTypes as $budgetType)
-<div class="modal fade" id="editBudgetTypeModal-{{ $budgetType->id }}" tabindex="-1" aria-labelledby="editBudgetTypeModalLabel" aria-hidden="true">
+<!-- Edit Identified Expense Modal -->
+@foreach ($identifiedExpenses as $expense)
+<div class="modal fade" id="editIdentifiedExpenseModal-{{ $expense->id }}" tabindex="-1" aria-labelledby="editIdentifiedExpenseModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('budget-types.update', $budgetType->id) }}" method="POST">
+            <form action="{{ route('identified-expenses.update', $expense->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editBudgetTypeModalLabel">Edit Budget Type</h5>
+                    <h5 class="modal-title" id="editIdentifiedExpenseModalLabel">Edit Identified Expense</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="fund_source_id" class="form-label">Fund Source:</label>
-                        <select class="form-control" id="fund_source_id" name="fund_source_id" required>
-                            @foreach ($fundSources as $fundSource)
-                                <option value="{{ $fundSource->id }}" {{ $fundSource->id == $budgetType->fund_source_id ? 'selected' : '' }}>
-                                    {{ $fundSource->abbreviation }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
                         <label for="name" class="form-label">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ $budgetType->name }}" required>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ $expense->name }}" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -142,20 +121,20 @@
 </div>
 @endforeach
 
-<!-- Delete Budget Type Modal -->
-@foreach ($budgetTypes as $budgetType)
-<div class="modal fade" id="deleteBudgetTypeModal-{{ $budgetType->id }}" tabindex="-1" aria-labelledby="deleteBudgetTypeModalLabel" aria-hidden="true">
+<!-- Delete Identified Expense Modal -->
+@foreach ($identifiedExpenses as $expense)
+<div class="modal fade" id="deleteIdentifiedExpenseModal-{{ $expense->id }}" tabindex="-1" aria-labelledby="deleteIdentifiedExpenseModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('budget-types.delete', $budgetType->id) }}" method="POST">
+            <form action="{{ route('identified-expenses.delete', $expense->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteBudgetTypeModalLabel">Delete Confirmation</h5>
+                    <h5 class="modal-title" id="deleteIdentifiedExpenseModalLabel">Delete Confirmation</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete Budget Type: <strong>{{ $budgetType->name }}</strong>?
+                    Are you sure you want to delete Identified Expense: <strong>{{ $expense->name }}</strong>?
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger">Confirm</button>

@@ -9,6 +9,7 @@ use App\Http\Controllers\BudgetYearController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\FundSourceController;
 use App\Http\Controllers\FundSourcePapTypePapController;
+use App\Http\Controllers\IdentifiedExpenseController;
 use App\Http\Controllers\MajorFinalOutputController;
 use App\Http\Controllers\ObjectExpenditureController;
 use App\Http\Controllers\PapTypeController;
@@ -208,6 +209,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
         'edit'      =>  'object-expenditures.edit',
         'update'    =>  'object-expenditures.update',
         'destroy'   =>  'object-expenditures.delete',
+    ]);
+
+    Route::resource('identified-expenses', IdentifiedExpenseController::class)->names([
+        'index'     => 'identified-expenses.index',
+        'create'    => 'identified-expenses.create',
+        'store'     => 'identified-expenses.store',
+        'show'      => 'identified-expenses.show',
+        'edit'      => 'identified-expenses.edit',
+        'update'    => 'identified-expenses.update',
+        'destroy'   => 'identified-expenses.delete',
     ]);
 
     // Product

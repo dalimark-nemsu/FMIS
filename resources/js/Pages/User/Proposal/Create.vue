@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, computed } from 'vue';
+    import { ref, computed, onMounted } from 'vue';
     import { formatAmount } from '../../../Utils/numberUtils';
     import BaseInput from '../../../Components/BaseInput.vue';
     import BaseSelect from '../../../Components/BaseSelect.vue';
@@ -7,6 +7,15 @@
     import PapsTablePlaceHolder from './includes/PapsTablePlaceHolder.vue';
     import { usePage, useForm } from '@inertiajs/vue3';
     import axios from 'axios';
+
+    const page = usePage();
+    const budgetYears = computed(() => {
+        return (page.props.auth.budgetYears || []).map((year) => ({
+            value: year.id,
+            text: year.year.toString(),
+        }));
+    });
+    const activeYear = computed(() => page.props.auth.activeYear?.id || null); // Get active year's ID
 
     const typeOptions = [
         { value: 'project', text: 'Project' },
@@ -19,9 +28,11 @@
             default: ()=>([]),
         },
     });
+    
 
     const form = useForm({
         type: '',
+        budget_year_id: activeYear.value, // Default to active year
         title: '',
         proponent_id: '',
         unit_budget_ceiling_id: '',
@@ -72,10 +83,32 @@
 
 <template>
     <form @submit.prevent="submit();" class="d-flex flex-column h-100">
-        <div class="offcanvas-body d-flex flex-column">
-            <div class="form-floating mb-3 col-6">
-                <BaseSelect id="floatingSelect" v-model="form.type" :options="typeOptions" label="Type" classes="form-select fw-bold"/>
+        <div id="offCanvasProposalForm" class="offcanvas-body d-flex flex-column">
+            <div class="row mb-3">
+                <div class="col-6">
+                    <div class="form-floating">
+                        <BaseSelect 
+                            id="floatingSelect" 
+                            v-model="form.type" 
+                            :options="typeOptions" 
+                            label="Type" 
+                            classes="form-select fw-bold" 
+                        />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-floating">
+                        <BaseSelect 
+                            id="floatingSelectBudgetYear" 
+                            v-model="form.budget_year_id" 
+                            :options="budgetYears" 
+                            label="Budget Year" 
+                            classes="form-select fw-bold" 
+                        />
+                    </div>
+                </div>
             </div>
+
             <div class="form-floating mb-3">
                 <BaseInput id="floatingInput" type="text" v-model="form.title" label="Proposal Title" classes="form-control fw-bold"/>
             </div>
@@ -101,7 +134,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="table-responsive flex-grow-1 mb-3 vi">
+            <!-- <div class="table-responsive flex-grow-1 mb-3 vi">
                 <table class="table">
                     <thead>
                         <tr>
@@ -151,7 +184,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
         </div>
         <div class="offcanvas-footer sticky-footer">
             <BaseButton variant="primary" type="submit" customClasses="float-end">

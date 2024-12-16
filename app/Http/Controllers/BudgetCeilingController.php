@@ -7,11 +7,14 @@ use App\Http\Requests\BudgetCeilingUpdateRequest;
 use App\Models\BudgetYear;
 use App\Models\Campus;
 use App\Models\CampusBudgetCeiling;
+use App\Models\FundSource;
+use App\Models\ProgramActivityProject;
 use App\Services\BudgetYearService;
 use App\Services\CampusBudgetCeilingService;
 use App\Traits\DataRetrievalTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class BudgetCeilingController extends Controller
 {
@@ -111,9 +114,23 @@ class BudgetCeilingController extends Controller
         // Check if all CampusBudgetCeilings are posted
         $allBudgetsPosted = $campus->allBudgetsPosted();
 
+        // Get fundSource from the request, default to 'GAA'
+        $requestedAbbreviation = $request->input('fundSource', 'GAA');
+
+        // Query the FundSource table based on the abbreviation
+        $fundSource = FundSource::where('abbreviation', $requestedAbbreviation)->first();
+
+        // If the requested abbreviation is not found, fall back to 'GAA'
+        if (!$fundSource) {
+            $fundSource = FundSource::where('abbreviation', 'GAA')->first();
+        }
+
         // Other code to fetch data
         $campusBudgetCeilings = CampusBudgetCeiling::where('campus_id', $campus->id)
             ->where('budget_year_id', $budgetYearId)
+            ->whereHas('programActivityProject', function($query) use($fundSource){
+                $query->where('fund_source_id', $fundSource->id);
+            })
             ->with(['programActivityProject.fundSource', 'programActivityProject.majorFinalOutput'])
             ->get();
 
@@ -127,7 +144,7 @@ class BudgetCeilingController extends Controller
         $paps = $this->getAllPAPs();
 
         return view('budget-ceilings.index', compact(
-            'campus', 'activeYear', 'fundSources', 'mfos', 'paps', 'groupedBudgetCeilings', 'grandTotal', 'budgetYearId', 'allBudgetsPosted'
+            'campus', 'activeYear', 'fundSources', 'mfos', 'paps', 'campusBudgetCeilings', 'groupedBudgetCeilings', 'grandTotal', 'budgetYearId', 'allBudgetsPosted'
         ));
     }
 
@@ -169,28 +186,38 @@ class BudgetCeilingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BudgetCeilingStoreRequest $request)
+    public function store(Request $request)
     {
-        $psAmount = (float) str_replace(',', '', $request->ps);
-        $mooeAmount = (float) str_replace(',', '', $request->mooe);
-        $coAmount = (float) str_replace(',', '', $request->co);
-        if (!empty($psAmount) || !empty($mooeAmount) || !empty($coAmount)) {
-            // Calculate totalAmount if at least one of the values is present
-            $totalAmount = $psAmount + $mooeAmount + $coAmount;
-        } else {
-            $totalAmount = (float) str_replace(',', '', $request->total);
+        $programActivityProjects = ProgramActivityProject::query()
+            ->where(function ($query) {
+                // PAPs with no children
+                $query->whereDoesntHave('programActivityProjects')
+                    ->orWhereNotNull('parent_id'); // Only children PAPs
+            })
+            ->where('fund_source_id', $request->fundSource) // Filter by fund source
+            ->get();
+        // $psAmount = (float) str_replace(',', '', $request->ps);
+        // $mooeAmount = (float) str_replace(',', '', $request->mooe);
+        // $coAmount = (float) str_replace(',', '', $request->co);
+        // if (!empty($psAmount) || !empty($mooeAmount) || !empty($coAmount)) {
+        //     // Calculate totalAmount if at least one of the values is present
+        //     $totalAmount = $psAmount + $mooeAmount + $coAmount;
+        // } else {
+        //     $totalAmount = (float) str_replace(',', '', $request->total);
+        // }
+        foreach ($programActivityProjects as $key => $programActivityProject) {
+            CampusBudgetCeiling::create([
+                'campus_id'             =>      $request->campus_id,
+                'budget_year_id'        =>      $request->year_id,
+                'pap_id'                =>      $programActivityProject->id,
+                // 'ps'                    =>      $psAmount,
+                // 'mooe'                  =>      $mooeAmount,
+                // 'co'                    =>      $coAmount,
+                // 'total_amount'          =>      $totalAmount,
+                'processed_by'          =>      Auth::id(),
+            ]);
         }
-        CampusBudgetCeiling::create([
-            'campus_id'             =>      $request->campus_id,
-            'budget_year_id'        =>      $request->year_id,
-            'pap_id'                =>      $request->pap,
-            'ps'                    =>      $psAmount,
-            'mooe'                  =>      $mooeAmount,
-            'co'                    =>      $coAmount,
-            'total_amount'          =>      $totalAmount,
-            'processed_by'          =>      Auth::id(),
-        ]);
-        return redirect()->back()->with('success','Budget Ceiling added successfully');
+        return redirect()->back()->with('success','Budget Ceiling created successfully');
     }
 
     /**
@@ -222,26 +249,50 @@ class BudgetCeilingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(BudgetCeilingUpdateRequest $request, CampusBudgetCeiling $budget_ceiling)
+    public function update(Request $request, CampusBudgetCeiling $budget_ceiling)
     {
-        $psAmount = (float) str_replace(',', '', $request->ps);
-        $mooeAmount = (float) str_replace(',', '', $request->mooe);
-        $coAmount = (float) str_replace(',', '', $request->co);
-        if (!empty($psAmount) || !empty($mooeAmount) || !empty($coAmount)) {
-            // Calculate totalAmount if at least one of the values is present
-            $totalAmount = $psAmount + $mooeAmount + $coAmount;
-        } else {
-            $totalAmount = (float) str_replace(',', '', $request->total);
-        }
-        $budget_ceiling->update([
-            'pap_id'                =>      $request->pap,
-            'ps'                    =>      $psAmount,
-            'mooe'                  =>      $mooeAmount,
-            'co'                    =>      $coAmount,
-            'total_amount'          =>      $totalAmount,
-            'processed_by'          =>      Auth::id(),
+        $validated = $request->validate([
+            'ps' => 'nullable|numeric|min:0',
+            'mooe' => 'nullable|numeric|min:0',
+            'co' => 'nullable|numeric|min:0',
+            'total_amount' => 'nullable|numeric|min:0', // Add validation for total_amount
         ]);
-        return redirect()->back()->with('success','Budget Ceiling updated successfully');
+        
+        $budgetCeiling = $budget_ceiling;
+        
+        if ($request->has('total_amount')) {
+            // If only total_amount is sent, update it directly
+            $budgetCeiling->total_amount = $validated['total_amount'];
+        } else {
+            // If ps, mooe, and co are sent, calculate total_amount
+            $budgetCeiling->ps = $validated['ps'] ?? 0;
+            $budgetCeiling->mooe = $validated['mooe'] ?? 0;
+            $budgetCeiling->co = $validated['co'] ?? 0;
+            $budgetCeiling->total_amount = ($validated['ps'] ?? 0) + ($validated['mooe'] ?? 0) + ($validated['co'] ?? 0);
+        }
+        
+        $budgetCeiling->save();
+        
+        return response()->json(['success' => true, 'message' => 'Saved!']);
+        
+        // $psAmount = (float) str_replace(',', '', $request->ps);
+        // $mooeAmount = (float) str_replace(',', '', $request->mooe);
+        // $coAmount = (float) str_replace(',', '', $request->co);
+        // if (!empty($psAmount) || !empty($mooeAmount) || !empty($coAmount)) {
+        //     // Calculate totalAmount if at least one of the values is present
+        //     $totalAmount = $psAmount + $mooeAmount + $coAmount;
+        // } else {
+        //     $totalAmount = (float) str_replace(',', '', $request->total);
+        // }
+        // $budget_ceiling->update([
+        //     'pap_id'                =>      $request->pap,
+        //     'ps'                    =>      $psAmount,
+        //     'mooe'                  =>      $mooeAmount,
+        //     'co'                    =>      $coAmount,
+        //     'total_amount'          =>      $totalAmount,
+        //     'processed_by'          =>      Auth::id(),
+        // ]);
+        // return redirect()->back()->with('success','Budget Ceiling updated successfully');
     }
 
     /**
