@@ -30,8 +30,10 @@ class ProposalController extends Controller
      */
     public function index()
     {
-        $unitBudgetCeilings = UnitBudgetCeiling::where('operating_unit', Auth::user()->unit_id)->get();
-        return Inertia::render('User/Proposal/Index', ['unitBudgetCeilings' => $unitBudgetCeilings]);
+        // Fetch all proposals where the user belongs to the same unit
+        $proposals = Proposal::where('operating_unit', Auth::user()->unit_id)->get();
+        // return $unitBudgetCeilings = UnitBudgetCeiling::where('operating_unit', Auth::user()->unit_id)->get();
+        return Inertia::render('User/Proposal/Index', ['proposals' => $proposals]);
     }
 
     /**
