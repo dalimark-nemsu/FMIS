@@ -5,12 +5,16 @@ import debounce from "lodash/debounce";
 import Swal from "sweetalert2";
 import "flatpickr/dist/flatpickr.css";
 import Flatpickr from "vue-flatpickr-component";
+import ShoppingFormOffcanvas from "../ShoppingFormOffcanvas.vue";
+
+const shoppingOffcanvas = ref(null);
 
 // Props and Emits
 const props = defineProps({
   activity: Object,
   proposalId: Number,
 });
+
 const emit = defineEmits(["delete-activity"]);
 
 // Reactive Data
@@ -19,7 +23,9 @@ const activityData = ref({
   dateRange: props.activity.activity_date_schedule,
   venue: props.activity.activity_venue,
 });
+
 const showBudgetary = ref(false);
+
 const budgetaryRequirements = ref([
   {
     general_description: "",
@@ -30,6 +36,7 @@ const budgetaryRequirements = ref([
     editable: true,
   },
 ]);
+
 const openDropdownIndex = ref(null);
 
 // Computed Properties
@@ -167,10 +174,50 @@ const deleteRow = async (index) => {
   }
 };
 
+const calculateTotal = computed(() => {
+  return budgetaryRequirements.value
+    .slice(1) // Exclude the default input row
+    .reduce((sum, item) => sum + (item.quantity || 0) * (item.unit_cost || 0), 0)
+    .toLocaleString("en-US", { style: "currency", currency: "PHP" });
+});
+
 // Watchers
 watch(() => activityData.value.title, (newValue) => saveField("title", newValue));
 watch(() => activityData.value.dateRange, (newValue) => saveField("dateRange", newValue));
 watch(() => activityData.value.venue, (newValue) => saveField("venue", newValue));
+
+
+// Listen for added items
+function handleAddItems(items) {
+  // Map the selected items to the budgetary requirements structure
+  const newRows = items.map((item) => ({
+    general_description: item.general_description || item.description,
+    uom: item.uom || item.unit,
+    quantity: item.quantity || 1, // Default to 1 if no quantity is provided
+    unit_cost: item.unit_cost || item.price,
+    procurement_mode_id: "", // Default value or empty
+    editable: false,
+  }));
+
+  // Add the new rows to the budgetaryRequirements array
+  budgetaryRequirements.value.push(...newRows);
+
+  // Success feedback
+  Swal.fire("Success", "Items added to budgetary requirements table.", "success");
+}
+
+
+console.log("Activity data in ActivityCard:", props.activity);
+
+
+const openShoppingOffcanvas = (activityId) => {
+  console.log("Opening shopping offcanvas with activityId:", activityId);
+  if (shoppingOffcanvas.value) {
+    shoppingOffcanvas.value.openOffcanvas(activityId); // Pass activityId
+  } else {
+    console.error("shoppingOffcanvas reference is not defined.");
+  }
+};
 
 // Lifecycle Hooks
 onMounted(loadBudgetaryRequirements);
@@ -237,6 +284,32 @@ onMounted(loadBudgetaryRequirements);
 
     <!-- Accordion Content -->
     <div v-if="showBudgetary" class="accordion-content" id="budgetary-content">
+        <div class="accordion-header">
+            <!-- Total Section -->
+            <div class="total-display">
+                <span class="total-label">Total:</span>
+                <span class="total-amount">{{ calculateTotal }}</span>
+            </div>
+
+            <!-- Buttons Section -->
+            <div class="accordion-header-buttons">
+                <button class="btn btn-charge-fund" @click="handleChargeFund">
+                    <i class="fas fa-wallet"></i> Charge Fund
+                </button>
+                <!-- Shopping Button -->
+                <button class="btn btn-shopping" @click="openShoppingOffcanvas(props.activity.id)">
+                <i class="fas fa-shopping-cart"></i> Shopping
+                </button>
+
+                <!-- Shopping Form Offcanvas -->
+                <ShoppingFormOffcanvas
+                ref="shoppingOffcanvas"
+                :activity-id="props.activity.id"
+                @add-items="handleAddItems"
+                />
+            </div>
+        </div>
+
       <table class="budget-table">
         <thead>
           <tr>
@@ -412,7 +485,5 @@ onMounted(loadBudgetaryRequirements);
         </tbody>
       </table>
     </div>
-
-
   </div>
 </template>

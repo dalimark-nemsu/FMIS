@@ -20,6 +20,7 @@ use App\Http\Controllers\SubFundController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\User\HomeController as UserHomeController;
 use App\Http\Controllers\User\ProposalController;
+use App\Http\Controllers\User\ProductController as UserProductController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FundSource;
 use App\Models\ProgramActivityProject;
@@ -56,6 +57,8 @@ Route::delete('/proposals/{proposal}/activities/{activity}', [ProposalController
 Route::post('/activities/{activityId}/budgetary-requirements', [ProposalController::class, 'saveBudgetaryRequirement']);
 Route::get('/activities/{activityId}/budgetary-requirements', [ProposalController::class, 'getBudgetaryRequirements']);
 Route::delete('/activities/{activity}/budgetary-requirements/{id}', [ProposalController::class, 'deleteBudgetaryRequirement']);
+Route::get('/api/products', [UserProductController::class, 'index']);
+Route::post('/activities/{activityId}/cart-items', [UserProductController::class, 'saveCartItems']);
 Route::get('project-procurement-management-plan', function(){
     return Inertia::render('User/Ppmp/Index');
 })->name('ppmp')->middleware('auth');
@@ -110,7 +113,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
             'destroy'   => 'school-fee-classifications.delete',
         ]);
 
-    
+
     Route::resource('pap-types', PapTypeController::class)->names([
         'index'     => 'pap-types.index',
         'create'    => 'pap-types.create',
@@ -122,7 +125,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
     ]);
 
 
-    
+
     Route::resource('units', UnitController::class)->names([
         'index'     =>  'units.index',
         'create'    =>  'units.create',
@@ -133,7 +136,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:super-admin|bu
         'destroy'   =>  'units.delete',
     ]);
 
- 
+
 
     Route::put('/units/{id}/assign-mfo', [UnitController::class, 'assignPap'])->name('units.assignPap');
 

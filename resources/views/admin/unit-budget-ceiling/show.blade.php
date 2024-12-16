@@ -147,9 +147,9 @@
                             <div class="col-sm-8">
                               <select name="unit" id="unit" class="form-select border-dark text-dark" data-placeholder="Choose Unit">
                                 <option value=""></option>
-                                @foreach ($units as $unit)
+                                {{-- @foreach ($units as $unit)
                                   <option value="{{ $unit->id }}" @if(old('unit')) selected @endif>{{ $unit->name }}</option>
-                                @endforeach
+                                @endforeach --}}
                               </select>
                             </div>
                           </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
@@ -128,7 +129,7 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
     }
-    
+
     // Import CNAS
     public function importCNAS(Request $request)
     {
@@ -196,20 +197,20 @@ class ProductController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls', // Validate file type
         ]);
-    
+
         $file = $request->file('file');
         $data = Excel::toArray([], $file);
 
         // Debug the imported data
         // dd($data);
-    
+
         if (empty($data[0])) {
             return redirect()->back()->withErrors(['file' => 'The uploaded file is empty.']);
         }
-    
+
         $rows = $data[0];
         $headerIndex = null;
-    
+
         // Find the header row
         foreach ($rows as $index => $row) {
             if (isset($row[0]) && strtolower(trim($row[0])) === 'product code') {
@@ -217,16 +218,16 @@ class ProductController extends Controller
                 break;
             }
         }
-    
+
         // If no header row is found, return an error
         if ($headerIndex === null) {
             return redirect()->back()->withErrors(['file' => 'Invalid file format. Header row not found.']);
         }
-    
+
         // Initialize counters
         $addedCount = 0;
         $updatedCount = 0;
-    
+
         // Process rows after the header
         for ($i = $headerIndex + 1; $i < count($rows); $i++) {
             $row = $rows[$i];
@@ -236,15 +237,15 @@ class ProductController extends Controller
             $price = $row[3] ?? 0;
             $quantity = $row[4] ?? 0;
             $remarks = $row[5] ?? null;
-    
+
             // Skip rows without a valid product code
             if (!$productCode) {
                 continue;
             }
-    
+
             // Check if the product exists
             $product = Product::where('product_code', $productCode)->first();
-    
+
             if ($product) {
                 // Update existing product
                 $product->update([
@@ -269,12 +270,12 @@ class ProductController extends Controller
                 $addedCount++;
             }
         }
-    
+
         return redirect()->back()->with('success', "{$updatedCount} products updated and {$addedCount} new products added successfully!");
     }
-    
 
 
-    
+
+
 
 }

@@ -26,12 +26,12 @@
                         <div class="col-md-6">
                             <label for="editMFO" class="form-label text-muted">Major Final Output (MFO)</label>
                             <select class="form-select edit-mfo" name="mfo" id="edit_mfo">
-                                @foreach ($mfos as $mfo)
+                                {{-- @foreach ($mfos as $mfo)
                                     <option value="{{ $mfo->id }}"
                                         @if ($mfo->id == $budgetCeiling->programActivityProject->majorFinalOutput->id) selected @endif>
                                         {{ $mfo->abbreviation }}
                                     </option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
 

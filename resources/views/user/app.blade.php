@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title inertia>{{ config("app.name", "Laravel") }}</title>
 
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    />
+
     <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Nunito:300,400,600,700|Poppins:300,400,500,600,700" rel="stylesheet">
@@ -16,6 +21,7 @@
 
     <!-- Custom CSS -->
     <link href="{{ asset('assets/layouts/css/style.css') }}" rel="stylesheet">
+
   </head>
   <body>
     @inertia
